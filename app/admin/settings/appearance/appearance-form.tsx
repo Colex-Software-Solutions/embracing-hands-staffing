@@ -41,16 +41,12 @@ function convertThemeToSchemaValue(
   | "light"
   | "dark" {
   switch (theme) {
-    case "admin-theme-blue":
-      return "admin-theme-blue";
-    case "admin-theme-purple":
-      return "admin-theme-purple";
     case "light":
       return "light";
     case "dark":
       return "dark";
     default:
-      return "admin-theme-red";
+      return "light";
   }
 }
 
@@ -151,96 +147,6 @@ export function AppearanceForm({
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
                       Dark
-                    </span>
-                  </FormLabel>
-                </FormItem>
-                <FormItem>
-                  <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
-                    <FormControl>
-                      <RadioGroupItem
-                        value="admin-theme-blue"
-                        className="sr-only"
-                      />
-                    </FormControl>
-                    <div className="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
-                      <div className="space-y-2 rounded-sm bg-[#ecedef] p-2">
-                        <div className="space-y-2 rounded-md bg-white p-2 shadow-sm">
-                          <div className="h-2 w-[80px] rounded-lg bg-blue-300" />
-                          <div className="h-2 w-[100px] rounded-lg bg-blue-300" />
-                        </div>
-                        <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
-                          <div className="h-4 w-4 rounded-full bg-blue-500" />
-                          <div className="h-2 w-[100px] rounded-lg bg-blue-500" />
-                        </div>
-                        <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
-                          <div className="h-4 w-4 rounded-full bg-blue-700" />
-                          <div className="h-2 w-[100px] rounded-lg bg-blue-700" />
-                        </div>
-                      </div>
-                    </div>
-                    <span className="block w-full p-2 text-center font-normal">
-                      Blue Theme
-                    </span>
-                  </FormLabel>
-                </FormItem>
-
-                <FormItem>
-                  <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
-                    <FormControl>
-                      <RadioGroupItem
-                        value="admin-theme-purple"
-                        className="sr-only"
-                      />
-                    </FormControl>
-                    <div className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground">
-                      <div className="space-y-2 rounded-sm bg-slate-950 p-2">
-                        <div className="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                          <div className="h-2 w-[80px] rounded-lg bg-purple-300" />
-                          <div className="h-2 w-[100px] rounded-lg bg-purple-300" />
-                        </div>
-                        <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                          <div className="h-4 w-4 rounded-full bg-purple-500" />
-                          <div className="h-2 w-[100px] rounded-lg bg-purple-500" />
-                        </div>
-                        <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                          <div className="h-4 w-4 rounded-full bg-purple-700" />
-                          <div className="h-2 w-[100px] rounded-lg bg-purple-700" />
-                        </div>
-                      </div>
-                    </div>
-                    <span className="block w-full p-2 text-center font-normal">
-                      Purple Theme
-                    </span>
-                  </FormLabel>
-                </FormItem>
-
-                <FormItem>
-                  <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
-                    <FormControl>
-                      <RadioGroupItem
-                        value="admin-theme-red"
-                        className="sr-only"
-                      />
-                    </FormControl>
-                    <div className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground">
-                      <div className="space-y-2 rounded-sm bg-black p-2">
-                        <div className="space-y-2 rounded-md bg-slate-800 border-red-500 border p-2 shadow-sm">
-                          <div className="h-2 w-[80px] rounded-lg bg-slate-400" />
-                          <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
-                        </div>
-                        <div className="flex items-center space-x-2 rounded-md border-red-500 border bg-slate-800 p-2 shadow-sm">
-                          <div className="h-4 w-4 rounded-full bg-slate-400" />
-                          <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
-                        </div>
-                        <div className="flex items-center space-x-2 rounded-md border border-red-500 bg-slate-800 p-2 shadow-sm">
-                          <div className="h-4 w-4 rounded-full bg-slate-400" />
-                          <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <span className="block w-full p-2 text-center font-normal">
-                      Red Theme
                     </span>
                   </FormLabel>
                 </FormItem>
