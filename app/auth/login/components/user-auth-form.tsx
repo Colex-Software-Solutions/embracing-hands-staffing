@@ -10,6 +10,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Alert } from "@/app/admin/components/alert";
 import { Loader, XCircle, XIcon } from "lucide-react";
+import Link from "next/link";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 interface UserInfo {
@@ -123,7 +124,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            don't have an account{" "}
+            <Link href={"/auth/register"}>
+              <Button className="px-0" variant={"link"}>
+                Register
+              </Button>
+            </Link>
           </span>
         </div>
       </div>
