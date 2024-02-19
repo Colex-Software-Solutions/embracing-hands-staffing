@@ -3,7 +3,7 @@ import { userProvider } from "@/app/providers/userProvider";
 import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 interface RegisterBody {
-  user: Omit<User, "status">;
+  user: Omit<User, "status" | "createdAt" | "updatedAt" | "stripeId">;
 }
 
 export async function POST(req: NextRequest) {

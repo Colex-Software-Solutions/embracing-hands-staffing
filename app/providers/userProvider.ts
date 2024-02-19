@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import prisma from "@/db/prisma";
 
 class UserProvider {
-  async createUser(data: User) {
+  async createUser(data: Omit<User, "createdAt" | "updatedAt" | "stripeId">) {
     return await prisma.user.create({
       data,
     });
