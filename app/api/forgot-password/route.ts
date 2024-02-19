@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { users } from "../login/route";
 import jwt from "jsonwebtoken";
+import { userProvider } from "@/app/providers/userProvider";
 interface IForgotPassword {
   email: string;
 }
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const body: IForgotPassword = await req.json();
   const userEmail = body.email;
   // Check if user email is in the database
-  const user = users.find((user) => (user.email = userEmail));
+  const user = await userProvider.getUserByEmail(userEmail);
   if (!user) {
     // just stop the execution without letting the user know that this email does not exist in our database
     return new Response();
