@@ -1,12 +1,18 @@
+import { userProvider } from "@/app/providers/userProvider";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextRequest } from "next/server";
-import { users } from "../login/route";
 
 export async function GET(req: NextRequest) {
   try {
     const userEmail = req.nextUrl.searchParams.get("email");
     const token = req.nextUrl.searchParams.get("token");
-    const user = users.find((user) => user.email === userEmail);
+    if (!userEmail || !token) {
+      return new Response(null, {
+        status: 400,
+        statusText: "Email and token are not provided",
+      });
+    }
+    const user = await userProvider.getUserByEmail(userEmail);
     if (!user || !token) {
       return new Response(null, {
         status: 400,
