@@ -9,17 +9,17 @@ import {
   FormMessage,
   FormField,
   FormItem,
-} from "@/app/admin/components/form";
-import { Input } from "@/app/admin/components/input";
-import { Button } from "@/app/admin/components/button";
+} from "@/app/components/ui/form";
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
 import { z } from "zod";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PasswordInput } from "@/app/admin/components/passwordInput";
+import { PasswordInput } from "@/app/components/ui/passwordInput";
 import { Role, User } from "@prisma/client";
 import { signIn } from "next-auth/react";
-import { useToast } from "@/app/admin/components/use-toast";
+import { useToast } from "@/app/components/ui/use-toast";
 
 export default function RegisterForm({ users }: { users: Partial<User>[] }) {
   const { toast } = useToast();

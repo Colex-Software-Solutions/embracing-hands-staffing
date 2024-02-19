@@ -4,10 +4,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import { Label } from "@/app/admin/components/label";
-import { Input } from "@/app/admin/components/input";
-import { Alert } from "@/app/admin/components/alert";
-import { Button } from "@/app/admin/components/button";
+import { Label } from "@/app/components/ui/label";
+import { Input } from "@/app/components/ui/input";
+import { Alert } from "@/app/components/ui/alert";
+import { Button } from "@/app/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Task } from "../../tasks/data/schema";
-import { Button } from "../button";
+import { Button } from "../../../components/ui/button";
 import { labels, priorities, statuses } from "../../tasks/data/data";
-import { useToast } from "../use-toast";
+import { useToast } from "../../../components/ui/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -11,16 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../dialog";
-import { Label } from "../label";
-import { Textarea } from "../textarea";
+} from "../../../components/ui/dialog";
+import { Label } from "../../../components/ui/label";
+import { Textarea } from "../../../components/ui/textarea";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from "../dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 
 export function EditTaskModal({
   task,
