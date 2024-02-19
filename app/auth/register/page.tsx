@@ -2,13 +2,16 @@ import { Metadata } from "next";
 import Link from "next/link";
 import RegisterForm from "./components/register-auth-form";
 import Image from "next/image";
+import { userProvider } from "@/app/providers/userProvider";
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
+  title: "Register",
+  description: "Register As a healthcare professional or a healthcare facility",
 };
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const users = await userProvider.getAllUsers();
+
   return (
     <div className="overflow-hidden sm:rounded-[0.5rem] sm:border bg-background sm:shadow-md md:shadow-xl sm:mx-[15%] mt-16 flex justify-center items-center ">
       <div className="container relative  sm:h-[800px] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -29,9 +32,9 @@ export default function RegisterPage() {
                 Register by entering the information below
               </p>
             </div>
-            <RegisterForm />
+            {users && <RegisterForm users={users} />}
             <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
+              By clicking register, you agree to our{" "}
               <Link
                 href="/terms"
                 className="underline underline-offset-4 hover:text-primary"

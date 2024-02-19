@@ -1,3 +1,5 @@
+// src/accessRules.ts
+
 import { Role } from "@prisma/client";
 
 interface AccessRule {
@@ -6,13 +8,17 @@ interface AccessRule {
 }
 
 const accessRules: Record<string, AccessRule> = {
-  "/staff/[...path]": {
+  "/staff": {
     roles: [Role.STAFF, Role.ADMIN],
     methods: ["GET"],
   },
-  "/admin/[...path]": {
+  "/admin": {
     roles: [Role.ADMIN],
     methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+  "/facility": {
+    roles: [Role.FACILITY, Role.ADMIN],
+    methods: ["GET", "POST", "PUT"],
   },
 };
 
