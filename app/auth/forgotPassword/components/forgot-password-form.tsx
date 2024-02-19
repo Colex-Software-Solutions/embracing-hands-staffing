@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Button } from "@/app/admin/components/button";
-import { Input } from "@/app/admin/components/input";
-import { Label } from "@/app/admin/components/label";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Alert } from "@/app/admin/components/alert";
+import { Alert } from "@/app/components/ui/alert";
 import { Loader, XCircle } from "lucide-react";
 import axios from "axios";
-import { useToast } from "@/app/admin/components/use-toast";
+import { useToast } from "@/app/components/ui/use-toast";
 
 export function ForgotPasswordForm() {
   const { data: session } = useSession();
