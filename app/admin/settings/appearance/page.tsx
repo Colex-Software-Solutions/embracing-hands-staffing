@@ -1,6 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
-import { Separator } from "../../components/separator";
+import { Separator } from "@/app/components/ui/separator";
 import { AppearanceForm } from "./appearance-form";
 import { useEffect, useState } from "react";
 

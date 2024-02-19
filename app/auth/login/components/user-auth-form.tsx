@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/app/admin/components/button";
-import { Input } from "@/app/admin/components/input";
-import { Label } from "@/app/admin/components/label";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Alert } from "@/app/admin/components/alert";
+import { Alert } from "@/app/components/ui/alert";
 import { Loader, XCircle, XIcon } from "lucide-react";
 import Link from "next/link";
 

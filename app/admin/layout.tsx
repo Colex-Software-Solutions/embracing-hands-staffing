@@ -1,5 +1,5 @@
 import { ThemeProvider } from "../components/theme-provider";
-import { Nav } from "./components/Nav";
+import { Nav } from "@/app/components/ui/Nav";
 import {
   ArchiveX,
   File,
@@ -9,7 +9,7 @@ import {
   Settings,
   User,
 } from "lucide-react";
-import { Separator } from "./components/separator";
+import { Separator } from "@/app/components/ui/separator";
 
 export default function adminLayout({
   children,
