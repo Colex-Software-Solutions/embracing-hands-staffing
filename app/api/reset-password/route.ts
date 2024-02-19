@@ -6,10 +6,10 @@ export async function GET(req: NextRequest) {
   try {
     const userEmail = req.nextUrl.searchParams.get("email");
     const token = req.nextUrl.searchParams.get("token");
-    if (!userEmail || !token) {
+    if (!userEmail) {
       return new Response(null, {
         status: 400,
-        statusText: "Email and token are not provided",
+        statusText: "Please provide your email address",
       });
     }
     const user = await userProvider.getUserByEmail(userEmail);
