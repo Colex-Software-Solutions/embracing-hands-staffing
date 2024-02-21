@@ -34,6 +34,12 @@ export default function adminLayout({
                 href: "/admin/tasks",
               },
               {
+                title: "Staff",
+
+                icon: <User className="md:mr-2 h-4 w-4" />,
+                href: "/admin/staff",
+              },
+              {
                 title: "Users",
 
                 icon: <User className="md:mr-2 h-4 w-4" />,
