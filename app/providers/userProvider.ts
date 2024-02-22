@@ -1,3 +1,4 @@
+import "server-only";
 import { User } from "@prisma/client";
 import prisma from "@/db/prisma";
 
@@ -65,8 +66,6 @@ class UserProvider {
   }
 
   async updateUserStatus(id: string, status: "APPROVED" | "REJECTED") {
-    console.log("In updateUserStatus");
-    console.log("Data", id, status);
     return await prisma.user.update({
       where: { id },
       data: {

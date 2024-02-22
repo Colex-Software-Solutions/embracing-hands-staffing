@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -123,6 +123,10 @@ export const columns = (
         }
         if (status === "APPROVED") {
           return "text-green-300 border-green-300";
+        }
+
+        if (status === "REJECTED") {
+          return "text-red-400 border-red-400";
         }
 
         return "text-black border-black";

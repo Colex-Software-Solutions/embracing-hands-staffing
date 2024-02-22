@@ -1,55 +1,60 @@
-import React, { useState } from "react";
-import { Task } from "../../tasks/data/schema";
+import React from "react";
 import { Button } from "../../../components/ui/button";
-import { labels, priorities, statuses } from "../../tasks/data/data";
 import { useToast } from "../../../components/ui/use-toast";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   DialogClose,
 } from "../../../components/ui/dialog";
-import { Label } from "../../../components/ui/label";
-import { Textarea } from "../../../components/ui/textarea";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from "../../../components/ui/dropdown-menu";
-import { Row } from "@tanstack/react-table";
-import { StaffUser } from "../../staff/page";
+import axios from "axios";
 
-// interface ViewStaffUserDetailsModalProps<TData> {
-//   row: Row<TData>;
-// }
+interface DeclineStatusModalProps {
+  id: string;
+  role: "STAFF" | "FACILITY";
+  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void;
+}
 
-const getStaffUserInfoFromRow = (row: any): StaffUser => {
-  const id = row.getValue("id");
-  const firstName = row.getValue("firstName");
-  const lastName = row.getValue("lastName");
-  const email = row.getValue("email");
-  const phone = row.getValue("phone");
-  const status = row.getValue("status");
+export function DeclineStatusModal({
+  id,
+  handleStaffUsersUpdate,
+}: DeclineStatusModalProps) {
+  const { toast } = useToast();
 
-  return {
-    id,
-    firstName,
-    lastName,
-    email,
-    phone,
-    status,
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/users/staff", {
+        id,
+        status: "REJECTED",
+      });
+      if (response.data.success) {
+        handleStaffUsersUpdate(id, "REJECTED");
+        toast({
+          variant: "default",
+          title: "Success!",
+          description: "Application has been rejected.",
+        });
+
+        return;
+      }
+
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: "Application status could not be updated.",
+      });
+    } catch (error) {
+      console.log("Error", error);
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: "Application status could not be updated.",
+      });
+    }
   };
-};
-
-export function DeclineStatusModal({ row }: any) {
-  const { firstName, lastName, email, id, phone, status } =
-    getStaffUserInfoFromRow(row);
 
   return (
     <Dialog>
@@ -62,7 +67,7 @@ export function DeclineStatusModal({ row }: any) {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <div>
+        <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Do you wish to reject this application?</DialogTitle>
           </DialogHeader>
@@ -74,7 +79,7 @@ export function DeclineStatusModal({ row }: any) {
             </DialogClose>
             <DialogClose asChild>
               <Button
-                type="button"
+                type="submit"
                 variant="default"
                 className="bg-red-600 hover:bg-red-400"
               >
@@ -82,7 +87,7 @@ export function DeclineStatusModal({ row }: any) {
               </Button>
             </DialogClose>
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -3,10 +3,8 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   CheckCircledIcon,
-  CircleIcon,
   CrossCircledIcon,
   QuestionMarkCircledIcon,
-  StopwatchIcon,
 } from "@radix-ui/react-icons";
 
 export const labels = [
@@ -46,12 +44,10 @@ export const statusOptions = [
   {
     value: "APPROVE",
     label: "Approve",
-    className: "text-green-300",
   },
   {
     value: "REJECT",
     label: "Reject",
-    className: "text-red-300",
   },
 ];
 

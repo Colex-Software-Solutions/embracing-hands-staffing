@@ -9,8 +9,7 @@ import {
   DialogClose,
 } from "../../../components/ui/dialog";
 import { useToast } from "../../../components/ui/use-toast";
-import { userProvider } from "@/app/providers/userProvider";
-import { StaffUser } from "../../staff/page";
+import axios from "axios";
 
 interface ApproveStatusModalProps {
   row: any;
@@ -29,12 +28,25 @@ export function ApproveStatusModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await userProvider.updateUserStatus(id, "APPROVED");
-      handleStaffUsersUpdate(id, "APPROVED");
+      const response = await axios.post("/api/users/staff", {
+        id,
+        status: "APPROVED",
+      });
+      if (response.data.success) {
+        handleStaffUsersUpdate(id, "APPROVED");
+        toast({
+          variant: "default",
+          title: "Success!",
+          description: "Application has been approved.",
+        });
+
+        return;
+      }
+
       toast({
-        variant: "default",
-        title: "Success!",
-        description: "Application has been approved.",
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: "Application status could not be updated.",
       });
     } catch (error) {
       console.log("Error", error);

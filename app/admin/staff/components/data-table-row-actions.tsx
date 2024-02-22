@@ -36,6 +36,8 @@ export function DataTableRowActions<TData>({
   isPending,
   handleStaffUsersUpdate,
 }: DataTableRowActionsProps<TData>) {
+  const id = row.getValue("id") as string;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -55,11 +57,15 @@ export function DataTableRowActions<TData>({
             <DropdownMenuSubContent>
               <ApproveStatusModal
                 row={row}
-                id={row.getValue("id")}
+                id={id}
                 role="STAFF"
                 handleStaffUsersUpdate={handleStaffUsersUpdate}
               />
-              <DeclineStatusModal row={row} />
+              <DeclineStatusModal
+                id={id}
+                handleStaffUsersUpdate={handleStaffUsersUpdate}
+                role="STAFF"
+              />
             </DropdownMenuSubContent>
           </DropdownMenuSub>
         )}
