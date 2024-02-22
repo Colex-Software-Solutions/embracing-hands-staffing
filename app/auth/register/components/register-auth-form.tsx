@@ -43,8 +43,17 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
     });
 
   type RegisterFormValues = z.infer<typeof registrationSchema>;
+
+  const defaultValues: Partial<RegisterFormValues> = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    role: "STAFF",
+  };
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registrationSchema),
+    defaultValues,
   });
 
   const router = useRouter();

@@ -20,7 +20,6 @@ export default withAuth(
     // Dynamically check access permissions
     for (const path in accessRules) {
       if (req.nextUrl.pathname.startsWith(path)) {
-        console.log(path, req.nextUrl.pathname);
         const rule = accessRules[path];
         const userRole = req.nextauth.token?.role;
         const methodAllowed = rule.methods.includes(req.method);
