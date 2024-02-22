@@ -42,6 +42,19 @@ export const statuses = [
   },
 ];
 
+export const statusOptions = [
+  {
+    value: "APPROVE",
+    label: "Approve",
+    className: "text-green-300",
+  },
+  {
+    value: "REJECT",
+    label: "Reject",
+    className: "text-red-300",
+  },
+];
+
 export const priorities = [
   {
     label: "Low",

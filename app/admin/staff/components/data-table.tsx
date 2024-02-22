@@ -27,10 +27,11 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { StaffUser } from "../page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: StaffUser[];
 }
 
 export function DataTable<TData, TValue>({
@@ -66,8 +67,6 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
-  console.log("Table", table);
 
   return (
     <div className="space-y-4">

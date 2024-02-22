@@ -64,6 +64,17 @@ class UserProvider {
     });
   }
 
+  async updateUserStatus(id: string, status: "APPROVED" | "REJECTED") {
+    console.log("In updateUserStatus");
+    console.log("Data", id, status);
+    return await prisma.user.update({
+      where: { id },
+      data: {
+        status,
+      },
+    });
+  }
+
   async deleteUser(id: string) {
     return await prisma.user.delete({
       where: { id },

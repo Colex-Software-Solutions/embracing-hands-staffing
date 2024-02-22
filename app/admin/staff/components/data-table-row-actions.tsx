@@ -18,21 +18,24 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 
-import { labels } from "../data/data";
+import { statusOptions } from "../data/data";
 import { Task, taskSchema } from "../data/schema";
-import { EditTaskModal } from "../../components/modals/edit-task-modal";
+import { ViewStaffUserDetailsModal } from "../../components/modals/view-staff-user-details-modal";
+import { ApproveStatusModal } from "../../components/modals/approve-status-modal";
+import { DeclineStatusModal } from "../../components/modals/decline-status-modal";
+import { StaffUser } from "../page";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
-  handleTaskUpdate: (updatedTask: Task) => void;
+  isPending: boolean;
+  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void;
 }
 
 export function DataTableRowActions<TData>({
   row,
-  handleTaskUpdate,
+  isPending,
+  handleStaffUsersUpdate,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -45,27 +48,21 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <EditTaskModal task={task} handleTaskUpdate={handleTaskUpdate} />
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        <ViewStaffUserDetailsModal row={row} />
+        {isPending && (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <ApproveStatusModal
+                row={row}
+                id={row.getValue("id")}
+                role="STAFF"
+                handleStaffUsersUpdate={handleStaffUsersUpdate}
+              />
+              <DeclineStatusModal row={row} />
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

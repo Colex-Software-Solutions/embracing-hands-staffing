@@ -12,8 +12,7 @@ import { DataTableRowActions } from "./data-table-row-actions";
 import { StaffUser } from "../page";
 
 export const columns = (
-  // handleTaskUpdate: (updatedTask: Task) => void
-  handleStaffUsersUpdate: (updatedStaffUser: StaffUser) => void
+  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void
 ): ColumnDef<Task>[] => [
   {
     id: "select",
@@ -141,10 +140,14 @@ export const columns = (
       return value.includes(row.getValue(id));
     },
   },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => (
-  //     <DataTableRowActions row={row} handleTaskUpdate={handleTaskUpdate} />
-  //   ),
-  // },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <DataTableRowActions
+        row={row}
+        isPending={row.getValue("status") === "PENDING"}
+        handleStaffUsersUpdate={handleStaffUsersUpdate}
+      />
+    ),
+  },
 ];

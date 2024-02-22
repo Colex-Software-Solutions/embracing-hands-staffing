@@ -16,6 +16,8 @@ export interface StaffUser {
   firstName: string;
   lastName: string;
   email: string;
+  status: string;
+  phone: string;
 }
 
 const mapDataToStaffUsers = (data: any): StaffUser[] => {
