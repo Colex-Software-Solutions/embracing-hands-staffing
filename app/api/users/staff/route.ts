@@ -7,7 +7,6 @@ interface RequestBody {
 
 export async function POST(request: Request) {
   const body: RequestBody = await request.json();
-  console.log("Test");
 
   try {
     const user = await userProvider.updateUserStatus(body.id, body.status);

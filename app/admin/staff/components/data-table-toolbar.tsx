@@ -2,14 +2,11 @@
 
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
-
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
-
-import { priorities, statuses } from "../data/data";
+import { statuses } from "../data/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { ChangeEvent } from "react";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;

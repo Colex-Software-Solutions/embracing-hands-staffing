@@ -21,7 +21,6 @@ export interface StaffUser {
 }
 
 const mapDataToStaffUsers = (data: any): StaffUser[] => {
-  console.log({ data });
   const staffUsers: StaffUser[] = data.map((staffUserData) => {
     return {
       id: staffUserData.id,
