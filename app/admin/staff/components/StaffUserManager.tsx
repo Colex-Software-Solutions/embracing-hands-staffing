@@ -28,7 +28,10 @@ const StaffUserManager = ({ initialStaffUsers }: IStaffUserManager) => {
 
   return (
     <>
-      <DataTable data={staffUsers} columns={columns(handleStaffUsersUpdate)} />
+      <DataTable
+        data={staffUsers as any[]}
+        columns={columns(handleStaffUsersUpdate)}
+      />
       <Toaster />
     </>
   );

@@ -12,8 +12,6 @@ export async function POST(request: Request) {
     const user = await userProvider.updateUserStatus(body.id, body.status);
     return new Response(JSON.stringify({ success: true, user }));
   } catch (error) {
-    return new Response(
-      JSON.stringify({ success: false, message: error.message })
-    );
+    return new Response(JSON.stringify({ success: false, error }));
   }
 }

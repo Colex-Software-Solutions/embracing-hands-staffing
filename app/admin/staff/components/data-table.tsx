@@ -31,7 +31,7 @@ import { StaffUser } from "../page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: StaffUser[];
+  data: TData[];
 }
 
 export function DataTable<TData, TValue>({
