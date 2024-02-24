@@ -57,20 +57,17 @@ const StaffProfileForm = ({
   const { toast } = useToast();
   const [skills, setSkills] = useState<string[]>(profile?.skills ?? []);
   const [skillInput, setSkillInput] = useState("");
-  // State hooks for managing files
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
   const [resumeFile, setResumeFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
   const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl);
 
-  // Handlers for file change
   const handleProfileImageChange = (event: any) => {
     const file = event.target.files[0];
     if (file && /^(image\/jpeg|image\/png|image\/svg\+xml)$/.test(file.type)) {
       setProfileImageFile(file);
     } else {
       alert("Only JPEG, PNG, or SVG files are allowed.");
-      // Reset the file input
       event.target.value = "";
     }
   };
@@ -81,7 +78,6 @@ const StaffProfileForm = ({
       setResumeFile(file);
     } else {
       alert("Only PDF files are allowed.");
-      // Reset the file input
       event.target.value = "";
     }
   };
@@ -150,7 +146,7 @@ const StaffProfileForm = ({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
-                name="firstname" // Adjust this for each field
+                name="firstname"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>First Name</FormLabel>

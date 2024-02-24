@@ -30,7 +30,11 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
         .string()
         .min(6, { message: "Password must be at least 6 characters long" }),
       confirmPassword: z.string(),
-      phone: z.string().min(10, { message: "Invalid phone number" }),
+      phone: z
+        .string()
+        .regex(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, {
+          message: "Invalid phone number",
+        }),
       role: z.enum(["STAFF", "FACILITY"]),
     })
     .refine((data) => data.password === data.confirmPassword, {
