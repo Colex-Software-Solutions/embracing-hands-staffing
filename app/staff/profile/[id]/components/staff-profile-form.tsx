@@ -28,6 +28,7 @@ import {
 import { Loader, XIcon } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
+import Link from "next/link";
 
 const profileSchema = z.object({
   firstname: z.string().min(1, "First Name is required"),
@@ -255,9 +256,11 @@ const StaffProfileForm = ({
               />
               {resumeUrl && !resumeFile && (
                 <div className="flex items-center">
-                  <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
-                    View current resume
-                  </a>
+                  <Link href={resumeUrl} target="_blank">
+                    <Button type="button" variant={"link"}>
+                      View current resume
+                    </Button>
+                  </Link>
                   <p>
                     <Button
                       type="button"
