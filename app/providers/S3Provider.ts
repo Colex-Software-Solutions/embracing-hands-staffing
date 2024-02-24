@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
   region: process.env.NEXT_PUBLIC_AWS_REGION,
@@ -32,4 +36,28 @@ const uploadFile = async (
   }
 };
 
-export { uploadFile };
+const deleteFile = async (fileUrl: string) => {
+  const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME;
+
+  // Extract the key from the file URL
+  const key = fileUrl.replace(
+    `https://${bucketName}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/`,
+    ""
+  );
+
+  const deleteParams = {
+    Bucket: bucketName,
+    Key: key,
+  };
+
+  try {
+    const command = new DeleteObjectCommand(deleteParams);
+    await s3.send(command);
+    return true;
+  } catch (error) {
+    console.error("Error deleting file from S3:", error);
+    throw error;
+  }
+};
+
+export { uploadFile, deleteFile };

@@ -1,4 +1,4 @@
-import { uploadFile } from "@/app/providers/S3Provider";
+import { deleteFile, uploadFile } from "@/app/providers/S3Provider";
 import { staffProvider } from "@/app/providers/staffProvider";
 import { StaffProfile } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,23 +9,46 @@ export async function POST(request: NextRequest) {
     const userId = urlArr[urlArr.length - 1];
     if (!userId)
       return NextResponse.json(
-        { error: "User ID is required." },
-        { status: 400 }
+        { message: "User ID is required." },
+        {
+          status: 400,
+          statusText: "User ID is required.",
+        }
       );
+    const staff = await staffProvider.getStaffProfile(userId);
+
+    let profileImage, resume, profileUrl, resumeUrl;
     const formData = await request.formData();
-    const profileImage = formData.get("profileImage") as File;
-    const resume = formData.get("resume") as File;
-    if (!profileImage || !resume) {
-      return NextResponse.json(null, { status: 400 });
+
+    // resume and profile url will only be required on first creation
+    // otherwise the previous files should be deleted from S3
+    if (formData.has("profileImage")) {
+      if (staff?.profileImage) {
+        deleteFile(staff.profileImage);
+      }
+      profileImage = formData.get("profileImage") as File;
+      const profileImageBuffer = Buffer.from(await profileImage.arrayBuffer());
+      profileUrl = await uploadFile(
+        profileImageBuffer,
+        profileImage.name,
+        profileImage.type
+      );
     }
-    const profileImageBuffer = Buffer.from(await profileImage.arrayBuffer());
-    const profileUrl = await uploadFile(
-      profileImageBuffer,
-      profileImage.name,
-      profileImage.type
-    );
-    const resumeBuffer = Buffer.from(await profileImage.arrayBuffer());
-    const resumeUrl = await uploadFile(resumeBuffer, resume.name, resume.type);
+    if (formData.has("resume")) {
+      if (staff?.resumeUrl) {
+        deleteFile(staff.resumeUrl);
+      }
+      resume = formData.get("resume") as File;
+      const resumeBuffer = Buffer.from(await resume.arrayBuffer());
+      resumeUrl = await uploadFile(resumeBuffer, resume.name, resume.type);
+    }
+
+    if (!staff && (!profileImage || !resume)) {
+      return NextResponse.json(null, {
+        status: 400,
+        statusText: "Resume and profile image are required",
+      });
+    }
 
     const firstname = formData.get("firstname") as string;
     const lastname = formData.get("lastname") as string;
@@ -42,15 +65,14 @@ export async function POST(request: NextRequest) {
       about,
       title,
       skills: skillsArray,
-      profileImage: profileUrl,
-      resumeUrl,
+      profileImage: profileUrl || staff?.profileImage || null,
+      resumeUrl: resumeUrl || staff?.resumeUrl || null,
       profileSetupComplete: true,
     };
 
-    const updatedProfile = await staffProvider.createOrStaffProfile(
-      userId,
-      profileData
-    );
+    const updatedProfile = staff
+      ? await staffProvider.updateStaffProfile(userId, profileData)
+      : await staffProvider.createStaffProfile(profileData);
 
     return NextResponse.json({ success: true, profile: updatedProfile });
   } catch (error: any) {
