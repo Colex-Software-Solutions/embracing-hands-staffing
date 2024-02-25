@@ -65,9 +65,9 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
   // Assume this function is called after successful login
   const redirectToProfileSetup = (role: Role, userId: string) => {
     if (role === "STAFF") {
-      router.push(`/staff/profile/${userId}`);
+      router.push(`/staff/${userId}/profile`);
     } else if (role === "FACILITY") {
-      router.push(`/facility/profile/${userId}`);
+      router.push(`/facility/${userId}/profile`);
     }
   };
 
