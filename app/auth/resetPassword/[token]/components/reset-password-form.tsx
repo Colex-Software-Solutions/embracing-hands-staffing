@@ -8,7 +8,6 @@ import { Label } from "@/app/components/ui/label";
 import { Input } from "@/app/components/ui/input";
 import { Alert } from "@/app/components/ui/alert";
 import { Button } from "@/app/components/ui/button";
-import axios from "axios";
 import Link from "next/link";
 
 // Define the schema for form validation

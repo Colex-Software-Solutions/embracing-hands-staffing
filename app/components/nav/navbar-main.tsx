@@ -4,7 +4,11 @@ import React, { useState, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useWindowSize from "@/app/hooks/use-window-size";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, UserIcon, X } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { UserNav } from "./user-nav";
 
 interface NavbarLink {
   label: string;
@@ -76,7 +80,7 @@ const NavbarAnimated = ({
         <>
           <header
             className={cn(
-              "flex justify-between text-white items-center w-full h-14 border-b border-gray-300 bg-primary px-4",
+              "flex justify-between text-white items-center w-full h-14 bg-primary px-4",
               className
             )}
           >
@@ -84,14 +88,14 @@ const NavbarAnimated = ({
               className="w-14 h-14 flex justify-center items-center cursor-pointer"
               onClick={() => setOpen(true)}
             >
-              <Menu size={20} />
+              <Menu className="text-primary" size={20} />
             </div>
             {rightSide}
           </header>
           <AnimatePresence>
             {open && (
               <motion.div
-                className="absolute top-0 left-0 flex flex-col space-y-5 items-center w-full h-full bg-primary opacity-5 text-white"
+                className="absolute z-50 top-0 left-0 flex flex-col space-y-5 items-center w-full h-full bg-primary text-white"
                 variants={menuVariants}
                 initial="initial"
                 animate="animate"
@@ -117,6 +121,9 @@ const NavbarAnimated = ({
             className
           )}
         >
+          <h1 className="w-[200px] text-xl text-primary font-bold">
+            Embracing hands HealthCare Staffing
+          </h1>
           <div className="flex-justify-start space-x-6">
             {renderLinks(0, linkClassName)}
           </div>
@@ -127,4 +134,51 @@ const NavbarAnimated = ({
   );
 };
 
-export default NavbarAnimated;
+const navItems = [
+  {
+    href: "/home",
+    label: "Home",
+  },
+  {
+    href: "/home",
+    label: "Company",
+  },
+  {
+    href: "/home",
+    label: "About",
+  },
+  { href: "/home", label: "Contact" },
+];
+
+const Navbar = () => {
+  const { data: session } = useSession();
+  return (
+    <NavbarAnimated
+      className="bg-white"
+      linkClassName="p-4 text-lg text-black rounded-md cursor-pointer hover:text-secondary"
+      rightSide={
+        <div className="flex">
+          {session?.user ? (
+            <>
+              <UserNav session={session} />
+              <LogOut size={30} className="ml-4 cursor-pointer" />
+            </>
+          ) : (
+            <>
+              <Link className="px-2" href={"/auth/login"}>
+                <Button className="text-lg" variant={"link"}>
+                  Login
+                </Button>
+              </Link>
+              <Link href={"/auth/register"}>
+                <Button className="text-lg">Sign up</Button>
+              </Link>
+            </>
+          )}
+        </div>
+      }
+      links={navItems}
+    />
+  );
+};
+export default Navbar;

@@ -53,7 +53,7 @@ model StaffProfile {
   about               String?
   title               String
   skills              String[]
-  profileImage        Bytes?
+  profileImage        String?
   profileSetupComplete Boolean @default(false)
   resumeUrl           String?
   user                User     @relation(fields: [userId], references: [id])
@@ -67,7 +67,7 @@ model FacilityProfile {
   facilityType    String
   description     String?
   address         String
-  profileImage    Bytes?       
+  profileImage    String?       
   jobPosts        JobPost[]
   user            User     @relation(fields: [userId], references: [id])
 }

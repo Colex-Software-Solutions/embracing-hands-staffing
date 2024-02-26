@@ -17,6 +17,24 @@ class UserProvider {
   async getUserByEmail(email: string) {
     return await prisma.user.findUnique({
       where: { email },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        phone: true,
+        status: true,
+        staffProfile: {
+          select: {
+            profileImage: true,
+          },
+        },
+        facilityProfile: {
+          select: {
+            profileImage: true,
+          },
+        },
+      },
     });
   }
 

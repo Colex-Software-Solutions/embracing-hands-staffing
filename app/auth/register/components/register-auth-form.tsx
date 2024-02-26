@@ -30,7 +30,11 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
         .string()
         .min(6, { message: "Password must be at least 6 characters long" }),
       confirmPassword: z.string(),
-      phone: z.string().min(10, { message: "Invalid phone number" }),
+      phone: z
+        .string()
+        .regex(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, {
+          message: "Invalid phone number",
+        }),
       role: z.enum(["STAFF", "FACILITY"]),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -43,8 +47,17 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
     });
 
   type RegisterFormValues = z.infer<typeof registrationSchema>;
+
+  const defaultValues: Partial<RegisterFormValues> = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    role: "STAFF",
+  };
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registrationSchema),
+    defaultValues,
   });
 
   const router = useRouter();
@@ -52,9 +65,9 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
   // Assume this function is called after successful login
   const redirectToProfileSetup = (role: Role, userId: string) => {
     if (role === "STAFF") {
-      router.push(`/staff/profile/${userId}`);
+      router.push(`/staff/${userId}/profile`);
     } else if (role === "FACILITY") {
-      router.push(`/facility/profile/${userId}`);
+      router.push(`/facility/${userId}/profile`);
     }
   };
 
