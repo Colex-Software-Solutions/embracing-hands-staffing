@@ -11,7 +11,7 @@ interface IStaffUserManager {
 const StaffUserManager = ({ initialStaffUsers }: IStaffUserManager) => {
   const [staffUsers, setStaffUsers] = useState(initialStaffUsers);
 
-  // Function to update a task
+  // Function to update a staff user
   const handleStaffUsersUpdate = (
     id: string,
     status: "APPROVED" | "REJECTED"

@@ -8,6 +8,7 @@ import {
   Trash2,
   Settings,
   User,
+  Building,
 } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
 
@@ -38,6 +39,12 @@ export default function adminLayout({
 
                 icon: <User className="md:mr-2 h-4 w-4" />,
                 href: "/admin/staff",
+              },
+              {
+                title: "Facility",
+
+                icon: <Building className="md:mr-2 h-4 w-4" />,
+                href: "/admin/facility",
               },
               {
                 title: "Users",

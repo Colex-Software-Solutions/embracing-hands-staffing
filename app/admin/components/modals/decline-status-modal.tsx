@@ -14,28 +14,59 @@ import axios from "axios";
 interface DeclineStatusModalProps {
   id: string;
   role: "STAFF" | "FACILITY";
-  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void;
+  handleStaffUsersUpdate?: (
+    id: string,
+    status: "APPROVED" | "REJECTED"
+  ) => void;
+  handleFacilityUsersUpdate?: (
+    id: string,
+    status: "APPROVED" | "REJECTED"
+  ) => void;
 }
 
 export function DeclineStatusModal({
   id,
+  role,
   handleStaffUsersUpdate,
+  handleFacilityUsersUpdate,
 }: DeclineStatusModalProps) {
   const { toast } = useToast();
+
+  const handleStaffSubmit = () =>
+    axios.post("/api/users", {
+      id,
+      status: "REJECTED",
+    });
+
+  const handleFacilitySubmit = () =>
+    axios.post("/api/users", {
+      id,
+      status: "REJECTED",
+    });
+
+  const getResponse = () => {
+    if (role === "STAFF") {
+      return handleStaffSubmit();
+    }
+
+    return handleFacilitySubmit();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/users/staff", {
-        id,
-        status: "REJECTED",
-      });
+      const response = await getResponse();
       if (response.data.success) {
-        handleStaffUsersUpdate(id, "REJECTED");
+        if (role === "STAFF" && handleStaffUsersUpdate) {
+          handleStaffUsersUpdate(id, "REJECTED");
+        }
+        if (role === "FACILITY" && handleFacilityUsersUpdate) {
+          handleFacilityUsersUpdate(id, "REJECTED");
+        }
         toast({
           variant: "default",
           title: "Success!",
-          description: "Application has been rejected.",
+          description: "Application has been approved.",
         });
 
         return;
