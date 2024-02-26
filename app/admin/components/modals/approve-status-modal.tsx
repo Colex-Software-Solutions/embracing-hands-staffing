@@ -50,15 +50,16 @@ export function ApproveStatusModal({
     if (role === "STAFF") {
       return handleStaffSubmit();
     }
-
-    return handleFacilitySubmit();
+    if (role === "FACILITY") {
+      return handleFacilitySubmit();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await getResponse();
-      if (response.data.success) {
+      if (response && response.data.success) {
         if (role === "STAFF" && handleStaffUsersUpdate) {
           handleStaffUsersUpdate(id, "APPROVED");
         }

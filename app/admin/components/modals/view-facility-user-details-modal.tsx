@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-import { Task } from "../../tasks/data/schema";
+import React from "react";
 import { Button } from "../../../components/ui/button";
-import { labels, priorities, statuses } from "../../tasks/data/data";
-import { useToast } from "../../../components/ui/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -13,21 +10,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "../../../components/ui/dialog";
-import { Label } from "../../../components/ui/label";
-import { Textarea } from "../../../components/ui/textarea";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from "../../../components/ui/dropdown-menu";
-import { Row } from "@tanstack/react-table";
 import { FacilityUser } from "../../facility/page";
-
-// interface ViewStaffUserDetailsModalProps<TData> {
-//   row: Row<TData>;
-// }
 
 const getStaffUserInfoFromRow = (row: any): FacilityUser => {
   const id = row.getValue("id");
