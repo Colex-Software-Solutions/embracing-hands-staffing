@@ -16,24 +16,19 @@ export default async function UserProfilePage({
     user?.role === "STAFF"
       ? await staffProvider.getStaffProfile(params.id)
       : await facilityProvider.getFacilityProfile(params.id);
+
+  if (!user || !profile) {
+    return <StaffProfileInfoSkeleton />;
+  }
   return (
     <>
-      {user && profile ? (
-        <>
-          {user?.role === "STAFF" ? (
-            <StaffProfileInfo
-              user={user}
-              staffProfile={profile as StaffProfile}
-            />
-          ) : (
-            <FacilityProfileInfo
-              user={user}
-              facilityProfile={profile as FacilityProfile}
-            />
-          )}
-        </>
+      {user?.role === "STAFF" ? (
+        <StaffProfileInfo user={user} staffProfile={profile as StaffProfile} />
       ) : (
-        <StaffProfileInfoSkeleton />
+        <FacilityProfileInfo
+          user={user}
+          facilityProfile={profile as FacilityProfile}
+        />
       )}
     </>
   );

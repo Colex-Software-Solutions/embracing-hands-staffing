@@ -23,21 +23,23 @@ export function UserNav({ session }: { session: Session }) {
   const {
     user: { id, email, role, staffProfile, facilityProfile },
   } = session;
+
+  const getSrc = () => {
+    switch (role) {
+      case "FACILITY":
+        return facilityProfile?.profileImage;
+      case "STAFF":
+        return staffProfile?.profileImage;
+      default:
+        return "/avatar.jpg";
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage
-              src={
-                role === "FACILITY"
-                  ? facilityProfile?.profileImage
-                  : role === "STAFF"
-                  ? staffProfile?.profileImage
-                  : "/avatar"
-              }
-              alt="Profile"
-            />
+            <AvatarImage src={getSrc()} alt="Profile" />
             <AvatarFallback>
               <UserIcon className="text-primary" />
             </AvatarFallback>

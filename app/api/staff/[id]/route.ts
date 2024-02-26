@@ -3,10 +3,12 @@ import { staffProvider } from "@/app/providers/staffProvider";
 import { StaffProfile } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const urlArr = request.url.split("/");
-    const userId = urlArr[urlArr.length - 1];
+    const userId = params.id;
     if (!userId)
       return NextResponse.json(
         { message: "User ID is required." },
