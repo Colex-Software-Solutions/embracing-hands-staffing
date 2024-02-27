@@ -1,5 +1,5 @@
 import { ThemeProvider } from "../components/theme-provider";
-import { Nav } from "./components/Nav";
+import { Nav } from "@/app/components/ui/Nav";
 import {
   ArchiveX,
   File,
@@ -8,8 +8,9 @@ import {
   Trash2,
   Settings,
   User,
+  Building,
 } from "lucide-react";
-import { Separator } from "./components/separator";
+import { Separator } from "@/app/components/ui/separator";
 
 export default function adminLayout({
   children,
@@ -32,6 +33,18 @@ export default function adminLayout({
                 title: "Tasks",
                 icon: <Inbox className="md:mr-2 h-4 w-4" />,
                 href: "/admin/tasks",
+              },
+              {
+                title: "Staff",
+
+                icon: <User className="md:mr-2 h-4 w-4" />,
+                href: "/admin/staff",
+              },
+              {
+                title: "Facility",
+
+                icon: <Building className="md:mr-2 h-4 w-4" />,
+                href: "/admin/facility",
               },
               {
                 title: "Users",

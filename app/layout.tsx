@@ -1,7 +1,9 @@
-import { Toaster } from "./admin/components/toaster";
+import { Toaster } from "./components/ui/toaster";
 import Providers from "./components/Auth-Provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import NavbarAnimated from "./components/nav/navbar-main";
+import { LogOut, UserIcon } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
+          <NavbarAnimated />
           {children}
           <Toaster />
         </Providers>

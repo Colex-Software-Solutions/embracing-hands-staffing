@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "../../components/button";
+import { Button } from "@/app/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,9 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/form";
-import { RadioGroup, RadioGroupItem } from "../../components/radio-group";
-import { toast } from "../../components/use-toast";
+} from "@/app/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
+import { toast } from "@/app/components/ui/use-toast";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(

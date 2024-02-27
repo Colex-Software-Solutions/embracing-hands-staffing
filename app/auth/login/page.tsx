@@ -16,14 +16,14 @@ export default function AuthenticationPage() {
           alt="Auth Image"
           width={800}
           height={400}
-          className="relative hidden h-full flex-col bg-muted  text-white lg:flex dark:border-r"
-          src="/auth-bg.jpeg"
+          className="relative hidden h-full flex-col bg-muted opacity-70  text-white lg:flex dark:border-r"
+          src="/auth-bg2.png"
         />
         <div className="lg:p-8 mt-[15%] sm:mt-0">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Login to Our Platform
+                Login To View the latest Per Piem Jobs
               </h1>
               <p className="text-sm text-muted-foreground">
                 Enter your email and password below

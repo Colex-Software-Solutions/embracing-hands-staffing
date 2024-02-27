@@ -1,7 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "../../components/badge";
-import { Checkbox } from "@/app/admin/components/checkbox";
+import { Badge } from "@/app/components/ui/badge";
+import { Checkbox } from "@/app/components/ui/checkbox";
 import { DataTableColumnHeader } from "../../tasks/components/data-table-column-header";
 import { User } from "../page";
 

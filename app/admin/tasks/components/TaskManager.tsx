@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Task } from "../data/schema";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { Toaster } from "../../components/toaster";
+import { Toaster } from "@/app/components/ui/toaster";
 interface ITaskManager {
   initialTasks: Task[];
 }
