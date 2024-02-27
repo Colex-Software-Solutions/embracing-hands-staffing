@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const staffUserSchema = z.object({
+export const facilityUserSchema = z.object({
   id: z.string(),
   title: z.string(),
   status: z.string(),
@@ -8,4 +8,4 @@ export const staffUserSchema = z.object({
   priority: z.string(),
 });
 
-export type StaffUserSchema = z.infer<typeof staffUserSchema>;
+export type FacilityUserSchema = z.infer<typeof facilityUserSchema>;

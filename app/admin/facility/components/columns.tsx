@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/app/components/ui/badge";
-import { StaffUserSchema } from "../data/schema";
+import { FacilityUserSchema } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 
@@ -9,7 +9,7 @@ export const columns = (
     id: string,
     status: "APPROVED" | "REJECTED"
   ) => void
-): ColumnDef<StaffUserSchema>[] => [
+): ColumnDef<FacilityUserSchema>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => (
