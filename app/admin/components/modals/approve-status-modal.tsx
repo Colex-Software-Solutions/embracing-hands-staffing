@@ -15,25 +15,57 @@ interface ApproveStatusModalProps {
   row: any;
   id: string;
   role: "STAFF" | "FACILITY";
-  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void;
+  handleStaffUsersUpdate?: (
+    id: string,
+    status: "APPROVED" | "REJECTED"
+  ) => void;
+  handleFacilityUsersUpdate?: (
+    id: string,
+    status: "APPROVED" | "REJECTED"
+  ) => void;
 }
 
 export function ApproveStatusModal({
   row,
   id,
+  role,
   handleStaffUsersUpdate,
+  handleFacilityUsersUpdate,
 }: ApproveStatusModalProps) {
   const { toast } = useToast();
+
+  const handleStaffSubmit = () =>
+    axios.post("/api/users", {
+      id,
+      status: "APPROVED",
+    });
+
+  const handleFacilitySubmit = () =>
+    axios.post("/api/users", {
+      id,
+      status: "APPROVED",
+    });
+
+  const getResponse = () => {
+    if (role === "STAFF") {
+      return handleStaffSubmit();
+    }
+    if (role === "FACILITY") {
+      return handleFacilitySubmit();
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/users/staff", {
-        id,
-        status: "APPROVED",
-      });
-      if (response.data.success) {
-        handleStaffUsersUpdate(id, "APPROVED");
+      const response = await getResponse();
+      if (response && response.data.success) {
+        if (role === "STAFF" && handleStaffUsersUpdate) {
+          handleStaffUsersUpdate(id, "APPROVED");
+        }
+        if (role === "FACILITY" && handleFacilityUsersUpdate) {
+          handleFacilityUsersUpdate(id, "APPROVED");
+        }
         toast({
           variant: "default",
           title: "Success!",

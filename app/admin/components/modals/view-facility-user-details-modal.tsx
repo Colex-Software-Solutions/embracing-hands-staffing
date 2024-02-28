@@ -10,28 +10,30 @@ import {
   DialogTrigger,
   DialogClose,
 } from "../../../components/ui/dialog";
-import { StaffUser } from "../../staff/page";
+import { FacilityUser } from "../../facility/page";
 
-const getStaffUserInfoFromRow = (row: any): StaffUser => {
+const getStaffUserInfoFromRow = (row: any): FacilityUser => {
   const id = row.getValue("id");
-  const firstName = row.getValue("firstName");
-  const lastName = row.getValue("lastName");
+  const name = row.getValue("name");
+  const address = row.getValue("address");
   const email = row.getValue("email");
   const phone = row.getValue("phone");
   const status = row.getValue("status");
 
   return {
     id,
-    firstName,
-    lastName,
+    name,
+    address,
+    description: "",
+    facilityType: "",
     email,
     phone,
     status,
   };
 };
 
-export function ViewStaffUserDetailsModal({ row }: any) {
-  const { firstName, lastName, email, id, phone, status } =
+export function ViewFacilityUserDetailsModal({ row }: any) {
+  const { name, address, description, facilityType, email, id, phone, status } =
     getStaffUserInfoFromRow(row);
 
   return (
@@ -47,13 +49,23 @@ export function ViewStaffUserDetailsModal({ row }: any) {
       <DialogContent className="sm:max-w-[425px]">
         <div>
           <DialogHeader>
-            <DialogTitle>Staff User Details</DialogTitle>
+            <DialogTitle>Facility User Details</DialogTitle>
             <DialogDescription>ID: {id}</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-5 my-10">
-            <div className="flex justify-between">
-              <div>First name: {firstName}</div>
-              <div>Last name: {lastName}</div>
+            <div className="flex">
+              <div>Name: {name}</div>
+            </div>
+            <div className="flex">
+              <div>Address: {address}</div>
+            </div>
+            <div className="flex">
+              <div>
+                Facility Type: {facilityType === "" ? facilityType : "N/A"}
+              </div>
+            </div>
+            <div className="flex">
+              <div>Description: {description === "" ? description : "N/A"}</div>
             </div>
             <div className="flex">
               <div>Email: {email}</div>
