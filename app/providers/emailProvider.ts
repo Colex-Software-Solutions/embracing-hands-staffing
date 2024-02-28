@@ -6,8 +6,6 @@ let apiKey = apiInstance.authentications["apiKey"];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 
 interface NewApplicationRequest {
-  name: string;
-  role: string;
   websiteUrl: string;
 }
 

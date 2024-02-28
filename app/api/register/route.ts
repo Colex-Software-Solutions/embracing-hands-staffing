@@ -22,8 +22,6 @@ export async function POST(req: NextRequest) {
       emailTo: "admin@colexsoftwaresolutions.com",
       emailTemplateId: EmailTemplate.NEW_APPLICATION_REQUEST,
       emailParams: {
-        name: await getUserProfileName(user.id, user.role),
-        role: user.role,
         websiteUrl: `${
           process.env.WEBSITE_URL
         }/admin/${user.role.toLowerCase()}`,
