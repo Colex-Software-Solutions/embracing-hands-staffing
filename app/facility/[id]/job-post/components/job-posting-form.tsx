@@ -227,7 +227,7 @@ const JobPostingForm = () => {
                         <Switch
                           id="scrubsProvided"
                           checked={value}
-                          onChange={onChange}
+                          onCheckedChange={onChange}
                           onBlur={onBlur}
                           ref={ref}
                         />
