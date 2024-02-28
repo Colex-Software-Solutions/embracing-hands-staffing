@@ -3,7 +3,6 @@ import { userProvider } from "@/app/providers/userProvider";
 import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { EmailTemplate, emailProvider } from "@/app/providers/emailProvider";
-import { getUserProfileName } from "../users/route";
 interface RegisterBody {
   user: Omit<User, "status" | "createdAt" | "updatedAt" | "stripeId">;
 }

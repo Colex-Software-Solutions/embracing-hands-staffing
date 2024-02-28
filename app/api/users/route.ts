@@ -2,10 +2,7 @@ import { EmailTemplate, emailProvider } from "@/app/providers/emailProvider";
 import { userProvider } from "@/app/providers/userProvider";
 import { Role } from "@prisma/client";
 
-export const getUserProfileName = async (
-  id: string,
-  role: Role
-): Promise<string> => {
+const getUserProfileName = async (id: string, role: Role): Promise<string> => {
   if (role === "STAFF") {
     const userProfile = await userProvider.getStaffProfileById(id);
     console.log({ userProfile });
