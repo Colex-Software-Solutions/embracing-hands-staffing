@@ -22,10 +22,10 @@ const mapDataToFacilityUsers = (data: any): FacilityUser[] => {
   const facilityUsers: FacilityUser[] = data.map((facilityUser: any) => {
     return {
       id: facilityUser.id,
-      name: facilityUser.facilityProfile.name,
-      facilityType: facilityUser.facilityProfile.facilityType,
-      description: facilityUser.facilityProfile.description,
-      address: facilityUser.facilityProfile.address,
+      name: facilityUser.facilityProfile?.name || "N/A",
+      facilityType: facilityUser.facilityProfile?.facilityType || "N/A",
+      description: facilityUser.facilityProfile?.description || "N/A",
+      address: facilityUser.facilityProfile?.address || "N/A",
       email: facilityUser.email,
       status: facilityUser.status,
       phone: facilityUser.phone,
