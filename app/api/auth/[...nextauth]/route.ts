@@ -1,6 +1,6 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
@@ -41,10 +41,10 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       return { ...token, ...user };
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       session.user = token as any;
       return session;
     },
@@ -52,6 +52,7 @@ const handler = NextAuth({
   pages: {
     signIn: "/auth/login",
   },
-});
+};
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
