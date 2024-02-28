@@ -55,6 +55,46 @@ class UserProvider {
     });
   }
 
+  async getStaffProfileById(id: string) {
+    return prisma.user.findUnique({
+      select: {
+        id: true,
+        staffProfile: {
+          select: {
+            firstname: true,
+            lastname: true,
+            title: true,
+          },
+        },
+      },
+      where: {
+        id,
+        role: "STAFF",
+      },
+    });
+  }
+
+  async getFacilityProfileById(id: string) {
+    return prisma.user.findUnique({
+      select: {
+        id: true,
+        facilityProfile: {
+          select: {
+            id: true,
+            name: true,
+            facilityType: true,
+            description: true,
+            address: true,
+          },
+        },
+      },
+      where: {
+        id,
+        role: "FACILITY",
+      },
+    });
+  }
+
   async getStaffUsers() {
     return await prisma.user.findMany({
       select: {
