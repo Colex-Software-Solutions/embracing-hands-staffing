@@ -11,8 +11,8 @@ declare module "next-auth" {
       role: Role;
       status: UserStatus;
       accessToken: string;
-      staffProfile: { profileImage: string }?;
-      facilityProfile: { profileImage: string }?;
+      staffProfile: { profileImage: string; id: string }?;
+      facilityProfile: { profileImage: string; id: string }?;
     };
   }
 }

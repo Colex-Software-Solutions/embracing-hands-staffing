@@ -67,6 +67,9 @@ model FacilityProfile {
   facilityType    String
   description     String?
   address         String
+  city            String?
+  state           String?
+  country         String?
   profileImage    String?       
   jobPosts        JobPost[]
   user            User     @relation(fields: [userId], references: [id])
@@ -85,7 +88,7 @@ model JobPost {
   startDate       DateTime
   endDate         DateTime
   housing         String
-  procedures      String
+  procedures      String[]
   patientPopulation String
   mie             Float?
   bonus           Float?

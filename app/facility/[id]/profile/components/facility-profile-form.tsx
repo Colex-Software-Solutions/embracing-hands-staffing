@@ -7,7 +7,7 @@ import { CardContent, CardFooter, Card } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Alert } from "@/app/components/ui/alert";
 import { FacilityProfile } from "@prisma/client";
-import { TypeOf, z } from "zod";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,16 +18,21 @@ import {
   FormField,
   FormItem,
 } from "@/app/components/ui/form";
-import { Loader, XIcon } from "lucide-react";
+import { Loader } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
-import Link from "next/link";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
   facilityType: z.string().min(1, "Facility Type is required"),
   description: z.string().optional(),
   address: z.string().min(10, "Address is required"),
+  country: z.string().min(3, "Country is required"),
+  state: z
+    .string()
+    .min(1, "State/Province is required")
+    .min(3, "Please enter full state/province name and not the shortcut"),
+  city: z.string().min(3, "City is required"),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -43,6 +48,9 @@ const FacilityProfileForm = ({
     facilityType: profile?.facilityType ?? "",
     description: profile?.description ?? "",
     address: profile?.address ?? "",
+    country: profile?.country ?? "",
+    state: profile?.state ?? "",
+    city: profile?.city ?? "",
   };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -67,6 +75,9 @@ const FacilityProfileForm = ({
     formData.append("address", data.address);
     formData.append("description", data.description ?? "");
     formData.append("facilityType", data.facilityType);
+    formData.append("country", data.country);
+    formData.append("state", data.state);
+    formData.append("city", data.city);
     if (profileImageFile) formData.append("profileImage", profileImageFile);
 
     try {
@@ -180,6 +191,56 @@ const FacilityProfileForm = ({
                       </FormControl>
                       {errors.address && (
                         <FormMessage>{errors.address.message}</FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter City" {...field} />
+                      </FormControl>
+                      {errors.city && (
+                        <FormMessage>{errors.city.message}</FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>State/Province</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter State or Province"
+                          {...field}
+                        />
+                      </FormControl>
+                      {errors.state && (
+                        <FormMessage>{errors.state.message}</FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter Country" {...field} />
+                      </FormControl>
+                      {errors.country && (
+                        <FormMessage>{errors.country.message}</FormMessage>
                       )}
                     </FormItem>
                   )}
