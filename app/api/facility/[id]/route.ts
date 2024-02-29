@@ -49,6 +49,9 @@ export async function POST(
     const facilityType = formData.get("facilityType") as string;
     const description = formData.get("description") as string;
     const address = formData.get("address") as string;
+    const country = formData.get("country") as string;
+    const state = formData.get("state") as string;
+    const city = formData.get("city") as string;
 
     const profileData: Omit<FacilityProfile, "id"> = {
       userId,
@@ -56,6 +59,9 @@ export async function POST(
       facilityType,
       description,
       address,
+      state,
+      country,
+      city,
       profileImage: profileUrl || facility?.profileImage || null,
     };
 

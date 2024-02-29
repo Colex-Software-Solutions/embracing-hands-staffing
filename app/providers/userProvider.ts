@@ -27,11 +27,13 @@ class UserProvider {
         staffProfile: {
           select: {
             profileImage: true,
+            id: true,
           },
         },
         facilityProfile: {
           select: {
             profileImage: true,
+            id: true,
           },
         },
       },

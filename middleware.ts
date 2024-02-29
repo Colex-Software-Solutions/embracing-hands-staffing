@@ -8,13 +8,15 @@ import { Role } from "@prisma/client";
 
 export default withAuth(
   async function middleware(req) {
+    const signInUrl = new URL("/auth/login", req.url);
+    signInUrl.searchParams.set("callbackUrl", req.nextUrl.href);
     const token = req.nextauth.token?.accessToken as string;
     const verifiedToken =
       token && (await verifyJwt(token).catch(console.error));
 
     // Check if user is logged in
     if (!verifiedToken) {
-      return new Response(null, { status: 401, statusText: "Unauthorized" });
+      return NextResponse.redirect(signInUrl);
     }
 
     // Dynamically check access permissions
@@ -26,9 +28,6 @@ export default withAuth(
         const roleAllowed = rule.roles.includes(userRole as Role);
 
         if (!methodAllowed || !roleAllowed) {
-          const signInUrl = new URL("/auth/login", req.url);
-          signInUrl.searchParams.set("callbackUrl", req.nextUrl.href);
-
           return NextResponse.redirect(signInUrl);
         }
 
