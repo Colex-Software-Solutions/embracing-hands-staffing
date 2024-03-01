@@ -1,13 +1,10 @@
 import { Nav } from "@/app/components/ui/Nav";
 import {
-  ArchiveX,
-  File,
-  Inbox,
-  Send,
-  Trash2,
   Settings,
-  User,
-  Building,
+  NotebookPen,
+  CreditCard,
+  ClipboardList,
+  Briefcase,
 } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
 import { getServerSession } from "@/lib/getServerSession";
@@ -27,55 +24,37 @@ export default async function facilityLayout({
           links={[
             {
               title: "Post a job",
-              icon: <Inbox className="md:mr-2 h-4 w-4" />,
+              icon: <NotebookPen className="md:mr-2 h-4 w-4" />,
               href: `${baseUrl}/job-post`,
             },
             {
-              title: "Staff",
+              title: "Jobs",
+              icon: <Briefcase className="md:mr-2 h-4 w-4" />,
+              href: `${baseUrl}/jobs`,
+            },
 
-              icon: <User className="md:mr-2 h-4 w-4" />,
-              href: "/admin/staff",
+            {
+              title: "Applications",
+              icon: <ClipboardList className="md:mr-2 h-4 w-4" />,
+              href: `${baseUrl}/applications`,
             },
             {
-              title: "Facility",
-
-              icon: <Building className="md:mr-2 h-4 w-4" />,
-              href: "/admin/facility",
+              title: "Billing",
+              icon: <CreditCard className="md:mr-2 h-4 w-4" />,
+              href: `${baseUrl}/billing`,
             },
             {
-              title: "Users",
-
-              icon: <User className="md:mr-2 h-4 w-4" />,
-              href: "/admin/users",
-            },
-            {
-              title: "Sent",
-              label: "",
-              icon: <Send className="md:mr-2 h-4 w-4" />,
-              href: "ghost",
-            },
-            {
-              title: "Junk",
-              label: "23",
-              icon: <ArchiveX className="md:mr-2 h-4 w-4" />,
-              href: "ghost",
-            },
-            {
-              title: "Trash",
-              label: "",
-              icon: <Trash2 className="md:mr-2 h-4 w-4" />,
-              href: "ghost",
-            },
-            {
-              title: "Settings",
+              title: "Profile Settings",
               icon: <Settings className="md:mr-2 h-4 w-4" />,
-              href: "/admin/settings",
+              href: `${baseUrl}/profile`,
             },
           ]}
         />
         <Separator />
       </div>
-      <>{children}</>
+      <div className="h-full flex-1 flex-col space-y-8 px-8 py-2 flex">
+        {children}
+      </div>
     </div>
   );
 }

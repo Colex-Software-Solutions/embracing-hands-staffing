@@ -11,6 +11,14 @@ class JobPostProvider {
       data: jobPostData,
     });
   }
+
+  async getJobPostsPerFacility(id: string) {
+    return await prisma.jobPost.findMany({
+      where: {
+        facilityId: id,
+      },
+    });
+  }
 }
 
 export const jobPostProvider = new JobPostProvider();

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AuthenticationPage() {
   return (
-    <div className="overflow-hidden sm:rounded-[0.5rem] sm:border bg-background sm:shadow-md md:shadow-xl sm:mx-[15%] mt-16 flex justify-center items-center ">
+    <div className="overflow-hidden sm:rounded-[0.5rem] sm:border bg-background sm:shadow-md md:shadow-xl sm:mx-[15%] mt-8 flex justify-center items-center ">
       <div className="container relative  sm:h-[800px] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Image
           alt="Auth Image"
