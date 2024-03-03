@@ -1,5 +1,4 @@
 "use client";
-import JobCard, { Job } from "./job-card";
 import {
   Select,
   SelectContent,
@@ -10,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import JobDisplayTabs from "./jobs-display-tabs";
 import sampleData from "./sampleData.json";
+import { Job } from "@/app/(staff)/find-jobs/page";
 
 const sortByNewestToOldest = (jobs: Job[]): Job[] =>
   jobs.sort(
@@ -22,14 +22,20 @@ const sortByOldestToNewest = (jobs: Job[]): Job[] =>
   );
 
 const sortByPay = (jobs: Job[]): Job[] =>
-  jobs.sort((a, b) => b.weeklyPay - a.weeklyPay);
+  jobs.sort((a, b) => b.paymentPerDay - a.paymentPerDay);
 
-const fetchedJobs: Job[] = sampleData as Job[];
+// const fetchedJobs: Job[] = sampleData as Job[];
 
-const JobsDisplayContainer = () => {
+interface JobsDisplayContainerProps {
+  initialJobs: Job[];
+}
+
+const JobsDisplayContainer: React.FC<JobsDisplayContainerProps> = ({
+  initialJobs,
+}) => {
   const [sortValue, setSortValue] = useState("relevance");
   const [window, setWindow] = useState<"jobs" | "favorites">("jobs");
-  const [jobs, setJobs] = useState<Job[]>(fetchedJobs);
+  const [jobs, setJobs] = useState<Job[]>(initialJobs);
 
   const getResults = () => {
     if (window === "favorites") {
@@ -59,7 +65,7 @@ const JobsDisplayContainer = () => {
 
   useEffect(() => {
     sortJobs();
-  }, [fetchedJobs, sortValue]);
+  }, [sortValue]);
 
   return (
     <div className="flex flex-col w-full max-w-3xl">

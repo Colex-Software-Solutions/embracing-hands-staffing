@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import EmptyTabContent from "./empty-tab-content";
-import JobCard, { Job } from "./job-card";
+import JobCard from "./job-card";
+import { Job } from "@/app/(staff)/find-jobs/page";
 
 interface JobDisplayTabsProps {
   jobs: Job[];
