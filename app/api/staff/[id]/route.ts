@@ -70,10 +70,11 @@ export async function POST(
       profileImage: profileUrl || staff?.profileImage || null,
       resumeUrl: resumeUrl || staff?.resumeUrl || null,
       profileSetupComplete: true,
+      favoriteJobPostIds: [],
     };
 
     const updatedProfile = staff
-      ? await staffProvider.updateStaffProfile(userId, profileData)
+      ? await staffProvider.updateStaffProfile({ userId, data: profileData })
       : await staffProvider.createStaffProfile(profileData);
 
     return NextResponse.json({ success: true, profile: updatedProfile });
