@@ -3,12 +3,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import EmptyTabContent from "./empty-tab-content";
 import JobCard from "./job-card";
 import { Job } from "@/app/(staff)/find-jobs/page";
+import axios from "axios";
 
 interface JobDisplayTabsProps {
   jobs: Job[];
   window: "jobs" | "favorites";
   setWindow: Dispatch<SetStateAction<"jobs" | "favorites">>;
   setJobs: Dispatch<SetStateAction<Job[]>>;
+  favoriteJobPostIds: string[];
 }
 
 export interface HandleFavoriteChange {
@@ -21,6 +23,7 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
   window,
   setWindow,
   setJobs,
+  favoriteJobPostIds,
 }) => {
   const favoriteJobs = jobs.filter((job) => job.isFavorite === true);
 
@@ -30,19 +33,38 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
     }
   };
 
-  const handleFavoriteChange = (input: HandleFavoriteChange) => {
-    const updatedJobs = jobs.map((job) => {
-      if (job.id === input.id) {
-        return {
-          ...job,
-          isFavorite: !input.isCurrentFavorite,
-        };
+  const handleFavoriteChange = async (input: HandleFavoriteChange) => {
+    let newFavoriteJobsArray: string[];
+
+    if (input.isCurrentFavorite) {
+      newFavoriteJobsArray = favoriteJobPostIds.filter(
+        (favoriteJobPostId: string) => favoriteJobPostId !== input.id
+      );
+    } else {
+      newFavoriteJobsArray = [...favoriteJobPostIds, input.id];
+    }
+
+    const response = await axios.put(
+      `/api/staff/${"65d0e2ee5075704385a8e95b"}`,
+      {
+        favoriteJobPostIds: newFavoriteJobsArray,
       }
+    );
 
-      return job;
-    });
+    if (response.data.success) {
+      const updatedJobs = jobs.map((job) => {
+        if (job.id === input.id) {
+          return {
+            ...job,
+            isFavorite: !input.isCurrentFavorite,
+          };
+        }
 
-    setJobs(updatedJobs);
+        return job;
+      });
+
+      setJobs(updatedJobs);
+    }
   };
 
   return (
@@ -59,7 +81,11 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
         {jobs.length > 0 ? (
           jobs.map((job) => {
             return (
-              <JobCard {...job} handleFavoriteChange={handleFavoriteChange} />
+              <JobCard
+                key={job.id}
+                {...job}
+                handleFavoriteChange={handleFavoriteChange}
+              />
             );
           })
         ) : (
@@ -73,7 +99,11 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
         {favoriteJobs.length > 0 ? (
           favoriteJobs.map((job) => {
             return (
-              <JobCard {...job} handleFavoriteChange={handleFavoriteChange} />
+              <JobCard
+                key={job.id}
+                {...job}
+                handleFavoriteChange={handleFavoriteChange}
+              />
             );
           })
         ) : (
