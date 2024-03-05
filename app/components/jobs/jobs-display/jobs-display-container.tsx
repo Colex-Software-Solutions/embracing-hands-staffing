@@ -8,7 +8,7 @@ import {
 } from "../../ui/select";
 import { useEffect, useState } from "react";
 import JobDisplayTabs from "./jobs-display-tabs";
-import { Job } from "@/app/(staff)/find-jobs/page";
+import { Job } from "@/app/(staff)/find-jobs/[id]/page";
 
 const sortByNewestToOldest = (jobs: Job[]): Job[] =>
   jobs.sort(

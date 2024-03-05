@@ -151,23 +151,23 @@ const navItems = [
   { href: "/home", label: "Contact" },
 ];
 
-const staffNavItems = [
-  {
-    href: "/home",
-    label: "Home",
-  },
-  {
-    href: "/find-jobs",
-    label: "Find Jobs",
-  },
-  {
-    href: "/home",
-    label: "About",
-  },
-  { href: "/home", label: "Contact" },
-];
-
 const getNavLinks = (session: Session | null) => {
+  const staffNavItems = [
+    {
+      href: "/home",
+      label: "Home",
+    },
+    {
+      href: `/find-jobs/${session?.user.id}`,
+      label: "Find Jobs",
+    },
+    {
+      href: "/home",
+      label: "About",
+    },
+    { href: "/home", label: "Contact" },
+  ];
+
   if (session?.user.role === "STAFF") {
     return staffNavItems;
   }

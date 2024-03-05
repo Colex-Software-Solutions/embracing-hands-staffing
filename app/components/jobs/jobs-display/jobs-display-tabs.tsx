@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import EmptyTabContent from "./empty-tab-content";
 import JobCard from "./job-card";
-import { Job } from "@/app/(staff)/find-jobs/page";
+import { Job } from "@/app/(staff)/find-jobs/[id]/page";
 import axios from "axios";
 import { debounce } from "@/lib/utils";
 

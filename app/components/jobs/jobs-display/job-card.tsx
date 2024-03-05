@@ -1,7 +1,7 @@
 import { formatCurrency, formatDate } from "@/lib/utils";
 import JobCardFavoriteIcon from "./job-card-favorite-icon";
 import { HandleFavoriteChange } from "./jobs-display-tabs";
-import { Job } from "@/app/(staff)/find-jobs/page";
+import { Job } from "@/app/(staff)/find-jobs/[id]/page";
 
 interface JobCardProps extends Job {
   handleFavoriteChange: (input: HandleFavoriteChange) => void;

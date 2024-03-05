@@ -3,6 +3,7 @@ import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { staffProvider } from "@/app/providers/staffProvider";
 import { weeksBetween } from "@/lib/utils";
 import { StaffProfile } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 export interface Job {
   id: string;
@@ -53,12 +54,10 @@ const mapFetchedJobPostToJobPost = (
   return [];
 };
 
-const FindJobsPage = async () => {
+const FindJobsPage = async ({ params }: { params: { id: string } }) => {
   const fetchedJobPosts =
     (await jobPostProvider.getAllJobPosts()) as FetchedJobPost[];
-  const staffProfile = await staffProvider.getStaffProfile(
-    "65d0e2ee5075704385a8e95b"
-  );
+  const staffProfile = await staffProvider.getStaffProfile(params.id);
   const jobs = mapFetchedJobPostToJobPost(fetchedJobPosts, staffProfile);
 
   if (!staffProfile) {
