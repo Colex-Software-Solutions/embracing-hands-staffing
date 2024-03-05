@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { UserNav } from "./user-nav";
+import { Session } from "next-auth";
 
 interface NavbarLink {
   label: string;
@@ -150,8 +151,35 @@ const navItems = [
   { href: "/home", label: "Contact" },
 ];
 
+const getNavLinks = (session: Session | null) => {
+  const staffNavItems = [
+    {
+      href: "/home",
+      label: "Home",
+    },
+    {
+      href: `/find-jobs/${session?.user.id}`,
+      label: "Find Jobs",
+    },
+    {
+      href: "/home",
+      label: "About",
+    },
+    { href: "/home", label: "Contact" },
+  ];
+
+  if (session?.user.role === "STAFF") {
+    return staffNavItems;
+  }
+
+  return navItems;
+};
+
 const Navbar = () => {
   const { data: session } = useSession();
+
+  const navLinks = getNavLinks(session);
+
   return (
     <NavbarAnimated
       className="bg-white"
@@ -177,7 +205,7 @@ const Navbar = () => {
           )}
         </div>
       }
-      links={navItems}
+      links={navLinks}
     />
   );
 };

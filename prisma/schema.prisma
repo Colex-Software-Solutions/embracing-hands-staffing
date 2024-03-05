@@ -56,6 +56,7 @@ model StaffProfile {
   profileImage        String?
   profileSetupComplete Boolean @default(false)
   resumeUrl           String?
+  favoriteJobPostIds  String[]
   user                User     @relation(fields: [userId], references: [id])
   jobApplication      JobApplication[]
 }
