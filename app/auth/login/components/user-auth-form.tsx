@@ -16,6 +16,7 @@ interface UserInfo {
   email: string;
   password: string;
 }
+
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -27,10 +28,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const params = useSearchParams();
   const router = useRouter();
   const callbackurl = params.get("callbackUrl");
-
-  const redirectBasedOnUserRole = () => {
-    return "/";
-  };
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -49,9 +46,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       }
       if (result?.ok) {
         router.replace(
-          Array.isArray(callbackurl)
-            ? callbackurl[0]
-            : callbackurl || redirectBasedOnUserRole()
+          Array.isArray(callbackurl) ? callbackurl[0] : callbackurl || "/"
         );
       }
     } catch (error: any) {
