@@ -26,6 +26,7 @@ import * as z from "zod";
 import { Loader, XIcon } from "lucide-react";
 import { useToast } from "@/app/components/ui/use-toast";
 import { useSession } from "next-auth/react";
+import { JobPost } from "@prisma/client";
 
 const jobPostingSchema = z
   .object({
@@ -58,32 +59,45 @@ const jobPostingSchema = z
   );
 type JobPostingFormValues = z.infer<typeof jobPostingSchema>;
 
-const JobPostingForm = () => {
+interface IJobPostingForm {
+  currentJob?: JobPost;
+  handleJobPostUpdate?: (newJob: JobPost) => void;
+}
+
+const JobPostingForm = ({
+  currentJob,
+  handleJobPostUpdate,
+}: IJobPostingForm) => {
   const defaultValues: Partial<JobPostingFormValues> = {
-    title: "",
-    description: "",
-    parkingPay: 0,
-    scrubsProvided: false,
-    experience: "",
-    location: "",
-    shifts: "",
-    startDate: "",
-    endDate: "",
-    housing: "",
-    patientPopulation: "",
-    mie: 0,
-    bonus: 0,
-    paymentPerDay: 0,
+    title: currentJob?.title || "",
+    description: currentJob?.description || "",
+    parkingPay: currentJob?.parkingPay || 0,
+    scrubsProvided: currentJob?.scrubsProvided || false,
+    experience: currentJob?.experience || "",
+    location: currentJob?.location || "",
+    shifts: currentJob?.shifts || "",
+    startDate: currentJob
+      ? currentJob.startDate.toISOString().slice(0, 10)
+      : "",
+    endDate: currentJob ? currentJob.endDate.toISOString().slice(0, 10) : "",
+    housing: currentJob?.housing || "",
+    patientPopulation: currentJob?.patientPopulation || "",
+    mie: currentJob?.mie || 0,
+    bonus: currentJob?.bonus || 0,
+    paymentPerDay: currentJob?.paymentPerDay || 0,
   };
   const form = useForm<JobPostingFormValues>({
     resolver: zodResolver(jobPostingSchema),
     defaultValues,
   });
 
-  const [procedures, setProcedures] = useState<string[]>([]);
+  const [procedures, setProcedures] = useState<string[]>(
+    currentJob?.procedures || []
+  );
+
   const [procedureInput, setProcedureInput] = useState("");
   const { data: session } = useSession();
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(currentJob?.tags || []);
   const [tagsInput, setTagsInput] = useState("");
   const { toast } = useToast();
   const handleAddTag = () => {
@@ -94,7 +108,6 @@ const JobPostingForm = () => {
   };
 
   const handleAddProcedure = () => {
-    console.log("here");
     if (procedureInput && !procedures.includes(procedureInput)) {
       setProcedures([...procedures, procedureInput]);
       setProcedureInput("");
@@ -116,6 +129,7 @@ const JobPostingForm = () => {
         procedures,
         tags,
         facilityId: session.user.facilityProfile.id,
+        id: currentJob ? currentJob.id : null,
       };
       const response = await fetch("/api/job-post", {
         method: "POST",
@@ -128,7 +142,12 @@ const JobPostingForm = () => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-      await response.json();
+      const newJob: JobPost = (await response.json()).jobPost;
+
+      // updating the jobs state
+      if (handleJobPostUpdate) {
+        handleJobPostUpdate(newJob);
+      }
       toast({
         title: "Success!",
         description: "The new job add has been posted successfully",
@@ -151,7 +170,9 @@ const JobPostingForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="w-full max-w-screen-xl mx-auto">
           <CardHeader>
-            <CardTitle>Job Posting Form</CardTitle>
+            <CardTitle>
+              {currentJob ? "View and edit this job" : "Job Posting Form"}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -540,7 +561,8 @@ const JobPostingForm = () => {
             </div>
             <CardFooter>
               <Button disabled={isSubmitting} type="submit" className="ml-auto">
-                {isSubmitting && <Loader className="animate-spin" />} Post Job
+                {isSubmitting && <Loader className="animate-spin" />}{" "}
+                {currentJob ? "Save Changes" : "Post Job"}
               </Button>
             </CardFooter>
           </CardContent>

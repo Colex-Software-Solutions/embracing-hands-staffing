@@ -8,7 +8,7 @@ import { Label } from "@/app/components/ui/label";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Alert } from "@/app/components/ui/alert";
-import { Loader, XCircle, XIcon } from "lucide-react";
+import { Loader, XCircle } from "lucide-react";
 import Link from "next/link";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -16,6 +16,7 @@ interface UserInfo {
   email: string;
   password: string;
 }
+
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);

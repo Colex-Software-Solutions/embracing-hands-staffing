@@ -11,6 +11,7 @@ import {
   DialogClose,
 } from "../../../components/ui/dialog";
 import { FacilityUser } from "../../facility/page";
+import Link from "next/link";
 
 const getStaffUserInfoFromRow = (row: any): FacilityUser => {
   const id = row.getValue("id");
@@ -78,6 +79,12 @@ export function ViewFacilityUserDetailsModal({ row }: any) {
             </div>
           </div>
           <DialogFooter>
+            <Link href={`/profile/${id}`}>
+              {" "}
+              <Button type="button" variant={"ghost"}>
+                View Full Profile
+              </Button>
+            </Link>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Close
