@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
 import { Toaster } from "@/app/components/ui/toaster";
 import { JobPost, JobStatus } from "@prisma/client";
 import JobDisplayTabs from "./jobs-display-tabs";

@@ -21,14 +21,3 @@ export const statuses = [
     icon: CrossCircledIcon,
   },
 ];
-
-export const statusOptions = [
-  {
-    value: "APPROVE",
-    label: "Approve",
-  },
-  {
-    value: "REJECT",
-    label: "Reject",
-  },
-];

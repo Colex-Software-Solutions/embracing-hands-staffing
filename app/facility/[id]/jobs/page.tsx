@@ -4,18 +4,9 @@ import { getServerSession } from "@/lib/getServerSession";
 import JobPostsManager from "./components/JobPostsManager";
 
 export const metadata: Metadata = {
-  title: "Staff",
-  description: "Allows admin user to view and manage staff users.",
+  title: "Jobs",
+  description: "Facility can view all their job posts",
 };
-
-export interface StaffUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  status: string;
-  phone: string;
-}
 
 async function getJobPosts(id: string) {
   try {
@@ -27,7 +18,7 @@ async function getJobPosts(id: string) {
   }
 }
 
-export default async function StaffPage() {
+export default async function JobsPage() {
   const session = await getServerSession();
   const jobPosts = await getJobPosts(session?.user?.facilityProfile.id);
 

@@ -1,4 +1,3 @@
-// JobsCalendar.jsx
 import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -29,9 +28,6 @@ const JobsCalendar = ({ jobs }: { jobs: JobPost[] }) => {
     end: new Date(job.endDate),
     status: job.status,
   }));
-  // function Event({ event }: { event: any }) {
-  //   return <div className="w-50 h-32">{event.title}</div>;
-  // }
 
   return (
     <div>
