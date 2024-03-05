@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import EmptyTabContent from "./empty-tab-content";
 import JobCard from "./job-card";
 import { Job } from "@/app/(staff)/find-jobs/page";
 import axios from "axios";
+import { debounce } from "@/lib/utils";
 
 interface JobDisplayTabsProps {
   jobs: Job[];
@@ -25,6 +26,9 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
   setJobs,
   favoriteJobPostIds,
 }) => {
+  const jobsRef = useRef<Job[]>(jobs);
+  jobsRef.current = jobs;
+
   const favoriteJobs = jobs.filter((job) => job.isFavorite === true);
 
   const handleChange = (newWindow: string) => {
@@ -33,38 +37,40 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
     }
   };
 
-  const handleFavoriteChange = async (input: HandleFavoriteChange) => {
-    let newFavoriteJobsArray: string[];
-
-    if (input.isCurrentFavorite) {
-      newFavoriteJobsArray = favoriteJobPostIds.filter(
-        (favoriteJobPostId: string) => favoriteJobPostId !== input.id
-      );
-    } else {
-      newFavoriteJobsArray = [...favoriteJobPostIds, input.id];
-    }
-
-    const response = await axios.put(
-      `/api/staff/${"65d0e2ee5075704385a8e95b"}`,
-      {
-        favoriteJobPostIds: newFavoriteJobsArray,
+  const updateJobsState = (input: HandleFavoriteChange) => {
+    const updatedJobs = jobs.map((job) => {
+      if (job.id === input.id) {
+        return {
+          ...job,
+          isFavorite: !input.isCurrentFavorite,
+        };
       }
-    );
 
-    if (response.data.success) {
-      const updatedJobs = jobs.map((job) => {
-        if (job.id === input.id) {
-          return {
-            ...job,
-            isFavorite: !input.isCurrentFavorite,
-          };
-        }
+      return job;
+    });
 
-        return job;
-      });
+    setJobs(updatedJobs);
+  };
 
-      setJobs(updatedJobs);
-    }
+  const updateFavoriteJobPostsApi = async () => {
+    let newFavoriteJobsArray: string[] = jobsRef.current
+      .filter((job) => job.isFavorite === true)
+      .map((job) => job.id);
+
+    await axios.put(`/api/staff/${"65d0e2ee5075704385a8e95b"}`, {
+      favoriteJobPostIds: newFavoriteJobsArray,
+    });
+  };
+
+  const debouncedUpdateFavoriteJobPostsApi = useCallback(
+    debounce(updateFavoriteJobPostsApi, 1500),
+    []
+  );
+
+  const handleFavoriteChange = async (input: HandleFavoriteChange) => {
+    updateJobsState(input);
+
+    debouncedUpdateFavoriteJobPostsApi();
   };
 
   return (
