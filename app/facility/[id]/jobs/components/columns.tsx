@@ -3,9 +3,16 @@ import { Badge } from "@/app/components/ui/badge";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { JobPostSchema } from "../data/schema";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { JobStatus } from "@prisma/client";
+import { JobPost, JobStatus } from "@prisma/client";
 
-export const columns = (): ColumnDef<JobPostSchema>[] => [
+interface JobColumnProps {
+  handleJobPostUpdate: (newJob: JobPost) => void;
+  handleJobStatusUpdate: (id: string, status: JobStatus) => void;
+}
+export const columns = ({
+  handleJobPostUpdate,
+  handleJobStatusUpdate,
+}: JobColumnProps): ColumnDef<JobPostSchema>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -56,7 +63,9 @@ export const columns = (): ColumnDef<JobPostSchema>[] => [
       <DataTableColumnHeader column={column} title="Posted On" />
     ),
     cell: ({ row }) => (
-      <div>{(row.getValue("createdAt") as Date).toLocaleDateString()}</div>
+      <div>
+        {new Date(row.getValue("createdAt"))?.toISOString().slice(0, 10)}
+      </div>
     ),
   },
   {
@@ -65,7 +74,9 @@ export const columns = (): ColumnDef<JobPostSchema>[] => [
       <DataTableColumnHeader column={column} title="Start Date" />
     ),
     cell: ({ row }) => (
-      <div>{(row.getValue("startDate") as Date).toLocaleDateString()}</div>
+      <div>
+        {new Date(row.getValue("startDate"))?.toISOString().slice(0, 10)}
+      </div>
     ),
   },
   {
@@ -74,7 +85,7 @@ export const columns = (): ColumnDef<JobPostSchema>[] => [
       <DataTableColumnHeader column={column} title="End Date" />
     ),
     cell: ({ row }) => (
-      <div>{(row.getValue("endDate") as Date).toLocaleDateString()}</div>
+      <div>{new Date(row.getValue("endDate"))?.toISOString().slice(0, 10)}</div>
     ),
   },
   {
@@ -82,7 +93,8 @@ export const columns = (): ColumnDef<JobPostSchema>[] => [
     cell: ({ row }) => (
       <DataTableRowActions
         row={row}
-        isPending={row.getValue("status") === "PENDING"}
+        handleJobPostUpdate={handleJobPostUpdate}
+        handleJobStatusUpdate={handleJobStatusUpdate}
       />
     ),
   },

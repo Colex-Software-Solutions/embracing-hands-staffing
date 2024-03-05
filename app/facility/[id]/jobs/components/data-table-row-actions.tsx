@@ -1,28 +1,27 @@
-"use client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuRadioItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-  DropdownMenuRadioGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/app/components/ui/dropdown-menu";
+import { ViewAndEditModal } from "./modals/view-and-edit-job-details";
+import { CloseJobModal } from "./modals/close-job-confirm-modal";
+import { JobPost, JobStatus } from "@prisma/client";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
-  isPending: boolean;
+  handleJobPostUpdate: (newJob: JobPost) => void;
+  handleJobStatusUpdate: (id: string, status: JobStatus) => void;
 }
 
 export function DataTableRowActions<TData>({
   row,
-  isPending,
+  handleJobPostUpdate,
+  handleJobStatusUpdate,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
 
@@ -38,30 +37,17 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>View / Edit job</DropdownMenuItem>
+        <ViewAndEditModal
+          row={row}
+          id={id}
+          handleJobPostUpdate={handleJobPostUpdate}
+        />
         <DropdownMenuItem>View Applicants</DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <Button
-              className="w-full border-0 justify-start flex pl-2 font-normal hover:bg-green-600 hover:text-white"
-              variant="outline"
-            >
-              Complete Job
-            </Button>
-            <Button
-              className="w-full border-0 justify-start flex pl-2 font-normal hover:bg-red-600 hover:text-white"
-              variant="outline"
-            >
-              Close Job
-            </Button>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        {row.getValue("status") !== "CLOSED" && (
+          <CloseJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

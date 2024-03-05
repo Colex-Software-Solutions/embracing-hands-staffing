@@ -3,8 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  const { id, ...jobInfo } = body;
   try {
-    const jobPost = await jobPostProvider.createJobPost(body);
+    let jobPost;
+    if (body.id) {
+      jobPost = await jobPostProvider.updateJobPost(id, jobInfo);
+    } else {
+      jobPost = await jobPostProvider.createJobPost(jobInfo);
+    }
+
     return NextResponse.json({ success: true, jobPost });
   } catch (error: any) {
     console.error("Job post creation failed", error);

@@ -8,7 +8,7 @@ import { Label } from "@/app/components/ui/label";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Alert } from "@/app/components/ui/alert";
-import { Loader, XCircle, XIcon } from "lucide-react";
+import { Loader, XCircle } from "lucide-react";
 import Link from "next/link";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -28,6 +28,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
   const callbackurl = params.get("callbackUrl");
 
+  const redirectBasedOnUserRole = () => {
+    return "/";
+  };
+
   const onSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -38,13 +42,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         password: userInfo.password,
         redirect: false,
       });
+      console.log(result);
       if (result?.error) {
         setError("Please Provide correct Credentials");
         return;
       }
       if (result?.ok) {
         router.replace(
-          Array.isArray(callbackurl) ? callbackurl[0] : callbackurl || "/"
+          Array.isArray(callbackurl)
+            ? callbackurl[0]
+            : callbackurl || redirectBasedOnUserRole()
         );
       }
     } catch (error: any) {

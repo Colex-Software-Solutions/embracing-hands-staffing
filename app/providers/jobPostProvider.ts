@@ -6,8 +6,23 @@ class JobPostProvider {
   async createJobPost(
     jobPostData: Omit<JobPost, "id" | "createdAt" | "updatedAt">
   ) {
-    // Validation or transformation logic can be added here
     return await prisma.jobPost.create({
+      data: jobPostData,
+    });
+  }
+  async updateJobPost(
+    id: string,
+    jobPostData: Omit<JobPost, "id" | "createdAt" | "updatedAt">
+  ) {
+    return await prisma.jobPost.update({
+      where: { id },
+      data: jobPostData,
+    });
+  }
+
+  async updatePartialJobPost(id: string, jobPostData: Partial<JobPost>) {
+    return await prisma.jobPost.update({
+      where: { id },
       data: jobPostData,
     });
   }
