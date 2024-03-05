@@ -28,11 +28,13 @@ const sortByPay = (jobs: Job[]): Job[] =>
 interface JobsDisplayContainerProps {
   initialJobs: Job[];
   favoriteJobPostIds: string[];
+  staffProfileId: string;
 }
 
 const JobsDisplayContainer: React.FC<JobsDisplayContainerProps> = ({
   initialJobs,
   favoriteJobPostIds,
+  staffProfileId,
 }) => {
   const [sortValue, setSortValue] = useState("relevance");
   const [window, setWindow] = useState<"jobs" | "favorites">("jobs");
@@ -92,7 +94,7 @@ const JobsDisplayContainer: React.FC<JobsDisplayContainerProps> = ({
         window={window}
         setWindow={setWindow}
         setJobs={setJobs}
-        favoriteJobPostIds={favoriteJobPostIds}
+        staffProfileId={staffProfileId}
       />
     </div>
   );

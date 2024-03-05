@@ -75,6 +75,7 @@ const FindJobsPage = async ({ params }: { params: { id: string } }) => {
       <JobsDisplayContainer
         initialJobs={jobs}
         favoriteJobPostIds={staffProfile.favoriteJobPostIds}
+        staffProfileId={params.id}
       />
     </div>
   );

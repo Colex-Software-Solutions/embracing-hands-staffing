@@ -11,7 +11,7 @@ interface JobDisplayTabsProps {
   window: "jobs" | "favorites";
   setWindow: Dispatch<SetStateAction<"jobs" | "favorites">>;
   setJobs: Dispatch<SetStateAction<Job[]>>;
-  favoriteJobPostIds: string[];
+  staffProfileId: string;
 }
 
 export interface HandleFavoriteChange {
@@ -24,7 +24,7 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
   window,
   setWindow,
   setJobs,
-  favoriteJobPostIds,
+  staffProfileId,
 }) => {
   const jobsRef = useRef<Job[]>(jobs);
   jobsRef.current = jobs;
@@ -57,7 +57,7 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
       .filter((job) => job.isFavorite === true)
       .map((job) => job.id);
 
-    await axios.put(`/api/staff/${"65d0e2ee5075704385a8e95b"}`, {
+    await axios.put(`/api/staff/${staffProfileId}`, {
       favoriteJobPostIds: newFavoriteJobsArray,
     });
   };
