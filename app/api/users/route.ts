@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     if (body.status === "APPROVED") {
       await emailProvider.sendEmailWithTemplate({
         // emailTo: user.email,
-        emailTo: "thabet.abe@gmail.com",
+        emailTo: "admin@colexsoftwaresolutions.com",
         emailTemplateId: EmailTemplate.APPLICATION_REQUEST_APPROVED,
         emailParams: {
           name: userProfileName,
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     if (body.status === "REJECTED") {
       await emailProvider.sendEmailWithTemplate({
         // emailTo: user.email,
-        emailTo: "thabet.abe@gmail.com",
+        emailTo: "admin@colexsoftwaresolutions.com",
         emailTemplateId: EmailTemplate.APPLICATION_REQUEST_REJECTED,
         emailParams: {
           name: userProfileName,

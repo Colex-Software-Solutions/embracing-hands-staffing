@@ -39,7 +39,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         password: userInfo.password,
         redirect: false,
       });
-      console.log(result);
       if (result?.error) {
         setError("Please Provide correct Credentials");
         return;
