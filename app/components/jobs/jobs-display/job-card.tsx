@@ -2,6 +2,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import JobCardFavoriteIcon from "./job-card-favorite-icon";
 import { HandleFavoriteChange } from "./jobs-display-tabs";
 import { Job } from "@/app/(staff)/find-jobs/[id]/page";
+import Link from "next/link";
 
 interface JobCardProps extends Job {
   handleFavoriteChange: (input: HandleFavoriteChange) => void;
@@ -22,7 +23,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
   } = props;
 
   return (
-    <div className="flex p-5 hover:bg-slate-100">
+    <Link href={`/job-posts/${id}`} className="flex p-5 hover:bg-slate-100">
       <div className="flex flex-col w-3/4">
         <p className="flex font-bold text-lg">{title}</p>
         <p>{location}</p>
@@ -50,7 +51,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           Posted on: {formatDate(createdAt)}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
