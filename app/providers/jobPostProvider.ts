@@ -49,6 +49,24 @@ class JobPostProvider {
       },
     });
   }
+
+  async getAllValidJobPosts() {
+    return await prisma.jobPost.findMany({
+      select: {
+        id: true,
+        title: true,
+        location: true,
+        paymentPerDay: true,
+        shifts: true,
+        startDate: true,
+        endDate: true,
+        createdAt: true,
+      },
+      where: {
+        status: "OPEN",
+      },
+    });
+  }
 }
 
 export const jobPostProvider = new JobPostProvider();

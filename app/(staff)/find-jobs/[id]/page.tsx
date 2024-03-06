@@ -56,7 +56,7 @@ const mapFetchedJobPostToJobPost = (
 
 const FindJobsPage = async ({ params }: { params: { id: string } }) => {
   const fetchedJobPosts =
-    (await jobPostProvider.getAllJobPosts()) as FetchedJobPost[];
+    (await jobPostProvider.getAllValidJobPosts()) as FetchedJobPost[];
   const staffProfile = await staffProvider.getStaffProfile(params.id);
   const jobs = mapFetchedJobPostToJobPost(fetchedJobPosts, staffProfile);
 
