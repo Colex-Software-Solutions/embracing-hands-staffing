@@ -11,6 +11,8 @@ import {
 import { ViewAndEditModal } from "./modals/view-and-edit-job-details";
 import { CloseJobModal } from "./modals/close-job-confirm-modal";
 import { JobPost, JobStatus } from "@prisma/client";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -24,6 +26,7 @@ export function DataTableRowActions<TData>({
   handleJobStatusUpdate,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
+  const facilityId = useParams().id;
 
   return (
     <DropdownMenu>
@@ -42,7 +45,10 @@ export function DataTableRowActions<TData>({
           id={id}
           handleJobPostUpdate={handleJobPostUpdate}
         />
-        <DropdownMenuItem>View Applicants</DropdownMenuItem>
+        <Link href={`facility/${facilityId}/applications?jobId=${id}`}>
+          {" "}
+          <DropdownMenuItem>View Applicants</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
 
         {row.getValue("status") !== "CLOSED" && (
