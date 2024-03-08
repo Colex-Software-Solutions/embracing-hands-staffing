@@ -16,6 +16,8 @@ import { JobApplicationTableData } from "../data/schema";
 import { DropdownMenuSubContent } from "@radix-ui/react-dropdown-menu";
 import { ConfirmationModal } from "@/app/components/modals/confirmation-modal";
 import { ApplicationStatus } from "@prisma/client";
+import { useToast } from "@/app/components/ui/use-toast";
+import axios from "axios";
 
 interface DataTableRowActionsProps {
   row: Row<JobApplicationTableData>;
@@ -29,10 +31,51 @@ export const DataTableRowActions: React.FC<DataTableRowActionsProps> = ({
   row,
   handleApplicationStatusUpdate,
 }) => {
-  const { id, userId, jobStatus } = row.original;
+  const {
+    id,
+    userId,
+    jobStatus,
+    facilityName,
+    applicantEmail,
+    jobTitle,
+    status,
+  } = row.original;
+  const { toast } = useToast();
 
-  const handleStatusChange = (newStatus: ApplicationStatus) => {
-    handleApplicationStatusUpdate(id, newStatus);
+  const handleStatusChange = async (newStatus: ApplicationStatus) => {
+    try {
+      const response = await axios.put(`/api/job-application/${id}/status`, {
+        status: newStatus,
+        facilityName,
+        applicantEmail,
+        jobTitle,
+      });
+      if (response && response.data.success) {
+        handleApplicationStatusUpdate(id, newStatus);
+        toast({
+          variant: "default",
+          title: "Success!",
+          description: `Application has been ${
+            newStatus[0] + newStatus.slice(1).toLocaleLowerCase()
+          } `,
+        });
+
+        return;
+      }
+
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: "Application status could not be updated.",
+      });
+    } catch (error) {
+      console.log("Error", error);
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: "Application status could not be updated.",
+      });
+    }
   };
 
   return (
@@ -56,27 +99,28 @@ export const DataTableRowActions: React.FC<DataTableRowActionsProps> = ({
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
-          {jobStatus === "OPEN" && (
+        {jobStatus === "OPEN" && status === "PENDING" && (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
+
             <DropdownMenuSubContent>
               <ConfirmationModal
                 confirmButtonText="yes, Accept"
-                onConfirm={() => handleStatusChange("ACCEPTED")}
+                onConfirm={async () => await handleStatusChange("ACCEPTED")}
                 confirmationQuestion="Do you wish to accept this applicant?"
                 triggerButtonText="Accept applicant"
                 triggerButtonClassNames="hover:bg-green-500"
               />
               <ConfirmationModal
                 confirmButtonText="yes, Reject"
-                onConfirm={() => handleStatusChange("REJECTED")}
+                onConfirm={async () => await handleStatusChange("REJECTED")}
                 confirmationQuestion="Do you wish to reject this applicant?"
                 triggerButtonText="Reject applicant"
                 triggerButtonClassNames="hover:bg-destructive"
               />
             </DropdownMenuSubContent>
-          )}
-        </DropdownMenuSub>
+          </DropdownMenuSub>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

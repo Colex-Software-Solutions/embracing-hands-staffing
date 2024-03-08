@@ -13,6 +13,8 @@ const mapApplicationsToTableData = (
       jobStatus: application.jobPost.status,
       applicantId: application.staffProfile.id,
       jobTitle: application.jobPost.title,
+      applicantEmail: application?.staffProfile.user.email,
+      facilityName: application.jobPost.facilityProfile.name,
       status: application.status,
       userId: application.staffProfile.userId,
       applicationDate: new Date(application.createdAt)

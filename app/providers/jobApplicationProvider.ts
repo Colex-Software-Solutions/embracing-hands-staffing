@@ -1,4 +1,5 @@
 import prisma from "@/db/prisma";
+import { JobApplication } from "@prisma/client";
 
 class JobApplicationProvider {
   async getApplicationsByJobId(jobId: string) {
@@ -16,6 +17,11 @@ class JobApplicationProvider {
           select: {
             title: true,
             status: true,
+            facilityProfile: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
         staffProfile: {
@@ -23,10 +29,25 @@ class JobApplicationProvider {
             firstname: true,
             lastname: true,
             id: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
             userId: true,
           },
         },
       },
+    });
+  }
+
+  async updateApplication(
+    id: string,
+    applicationData: Partial<JobApplication>
+  ) {
+    return await prisma.jobApplication.update({
+      where: { id },
+      data: applicationData,
     });
   }
 }
