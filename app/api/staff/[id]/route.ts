@@ -103,6 +103,7 @@ export async function PUT(
         }
       );
     const staffProfile = await staffProvider.getStaffProfile(userId);
+    console.log({ data });
 
     if (!staffProfile) {
       return NextResponse.json(

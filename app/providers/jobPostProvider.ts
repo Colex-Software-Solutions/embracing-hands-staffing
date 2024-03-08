@@ -35,6 +35,35 @@ class JobPostProvider {
     });
   }
 
+  async getJobPostById(id: string) {
+    return await prisma.jobPost.findUnique({
+      select: {
+        id: true,
+        facilityId: true,
+        title: true,
+        description: true,
+        parkingPay: true,
+        scrubsProvided: true,
+        experience: true,
+        location: true,
+        shifts: true,
+        startDate: true,
+        endDate: true,
+        housing: true,
+        procedures: true,
+        paymentPerDay: true,
+        patientPopulation: true,
+        mie: true,
+        bonus: true,
+        tags: true,
+        createdAt: true,
+      },
+      where: {
+        id,
+      },
+    });
+  }
+
   async getAllJobPosts() {
     return await prisma.jobPost.findMany({
       select: {

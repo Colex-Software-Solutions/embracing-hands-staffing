@@ -13,12 +13,15 @@ export function formatDate(date: Date): string {
   return `${month}/${day}/${year}`;
 }
 
-export function formatCurrency(number: number): string {
+export function formatCurrency(
+  number: number,
+  decimalPlaces: number = 0
+): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
   }).format(number / 100);
 }
 
