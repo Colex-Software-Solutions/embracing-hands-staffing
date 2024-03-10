@@ -55,6 +55,30 @@ class EmailProvider {
 
     return apiInstance.sendTransacEmail(sendSmtpEmail);
   }
+
+  async sendEmailDirectly({
+    emailTo,
+    subject,
+    content,
+  }: {
+    emailTo: string;
+    subject: string;
+    content: string;
+  }) {
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+    sendSmtpEmail = {
+      sender: {
+        email: "admin@colexsoftwaresolutions.com",
+        name: "Embracing Hands Staffing",
+      },
+      to: [{ email: emailTo }],
+      subject: subject,
+      htmlContent: content,
+    };
+
+    return apiInstance.sendTransacEmail(sendSmtpEmail);
+  }
 }
 
 export const emailProvider = new EmailProvider();
