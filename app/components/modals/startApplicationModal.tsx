@@ -98,7 +98,7 @@ export function StartApplicationModal({
   });
 
   return (
-    <Dialog open={openModal}>
+    <Dialog open={openModal} onOpenChange={() => setOpenModal(!openModal)}>
       <DialogTrigger asChild>
         {applicationStarted ? (
           <Button
