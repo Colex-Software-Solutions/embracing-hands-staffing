@@ -26,6 +26,8 @@ class UserProvider {
         status: true,
         staffProfile: {
           select: {
+            firstname: true,
+            lastname: true,
             profileImage: true,
             id: true,
           },
@@ -34,6 +36,42 @@ class UserProvider {
           select: {
             profileImage: true,
             id: true,
+          },
+        },
+      },
+    });
+  }
+  async getStaffUserById(id: string) {
+    return await prisma.user.findUnique({
+      where: { id, role: "STAFF" },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        role: true,
+        phone: true,
+        status: true,
+        staffProfile: {
+          select: {
+            firstname: true,
+            lastname: true,
+            profileImage: true,
+            id: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getUserByJobPostId(jobPostId: string) {
+    return await prisma.jobPost.findUnique({
+      where: {
+        id: jobPostId,
+      },
+      select: {
+        facilityProfile: {
+          select: {
+            user: true,
           },
         },
       },

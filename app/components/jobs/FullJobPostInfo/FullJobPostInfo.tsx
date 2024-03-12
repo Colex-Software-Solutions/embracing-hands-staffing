@@ -59,17 +59,17 @@ const FullJobPostInfo: React.FC<FullJobPostInfoProps> = ({ jobPost }) => {
     {
       title: "Tax Free Stipend",
       descriptions: [`M&IE: ${formatCurrency(jobPost.mie)}/day`],
-      amount: 144900,
+      amount: jobPost.paymentPerDay * 5 * 0.7,
     },
     {
       title: "Taxable Income",
       descriptions: [],
-      amount: 83540,
+      amount: jobPost.paymentPerDay * 5 * 0.3,
     },
     {
-      title: "Estimated Daily Pay",
+      title: "Estimated Weekly Pay",
       descriptions: ["40 hrs/week"],
-      amount: 22844,
+      amount: jobPost.paymentPerDay * 5,
     },
     {
       title: "Boost",
@@ -101,7 +101,10 @@ const FullJobPostInfo: React.FC<FullJobPostInfoProps> = ({ jobPost }) => {
           />
         ))}
       </div>
-      <FullJobPostCTAButtons jobPostId={jobPost.id} />
+      <FullJobPostCTAButtons
+        jobPostId={jobPost.id}
+        facilityProfile={jobPost.facilityProfile}
+      />
       <FullJobPostDivider />
       <FullJobPostAdditionalDetails {...jobPost} />
     </div>

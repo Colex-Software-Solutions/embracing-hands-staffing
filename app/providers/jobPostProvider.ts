@@ -57,6 +57,16 @@ class JobPostProvider {
         bonus: true,
         tags: true,
         createdAt: true,
+        facilityProfile: {
+          select: {
+            name: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
       },
       where: {
         id,

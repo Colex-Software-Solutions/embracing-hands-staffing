@@ -17,6 +17,13 @@ interface ApplicationRequestRejected {
   name: string;
 }
 
+interface ApplicationEmailToFacility {
+  name: string;
+  jobPostId: string;
+  message: string;
+  email: string;
+}
+
 type EmailParams<T extends EmailTemplate> =
   T extends EmailTemplate.NEW_APPLICATION_REQUEST
     ? NewApplicationRequest
@@ -24,15 +31,24 @@ type EmailParams<T extends EmailTemplate> =
     ? ApplicationRequestApproved
     : T extends EmailTemplate.APPLICATION_REQUEST_REJECTED
     ? ApplicationRequestRejected
+    : T extends EmailTemplate.APPLICATION_EMAIL_TO_FACILITY
+    ? ApplicationEmailToFacility
     : {};
 
 export enum EmailTemplate {
   NEW_APPLICATION_REQUEST = 1,
   APPLICATION_REQUEST_APPROVED = 2,
   APPLICATION_REQUEST_REJECTED = 3,
+  APPLICATION_EMAIL_TO_FACILITY = 4,
 }
 
 interface SendEmailWithTemplate {
+  emailTo: string;
+  emailTemplateId: EmailTemplate;
+  emailParams: EmailParams<EmailTemplate>;
+}
+
+interface SendJobPostEmail {
   emailTo: string;
   emailTemplateId: EmailTemplate;
   emailParams: EmailParams<EmailTemplate>;
@@ -78,6 +94,16 @@ class EmailProvider {
     };
 
     return apiInstance.sendTransacEmail(sendSmtpEmail);
+  }
+
+  async sendJobPostEmail(data: SendJobPostEmail) {
+    const { emailTo, emailTemplateId, emailParams } = data;
+
+    this.sendEmailWithTemplate({
+      emailTo,
+      emailTemplateId,
+      emailParams,
+    });
   }
 }
 
