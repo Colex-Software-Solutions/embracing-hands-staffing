@@ -5,7 +5,6 @@ import { Role } from "@prisma/client";
 const getUserProfileName = async (id: string, role: Role): Promise<string> => {
   if (role === "STAFF") {
     const userProfile = await userProvider.getStaffProfileById(id);
-    console.log({ userProfile });
 
     if (!userProfile || !userProfile.staffProfile) {
       throw new Error("Could not find staff user profile");

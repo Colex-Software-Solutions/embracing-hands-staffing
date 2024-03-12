@@ -35,6 +35,45 @@ class JobPostProvider {
     });
   }
 
+  async getJobPostById(id: string) {
+    return await prisma.jobPost.findUnique({
+      select: {
+        id: true,
+        facilityId: true,
+        title: true,
+        description: true,
+        parkingPay: true,
+        scrubsProvided: true,
+        experience: true,
+        location: true,
+        shifts: true,
+        startDate: true,
+        endDate: true,
+        housing: true,
+        procedures: true,
+        paymentPerDay: true,
+        patientPopulation: true,
+        mie: true,
+        bonus: true,
+        tags: true,
+        createdAt: true,
+        facilityProfile: {
+          select: {
+            name: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
+      where: {
+        id,
+      },
+    });
+  }
+
   async getAllJobPosts() {
     return await prisma.jobPost.findMany({
       select: {
@@ -46,6 +85,24 @@ class JobPostProvider {
         startDate: true,
         endDate: true,
         createdAt: true,
+      },
+    });
+  }
+
+  async getAllValidJobPosts() {
+    return await prisma.jobPost.findMany({
+      select: {
+        id: true,
+        title: true,
+        location: true,
+        paymentPerDay: true,
+        shifts: true,
+        startDate: true,
+        endDate: true,
+        createdAt: true,
+      },
+      where: {
+        status: "OPEN",
       },
     });
   }
