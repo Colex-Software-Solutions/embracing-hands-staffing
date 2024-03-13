@@ -56,6 +56,7 @@ model StaffProfile {
   profileImage        String?
   profileSetupComplete Boolean @default(false)
   resumeUrl           String?
+  favoriteJobPostIds  String[]
   user                User     @relation(fields: [userId], references: [id])
   jobApplication      JobApplication[]
 }
@@ -105,6 +106,8 @@ model JobApplication {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   jobId         String  @db.ObjectId
   staffId       String  @db.ObjectId
+  createdAt       DateTime?          @default(now())
+  updatedAt       DateTime?          @updatedAt
   status        ApplicationStatus @default(PENDING)
   jobPost       JobPost         @relation(fields: [jobId], references: [id])
   staffProfile  StaffProfile    @relation(fields: [staffId], references: [id])

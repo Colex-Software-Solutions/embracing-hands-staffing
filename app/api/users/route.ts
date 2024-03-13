@@ -5,7 +5,6 @@ import { Role } from "@prisma/client";
 const getUserProfileName = async (id: string, role: Role): Promise<string> => {
   if (role === "STAFF") {
     const userProfile = await userProvider.getStaffProfileById(id);
-    console.log({ userProfile });
 
     if (!userProfile || !userProfile.staffProfile) {
       throw new Error("Could not find staff user profile");
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
     if (body.status === "APPROVED") {
       await emailProvider.sendEmailWithTemplate({
         // emailTo: user.email,
-        emailTo: "dhan@colexsoftwaresolutions.com",
+        emailTo: "admin@colexsoftwaresolutions.com",
         emailTemplateId: EmailTemplate.APPLICATION_REQUEST_APPROVED,
         emailParams: {
           name: userProfileName,
@@ -45,7 +44,7 @@ export async function POST(request: Request) {
     if (body.status === "REJECTED") {
       await emailProvider.sendEmailWithTemplate({
         // emailTo: user.email,
-        emailTo: "dhan@colexsoftwaresolutions.com",
+        emailTo: "admin@colexsoftwaresolutions.com",
         emailTemplateId: EmailTemplate.APPLICATION_REQUEST_REJECTED,
         emailParams: {
           name: userProfileName,

@@ -1,6 +1,11 @@
 import prisma from "@/db/prisma";
 import { StaffProfile } from "@prisma/client";
 
+export interface UpdateStaffProfile {
+  userId: string;
+  data: Omit<StaffProfile, "id">;
+}
+
 class StaffProvider {
   async getStaffProfile(userId: string) {
     return await prisma.staffProfile.findUnique({
@@ -14,7 +19,8 @@ class StaffProvider {
     });
   }
 
-  async updateStaffProfile(userId: string, data: Omit<StaffProfile, "id">) {
+  async updateStaffProfile(input: UpdateStaffProfile) {
+    const { userId, data } = input;
     return await prisma.staffProfile.update({
       where: { userId },
       data,
