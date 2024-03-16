@@ -27,6 +27,7 @@ import { Loader, XIcon } from "lucide-react";
 import { useToast } from "@/app/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { JobPost } from "@prisma/client";
+import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 
 const jobPostingSchema = z
   .object({
@@ -98,14 +99,13 @@ const JobPostingForm = ({
   const [procedureInput, setProcedureInput] = useState("");
   const { data: session } = useSession();
   const [tags, setTags] = useState<string[]>(currentJob?.tags || []);
-  const [tagsInput, setTagsInput] = useState("");
   const { toast } = useToast();
-  const handleAddTag = () => {
-    if (tagsInput && !tags.includes(tagsInput)) {
-      setTags([...tags, tagsInput]);
-      setTagsInput("");
+
+  const handleAddSkill = (tag: string) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
     }
-  };
+  } 
 
   const handleAddProcedure = () => {
     if (procedureInput && !procedures.includes(procedureInput)) {
@@ -496,43 +496,28 @@ const JobPostingForm = ({
                   )}
                 />
               </div>
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col">
                 <Label htmlFor="tags">Tags</Label>
-                <div className="flex">
-                  <Input
-                    id="tags"
-                    placeholder="Enter job tags"
-                    value={tagsInput}
-                    onChange={(e) => setTagsInput(e.target.value)}
-                  />
-                  <Button
-                    type="button"
-                    disabled={tagsInput.length === 0}
-                    onClick={handleAddTag}
-                  >
-                    Add
-                  </Button>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  {tags.map((tag, index) => (
-                    <div
-                      className="bg-gray-100  rounded-full px-3 py-1 flex items-center"
-                      key={index}
-                    >
-                      {tag}
-                      <Button
-                        type="button"
-                        variant={"ghost"}
-                        onClick={() =>
-                          setTags(procedures.filter((s) => s !== tag))
-                        }
-                      >
-                        <XIcon />
-                      </Button>
+                <SkillsCombobox handleAddSkill={handleAddSkill}>Select Tags</SkillsCombobox>
+                    <div className="flex gap-3 flex-wrap justify-start">
+                      {tags.map((tag, index) => (
+                        <div
+                          className="flex border rounded-lg items-center justify-center bg-secondary"
+                          key={index}
+                        >
+                          <div className="px-2">{tag}</div>
+                          <Button
+                            type="button"
+                            variant={"ghost"}
+                            onClick={() =>
+                              setTags(tags.filter((s) => s !== tag))
+                            }
+                          >
+                            <XIcon width={15} />
+                          </Button>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
               </div>
               <div className="space-y-4">
                 <FormField
