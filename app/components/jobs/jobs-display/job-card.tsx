@@ -3,6 +3,7 @@ import JobCardFavoriteIcon from "./job-card-favorite-icon";
 import { HandleFavoriteChange } from "./jobs-display-tabs";
 import { Job } from "@/app/(staff)/find-jobs/[id]/page";
 import Link from "next/link";
+import JobSkillTag from "../job-skill-tag";
 
 interface JobCardProps extends Job {
   handleFavoriteChange: (input: HandleFavoriteChange) => void;
@@ -19,6 +20,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
     paymentPerDay,
     isFavorite,
     createdAt,
+    tags,
     handleFavoriteChange,
   } = props;
 
@@ -32,6 +34,12 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           <span className="tracking-wider">{duration}</span>
         </p>
         <p>{shift}</p>
+        <div className="flex gap-2 flex-wrap">
+        {
+          tags.map(tag => <JobSkillTag>{tag}</JobSkillTag>)
+        }
+        </div>
+        
       </div>
       <div className="flex flex-col w-1/4 items-end">
         <div
