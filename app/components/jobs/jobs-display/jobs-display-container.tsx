@@ -23,18 +23,31 @@ const sortByOldestToNewest = (jobs: Job[]): Job[] =>
 const sortByPay = (jobs: Job[]): Job[] =>
   jobs.sort((a, b) => b.paymentPerDay - a.paymentPerDay);
 
+const sortByRelevance = (jobPosts: Job[], userTags: string[]): Job[] => {
+  const commonElementsCount = (array: string[]): number => {
+    return array.filter((element) => userTags.includes(element)).length;
+  };
+
+  const sortedJobs = jobPosts.sort(
+    (a, b) => commonElementsCount(b.tags) - commonElementsCount(a.tags)
+  );
+  return sortedJobs;
+};
+
 // const fetchedJobs: Job[] = sampleData as Job[];
 
 interface JobsDisplayContainerProps {
   initialJobs: Job[];
   favoriteJobPostIds: string[];
   staffProfileId: string;
+  userTags: string[];
 }
 
 const JobsDisplayContainer: React.FC<JobsDisplayContainerProps> = ({
   initialJobs,
   favoriteJobPostIds,
   staffProfileId,
+  userTags,
 }) => {
   const [sortValue, setSortValue] = useState("relevance");
   const [window, setWindow] = useState<"jobs" | "favorites">("jobs");
@@ -61,6 +74,10 @@ const JobsDisplayContainer: React.FC<JobsDisplayContainerProps> = ({
 
     if (sortValue === "pay") {
       sortedJobs = sortByPay([...jobs]);
+    }
+
+    if (sortValue === "relevance") {
+      sortedJobs = sortByRelevance([...jobs], userTags);
     }
 
     setJobs(sortedJobs);

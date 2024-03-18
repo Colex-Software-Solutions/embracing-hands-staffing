@@ -100,6 +100,7 @@ class JobPostProvider {
         startDate: true,
         endDate: true,
         createdAt: true,
+        tags: true,
       },
       where: {
         status: "OPEN",

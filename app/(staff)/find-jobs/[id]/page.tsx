@@ -15,6 +15,7 @@ export interface Job {
   paymentPerDay: number;
   isFavorite?: boolean;
   createdAt: Date;
+  tags: string[];
 }
 
 interface FetchedJobPost {
@@ -26,6 +27,7 @@ interface FetchedJobPost {
   startDate: Date;
   endDate: Date;
   createdAt: Date;
+  tags: string[];
 }
 
 const mapFetchedJobPostToJobPost = (
@@ -47,6 +49,7 @@ const mapFetchedJobPostToJobPost = (
         ),
         startDate: fetchedJobPost.startDate,
         isFavorite: staffProfile.favoriteJobPostIds.includes(fetchedJobPost.id),
+        tags: fetchedJobPost.tags,
       };
     });
   }
@@ -76,6 +79,7 @@ const FindJobsPage = async ({ params }: { params: { id: string } }) => {
         initialJobs={jobs}
         favoriteJobPostIds={staffProfile.favoriteJobPostIds}
         staffProfileId={params.id}
+        userTags={staffProfile.skills}
       />
     </div>
   );
