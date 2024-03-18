@@ -2,6 +2,14 @@ import prisma from "@/db/prisma";
 import { JobApplication } from "@prisma/client";
 
 class JobApplicationProvider {
+  async createJobApplication(
+    data: Omit<JobApplication, "id" | "createdAt" | "updatedAt" | "status">
+  ) {
+    return await prisma.jobApplication.create({
+      data,
+    });
+  }
+
   async getApplicationsByJobId(jobId: string) {
     return await prisma.jobApplication.findMany({
       where: {
@@ -24,6 +32,29 @@ class JobApplicationProvider {
             },
           },
         },
+        staffProfile: {
+          select: {
+            firstname: true,
+            lastname: true,
+            id: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
+            userId: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getJobApplicationStaffProfiles(jobId: string) {
+    return await prisma.jobApplication.findMany({
+      where: {
+        jobId,
+      },
+      select: {
         staffProfile: {
           select: {
             firstname: true,

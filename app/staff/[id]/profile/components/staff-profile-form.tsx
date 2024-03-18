@@ -29,6 +29,7 @@ import { Loader, XIcon } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
 import Link from "next/link";
+import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 
 const profileSchema = z.object({
   firstname: z.string().min(1, "First Name is required"),
@@ -57,7 +58,6 @@ const StaffProfileForm = ({
   });
   const { toast } = useToast();
   const [skills, setSkills] = useState<string[]>(profile?.skills ?? []);
-  const [skillInput, setSkillInput] = useState("");
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
   const [resumeFile, setResumeFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
@@ -80,13 +80,6 @@ const StaffProfileForm = ({
     } else {
       alert("Only PDF files are allowed.");
       event.target.value = "";
-    }
-  };
-
-  const handleAddSkill = () => {
-    if (skillInput && !skills.includes(skillInput)) {
-      setSkills([...skills, skillInput]);
-      setSkillInput("");
     }
   };
 
@@ -124,6 +117,12 @@ const StaffProfileForm = ({
       });
     }
   };
+
+  const handleAddSkill = (skill: string) => {
+    if (!skills.includes(skill)) {
+      setSkills([...skills, skill]);
+    }
+  } 
 
   const { errors, isSubmitting } = form.formState;
 
@@ -283,28 +282,14 @@ const StaffProfileForm = ({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex">
-                      <Input
-                        placeholder="Enter your skill"
-                        value={skillInput}
-                        onChange={(e) => setSkillInput(e.target.value)}
-                      />
-                      <Button
-                        type="button"
-                        disabled={skillInput.length === 0}
-                        onClick={handleAddSkill}
-                      >
-                        Add
-                      </Button>
-                    </div>
-
-                    <div className="flex space-x-3">
+                    <SkillsCombobox handleAddSkill={handleAddSkill}>Select Skills</SkillsCombobox>
+                    <div className="flex gap-3 flex-wrap justify-start">
                       {skills.map((skill, index) => (
                         <div
-                          className="border rounded-xl items-center justify-center flex bg-gray-300"
+                          className="flex border rounded-lg items-center justify-center bg-secondary"
                           key={index}
                         >
-                          {skill}
+                          <div className="px-2">{skill}</div>
                           <Button
                             type="button"
                             variant={"ghost"}
@@ -312,7 +297,7 @@ const StaffProfileForm = ({
                               setSkills(skills.filter((s) => s !== skill))
                             }
                           >
-                            <XIcon />
+                            <XIcon width={15} />
                           </Button>
                         </div>
                       ))}
