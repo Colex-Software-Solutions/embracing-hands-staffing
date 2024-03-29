@@ -54,6 +54,7 @@ model StaffProfile {
   title               String
   skills              String[]
   profileImage        String?
+  shifts  Shift[]
   profileSetupComplete Boolean @default(false)
   resumeUrl           String?
   favoriteJobPostIds  String[]
@@ -85,7 +86,7 @@ model JobPost {
   scrubsProvided  Boolean
   experience      String
   location        String
-  shifts          String
+  shiftsTime          String
   startDate       DateTime
   endDate         DateTime
   housing         String
@@ -95,6 +96,7 @@ model JobPost {
   bonus           Float?
   tags            String[]
   paymentPerDay   Float
+  shifts  Shift[]
   status          JobStatus         @default(OPEN)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -124,5 +126,26 @@ model Payment {
   netAmount             Float
   status                String
   jobApplication        JobApplication?   @relation(fields: [applicationId], references: [id])
+}
+
+model Shift {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  jobPostId      String   @db.ObjectId
+  staffProfileId String   @db.ObjectId
+  start          DateTime
+  end            DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  jobPost        JobPost  @relation(fields: [jobPostId], references: [id])
+  staffProfile   StaffProfile @relation(fields: [staffProfileId], references: [id])
+  breaks         Break[]  // This line adds a list of Breaks related to the Shift
+}
+
+model Break {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  start     DateTime
+  end       DateTime
+  shiftId   String   @db.ObjectId
+  shift     Shift    @relation(fields: [shiftId], references: [id])
 }
 
