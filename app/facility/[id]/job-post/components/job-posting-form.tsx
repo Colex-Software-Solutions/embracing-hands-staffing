@@ -76,7 +76,7 @@ const JobPostingForm = ({
     scrubsProvided: currentJob?.scrubsProvided || false,
     experience: currentJob?.experience || "",
     location: currentJob?.location || "",
-    shifts: currentJob?.shifts || "",
+    shifts: currentJob?.shiftsTime || "",
     startDate: currentJob
       ? currentJob.startDate.toISOString().slice(0, 10)
       : "",

@@ -30,7 +30,7 @@ export interface FetchedJobPost {
   scrubsProvided: boolean;
   experience: string;
   location: string;
-  shifts: string;
+  shiftsTime: string;
   startDate: Date;
   endDate: Date;
   housing: string;
@@ -47,7 +47,7 @@ const JobPostPage = async ({ params }: { params: { id: string } }) => {
   const jobPostId = params.id;
   const jobPost = (await jobPostProvider.getJobPostById(
     jobPostId
-  )) as FetchedJobPost;
+  )) as unknown as FetchedJobPost;
 
   const appliedStaffProfiles: AppliedStaffProfileResponse[] =
     await jobApplicationProvider.getJobApplicationStaffProfiles(jobPostId);

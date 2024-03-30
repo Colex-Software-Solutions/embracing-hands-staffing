@@ -38,7 +38,7 @@ const FullJobPostInfo: React.FC<FullJobPostInfoProps> = ({ jobPost }) => {
     },
     {
       title: "Shift",
-      descriptions: [jobPost.shifts, "Actual shift times may vary"],
+      descriptions: [jobPost.shiftsTime, "Actual shift times may vary"],
       icon: <Clock />,
     },
     {
