@@ -128,12 +128,23 @@ model Payment {
   jobApplication        JobApplication?   @relation(fields: [applicationId], references: [id])
 }
 
+enum Status {
+  Scheduled
+  InProgress
+  OnBreak
+  Completed
+  Confirmed
+}
+
 model Shift {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   jobPostId      String   @db.ObjectId
   staffProfileId String   @db.ObjectId
-  start          DateTime
+  start        DateTime
   end            DateTime
+  status       Status    @default(Scheduled)
+  clockInTime  DateTime?
+  clockOutTime DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   jobPost        JobPost  @relation(fields: [jobPostId], references: [id])
