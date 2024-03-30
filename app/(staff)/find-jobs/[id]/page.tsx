@@ -23,7 +23,7 @@ interface FetchedJobPost {
   title: string;
   location: string;
   paymentPerDay: number;
-  shifts: string;
+  shiftsTime: string;
   startDate: Date;
   endDate: Date;
   createdAt: Date;
@@ -41,7 +41,7 @@ const mapFetchedJobPostToJobPost = (
         title: fetchedJobPost.title,
         location: fetchedJobPost.location,
         paymentPerDay: fetchedJobPost.paymentPerDay,
-        shift: fetchedJobPost.shifts,
+        shift: fetchedJobPost.shiftsTime,
         createdAt: fetchedJobPost.createdAt,
         duration: weeksBetween(
           fetchedJobPost.startDate,
