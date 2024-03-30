@@ -96,7 +96,7 @@ class JobPostProvider {
         title: true,
         location: true,
         paymentPerDay: true,
-        shifts: true,
+        shiftsTime: true,
         startDate: true,
         endDate: true,
         createdAt: true,
