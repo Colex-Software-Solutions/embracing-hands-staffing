@@ -13,6 +13,25 @@ export function formatDate(date: Date): string {
   return `${month}/${day}/${year}`;
 }
 
+export function formatDateTime(input: Date): string {
+  const date = new Date(input);
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1; // getUTCMonth() returns month index starting from 0
+    const day = date.getUTCDate();
+    let hour = date.getUTCHours();
+    const minute = date.getUTCMinutes();
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    
+    hour = hour % 12;
+    hour = hour ? hour : 12; // the hour '0' should be '12'
+    const monthFormatted = month < 10 ? `0${month}` : month;
+    const dayFormatted = day < 10 ? `0${day}` : day;
+    const hourFormatted = hour < 10 ? `0${hour}` : hour;
+    const minuteFormatted = minute < 10 ? `0${minute}` : minute;
+
+    return `${year}-${monthFormatted}-${dayFormatted} ${hourFormatted}:${minuteFormatted} ${ampm}`;
+  }
+
 export function formatCurrency(
   number: number,
   decimalPlaces: number = 0
@@ -60,4 +79,31 @@ export function debounce<T extends (...args: any[]) => any>(
     clearTimeout(timeout);
     timeout = window.setTimeout(later, wait);
   };
+}
+
+export function combineDateAndTime(dateString: string, timeString: string): string {
+  // Split the time string to get hours, minutes, and AM/PM
+  const [time, modifier] = timeString.split(' ');
+  let [hours, minutes] = time.split(':');
+  
+  // Convert hours to 24-hour format if necessary
+  if (hours === '12') {
+    hours = modifier.toUpperCase() === 'AM' ? '0' : '12';
+  } else if (modifier.toUpperCase() === 'PM') {
+    hours = (parseInt(hours, 10) + 12).toString();
+  }
+
+  // Create a Date object using the 24-hour time
+  let combinedDateTime = new Date(`${dateString}T${hours.padStart(2, '0')}:${minutes}:00`);
+
+  // Convert the local DateTime to UTC
+  const utcDateTime = new Date(Date.UTC(
+    combinedDateTime.getFullYear(),
+    combinedDateTime.getMonth(),
+    combinedDateTime.getDate(),
+    combinedDateTime.getHours(),
+    combinedDateTime.getMinutes()
+  ));
+
+  return utcDateTime.toISOString();
 }

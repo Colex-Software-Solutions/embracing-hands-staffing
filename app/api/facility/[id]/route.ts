@@ -8,15 +8,19 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const userId = params.id;
-    if (!userId)
+    const jobPostId = params.id;
+
+    if (!jobPostId)
+    {
       return NextResponse.json(
-        { message: "User ID is required." },
+        { message: "This job post could not be found." },
         {
           status: 400,
-          statusText: "User ID is required.",
+          statusText: "Invalid job post",
         }
       );
+    }
+      
     const facility = await facilityProvider.getFacilityProfile(userId);
 
     let profileImage, profileUrl;

@@ -7,35 +7,39 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/components/ui/dialog";
-import JobPostingForm from "../../../job-post/components/create-shift-form";
+import JobPostingForm from "../create-shift-form";
 import { JobPost } from "@prisma/client";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 
-interface ViewAndEditModalProps {
+interface AddShiftModalProps {
   row: any;
-  id: string;
+  jobPostId: string;
   handleJobPostUpdate: (newJob: JobPost) => void;
 }
 
-export function ViewAndEditModal({
+export function AddShiftModal({
   row,
-  id,
+  jobPostId,
   handleJobPostUpdate,
-}: ViewAndEditModalProps) {
+}: AddShiftModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="w-full border-0 justify-start flex pl-2 font-normal"
           variant="outline"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
         >
-          View / Edit Job
+          <PlusCircledIcon className="mr-2 h-4 w-4" />
+          Add Shift
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[1200px] max-h-[900px] overflow-auto">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>Job Details</DialogTitle>
+          <DialogTitle>Create Shift</DialogTitle>
         </DialogHeader>
         <JobPostingForm
+          jobPostId={jobPostId}
           currentJob={row.original as JobPost}
           handleJobPostUpdate={handleJobPostUpdate}
         />

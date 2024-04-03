@@ -11,12 +11,12 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "@/app/components/ui/dropdown-menu";
-import { ViewAndEditModal } from "./modals/view-and-edit-job-details";
-import { CloseJobModal } from "./modals/close-job-confirm-modal";
+import { ViewAndEditModal } from "./modals/add-shift-modal";
+// import { CloseJobModal } from "./modals/close-job-confirm-modal";
 import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { CompleteJobModal } from "./modals/complete-job-confirm-modal";
+// import { CompleteJobModal } from "./modals/complete-job-confirm-modal";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -65,8 +65,8 @@ export function DataTableRowActions<TData>({
               <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
 
               <DropdownMenuSubContent>
-                <CompleteJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
-                <CloseJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
+                {/* <CompleteJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
+                <CloseJobModal jobId={id} onUpdate={handleJobStatusUpdate} /> */}
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           )}
