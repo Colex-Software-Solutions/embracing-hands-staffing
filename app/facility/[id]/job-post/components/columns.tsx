@@ -2,18 +2,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/app/components/ui/badge";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { ShiftSchema } from "../data/schema";
-import { DataTableRowActions } from "./data-table-row-actions";
-import { JobPost, JobStatus } from "@prisma/client";
 import { formatDateTime } from "@/lib/utils";
 
-interface JobColumnProps {
-  handleJobPostUpdate: (newJob: JobPost) => void;
-  handleJobStatusUpdate: (id: string, status: JobStatus) => void;
-}
-export const columns = ({
-  handleJobPostUpdate,
-  handleJobStatusUpdate,
-}: JobColumnProps): ColumnDef<ShiftSchema>[] => [
+export const columns = (): ColumnDef<ShiftSchema>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -112,34 +103,4 @@ export const columns = ({
       </div>
     ),
   },
-  // {
-  //   accessorKey: "startDate",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Start Date" />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div>
-  //       {new Date(row.getValue("startDate"))?.toISOString().slice(0, 10)}
-  //     </div>
-  //   ),
-  // },
-  // {
-  //   accessorKey: "endDate",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="End Date" />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div>{new Date(row.getValue("endDate"))?.toISOString().slice(0, 10)}</div>
-  //   ),
-  // },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => (
-  //     <DataTableRowActions
-  //       row={row}
-  //       handleJobPostUpdate={handleJobPostUpdate}
-  //       handleJobStatusUpdate={handleJobStatusUpdate}
-  //     />
-  //   ),
-  // },
 ];

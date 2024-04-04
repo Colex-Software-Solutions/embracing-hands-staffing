@@ -45,7 +45,6 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <DataTableViewOptions
-        table={table}
         jobPostId={jobPostId}
         handleAddShift={handleAddShift}
       />

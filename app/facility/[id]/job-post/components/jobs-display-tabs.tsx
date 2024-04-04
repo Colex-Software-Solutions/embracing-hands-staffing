@@ -19,10 +19,7 @@ const ShiftDisplayTabs: React.FC<ShiftDisplayTabsProps> = ({
       data={shifts as Shift[]}
       jobPostId={jobPostId}
       handleAddShift={handleAddShift}
-      columns={columns({
-        handleJobPostUpdate: () => {},
-        handleJobStatusUpdate: () => {},
-      })}
+      columns={columns()}
     />
   );
 };

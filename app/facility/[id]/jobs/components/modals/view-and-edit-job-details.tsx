@@ -7,8 +7,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/components/ui/dialog";
-import JobPostingForm from "../../../job-post/components/create-shift-form";
 import { JobPost } from "@prisma/client";
+import JobPostingForm from "../../../job-post/components/job-posting-form";
 
 interface ViewAndEditModalProps {
   row: any;

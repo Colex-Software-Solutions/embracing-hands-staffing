@@ -7,10 +7,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/components/ui/dialog";
-import JobPostingForm from "../create-shift-form";
 import { JobPost } from "@prisma/client";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Shift } from "../../../applications/jobPost/[jobPostId]/page";
+import CreateShiftForm from "../create-shift-form";
 
 interface AddShiftModalProps {
   row: any;
@@ -45,7 +45,7 @@ export function AddShiftModal({
         <DialogHeader>
           <DialogTitle>Create Shift</DialogTitle>
         </DialogHeader>
-        <JobPostingForm
+        <CreateShiftForm
           jobPostId={jobPostId}
           currentJob={row.original as JobPost}
           handleJobPostUpdate={handleJobPostUpdate}

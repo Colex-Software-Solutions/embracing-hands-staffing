@@ -1,18 +1,9 @@
 "use client";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import {
-  CardTitle,
-  CardHeader,
-  CardFooter,
-  CardContent,
-  Card,
-} from "@/app/components/ui/card";
-import { Label } from "@/app/components/ui/label";
+import { CardContent, Card } from "@/app/components/ui/card";
 import { Input } from "@/app/components/ui/input";
-import { Textarea } from "@/app/components/ui/textarea";
 import { Button } from "@/app/components/ui/button";
-import { Switch } from "@/app/components/ui/switch";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -23,11 +14,10 @@ import {
 } from "@/app/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Loader, XIcon } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useToast } from "@/app/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { JobPost } from "@prisma/client";
-import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import StaffCombobox from "./staff-combobox";
 import hours from "../data/hours.json";
 import {
