@@ -8,9 +8,9 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const jobPostId = params.id;
+    const userId = params.id;
 
-    if (!jobPostId)
+    if (!userId)
     {
       return NextResponse.json(
         { message: "This job post could not be found." },
