@@ -29,7 +29,6 @@ export const columns = ({
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
-      console.log(row);
       return <div>{row.getValue("staffName")}</div>;
     },
   },

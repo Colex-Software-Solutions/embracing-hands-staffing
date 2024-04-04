@@ -17,26 +17,20 @@ import {
   PopoverTrigger,
 } from "@/app/components/ui/popover";
 import { Button } from "@/app/components/ui/button";
-import useStaff from "@/lib/hooks/useStaff";
-import { useParams } from "next/navigation";
+import { StaffProfile } from "@prisma/client";
 
 interface StaffComboboxProps {
   value: string;
   onChange: (value: string) => void;
-  jobPostId: string;
+  staffProfiles: StaffProfile[];
 }
 
 const StaffCombobox: React.FC<StaffComboboxProps> = ({
   value,
   onChange,
-  jobPostId,
+  staffProfiles,
 }) => {
   const [open, setOpen] = React.useState(false);
-  const { fetchStaffProfilesByJobPostId, staffProfiles } = useStaff("");
-
-  React.useEffect(() => {
-    fetchStaffProfilesByJobPostId(jobPostId);
-  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -69,10 +63,6 @@ const StaffCombobox: React.FC<StaffComboboxProps> = ({
               <CommandItem
                 key={staffProfile.id}
                 value={staffProfile.id}
-                // onSelect={(currentValue) => {
-                //   setValue(currentValue === value ? "" : currentValue);
-                //   setOpen(false);
-                // }}
                 onSelect={(currentValue) => {
                   onChange(currentValue === value ? "" : currentValue);
                   setOpen(false);

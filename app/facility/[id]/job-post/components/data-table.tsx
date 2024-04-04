@@ -27,17 +27,20 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { Shift } from "../../applications/jobPost/[jobPostId]/page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   jobPostId: string;
+  handleAddShift: (newShift: Shift) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   jobPostId,
+  handleAddShift,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -71,7 +74,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} jobPostId={jobPostId} />
+      <DataTableToolbar
+        table={table}
+        jobPostId={jobPostId}
+        handleAddShift={handleAddShift}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

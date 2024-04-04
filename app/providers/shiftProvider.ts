@@ -1,15 +1,15 @@
 // utils/jobPostProvider.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Shift } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class ShiftProvider {
-  // async createJobPost(
-  //   jobPostData: Omit<JobPost, "id" | "createdAt" | "updatedAt">
-  // ) {
-  //   return await prisma.jobPost.create({
-  //     data: jobPostData,
-  //   });
-  // }
+  async createShift(
+    shiftData: Omit<Shift, "id" | "createdAt" | "updatedAt" | "clockInTime" | "clockOutTime" | "status">
+  ) {
+    return await prisma.shift.create({
+      data: shiftData,
+    });
+  }
 
   async getAllShifts(jobPostId: string) {
     return await prisma.shift.findMany({

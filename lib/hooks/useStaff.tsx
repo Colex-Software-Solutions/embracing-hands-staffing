@@ -42,8 +42,6 @@ const useStaff = (userId: string) => {
       .get(`/api/job-post/${jobPostId}/job-applications`)
       .then((res) => {
         if (res.data.success) {
-          console.log("job applications", res.data.jobApplications);
-
           const validStaffProfiles = res.data.jobApplications
             .filter(
               (jobApplication: { status: string }) =>

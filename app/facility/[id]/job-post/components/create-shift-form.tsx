@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   CardTitle,
   CardHeader,
@@ -38,6 +38,8 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { combineDateAndTime } from "@/lib/utils";
+import { Shift } from "../../applications/jobPost/[jobPostId]/page";
+import useStaff from "@/lib/hooks/useStaff";
 
 const now = new Date();
 
@@ -70,13 +72,23 @@ interface ICreateShiftForm {
   currentJob?: JobPost;
   handleJobPostUpdate?: (newJob: JobPost) => void;
   jobPostId: string;
+  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  handleAddShift: (newShift: Shift) => void;
 }
 
 const CreateShiftForm = ({
   currentJob,
   handleJobPostUpdate,
   jobPostId,
+  setOpenModal,
+  handleAddShift,
 }: ICreateShiftForm) => {
+  const { fetchStaffProfilesByJobPostId, staffProfiles } = useStaff("");
+
+  React.useEffect(() => {
+    fetchStaffProfilesByJobPostId(jobPostId);
+  }, []);
+
   const defaultValues: Partial<CreateShiftFormValues> = {
     staff: "",
     startDate: new Date().toISOString().slice(0, 10),
@@ -93,23 +105,8 @@ const CreateShiftForm = ({
     currentJob?.procedures || []
   );
 
-  const [procedureInput, setProcedureInput] = useState("");
   const { data: session } = useSession();
-  const [tags, setTags] = useState<string[]>(currentJob?.tags || []);
   const { toast } = useToast();
-
-  const handleAddSkill = (tag: string) => {
-    if (!tags.includes(tag)) {
-      setTags([...tags, tag]);
-    }
-  };
-
-  const handleAddProcedure = () => {
-    if (procedureInput && !procedures.includes(procedureInput)) {
-      setProcedures([...procedures, procedureInput]);
-      setProcedureInput("");
-    }
-  };
 
   const onSubmit = async (data: CreateShiftFormValues) => {
     try {
@@ -136,30 +133,46 @@ const CreateShiftForm = ({
         staffProfileId: data.staff,
       };
 
-      console.log({ requestBody });
+      const response = await fetch("/api/shift", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-      // const response = await fetch("/api/job-post", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(requestBody),
-      // });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const shift = (await response.json()).shift;
 
-      // if (!response.ok) {
-      //   throw new Error(`Error: ${response.statusText}`);
-      // }
-      // const newJob: JobPost = (await response.json()).jobPost;
+      const staffProfile = staffProfiles.find(
+        (profile) => profile.id === data.staff
+      );
 
-      // updating the jobs state
-      // if (handleJobPostUpdate) {
-      //   handleJobPostUpdate(newJob);
-      // }
-      // toast({
-      //   title: "Success!",
-      //   description: "The new job add has been posted successfully",
-      //   variant: "default",
-      // });
+      if (!staffProfile) {
+        toast({
+          title: "Error!",
+          description: "Failed to update table. Please refresh page.",
+          variant: "destructive",
+        });
+        setOpenModal(false);
+
+        return;
+      }
+
+      handleAddShift({
+        ...shift,
+        staffName: `${staffProfile.firstname} ${staffProfile.lastname}`,
+      });
+
+      toast({
+        title: "Success!",
+        description: "New shift has been successfully created",
+        variant: "default",
+      });
+
+      setOpenModal(false);
     } catch (error: any) {
       toast({
         title: "Error!",
@@ -187,9 +200,9 @@ const CreateShiftForm = ({
                       <FormLabel>Assign Staff</FormLabel>
                       <FormControl>
                         <StaffCombobox
-                          jobPostId={jobPostId}
                           value={field.value}
                           onChange={field.onChange}
+                          staffProfiles={staffProfiles}
                         />
                       </FormControl>
                       {errors.staff && (

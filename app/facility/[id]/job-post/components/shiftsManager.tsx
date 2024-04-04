@@ -8,36 +8,20 @@ interface IShiftsManager {
   initialShifts: Shift[];
   jobPostId: string;
 }
+
 const ShiftsManager = ({ initialShifts, jobPostId }: IShiftsManager) => {
-  const [shifts, setShifts] = useState(initialShifts);
+  const [shifts, setShifts] = useState<Shift[]>(initialShifts);
 
-  // const handleJobPostUpdate = (updatedJob: JobPost) => {
-  //   const newjobPosts = jobPosts.map((job) =>
-  //     job.id === updatedJob.id ? updatedJob : job
-  //   );
-  //   setJobPosts(newjobPosts);
-  // };
-
-  // Function to update job status
-  // const handleJobStatusUpdate = (id: string, status: JobStatus) => {
-  //   const newJobPosts = jobPosts.map((jobPost) => {
-  //     if (jobPost.id === id) {
-  //       return { ...jobPost, status };
-  //     }
-  //     return jobPost;
-  //   });
-
-  //   setJobPosts(newJobPosts);
-  // };
-  console.log({ initialShifts });
+  const handleAddShift = (newShift: Shift) => {
+    setShifts([...shifts, newShift]);
+  };
 
   return (
     <>
       <ShiftDisplayTabs
         shifts={shifts}
         jobPostId={jobPostId}
-        // handleJobPostUpdate={handleJobPostUpdate}
-        // handleJobStatusUpdate={handleJobStatusUpdate}
+        handleAddShift={handleAddShift}
       />
       <Toaster />
     </>

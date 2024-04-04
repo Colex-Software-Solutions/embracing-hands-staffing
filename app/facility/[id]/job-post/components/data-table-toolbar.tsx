@@ -5,17 +5,18 @@ import { Table } from "@tanstack/react-table";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
-// import { statuses } from "../data/data";
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { Shift } from "../../applications/jobPost/[jobPostId]/page";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   jobPostId: string;
+  handleAddShift: (newShift: Shift) => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
   jobPostId,
+  handleAddShift,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -32,13 +33,6 @@ export function DataTableToolbar<TData>({
             className="h-8 w-[150px] lg:w-[250px]"
           />
         )}
-        {/* {table.getColumn("status") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
-            options={[]}
-          />
-        )} */}
         {isFiltered && (
           <Button
             variant="ghost"
@@ -50,7 +44,11 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} jobPostId={jobPostId} />
+      <DataTableViewOptions
+        table={table}
+        jobPostId={jobPostId}
+        handleAddShift={handleAddShift}
+      />
     </div>
   );
 }
