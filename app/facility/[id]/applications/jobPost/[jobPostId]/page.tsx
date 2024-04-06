@@ -1,5 +1,6 @@
 import { shiftProvider } from "@/app/providers/shiftProvider";
 import ShiftsManager from "../../../job-post/components/shiftsManager";
+import { Status } from "@prisma/client";
 
 interface ShiftStaffProfile {
   firstname: string;
@@ -12,7 +13,7 @@ interface FetchedShift {
   staffProfileId: string;
   start: Date;
   end: Date;
-  status: "Scheduled" | "InProgress" | "OnBreak" | "Completed" | "Confirmed";
+  status: Status;
   clockInTime?: Date;
   clockOutTime?: Date;
   createdAt: Date;
@@ -26,7 +27,7 @@ export interface Shift {
   staffProfileId: string;
   start: Date;
   end: Date;
-  status: "Scheduled" | "InProgress" | "OnBreak" | "Completed" | "Confirmed";
+  status: Status;
   clockInTime?: Date;
   clockOutTime?: Date;
   createdAt: Date;
