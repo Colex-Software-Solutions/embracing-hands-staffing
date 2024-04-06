@@ -21,7 +21,6 @@ const isApplicationStarted = (
   if (!staffId) {
     return false;
   }
-  console.log(appliedStaffProfiles);
 
   for (let appliedStaffProfile of appliedStaffProfiles) {
     if (appliedStaffProfile.staffProfile.id === staffId) {
