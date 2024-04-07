@@ -28,6 +28,9 @@ import { useToast } from "@/app/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { JobPost } from "@prisma/client";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
+import ReactGoogleAutocomplete from "react-google-autocomplete";
+
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const jobPostingSchema = z
   .object({
@@ -37,7 +40,9 @@ const jobPostingSchema = z
     scrubsProvided: z.boolean(),
     experience: z.string().min(5, "Experience description is required"),
     location: z.string().optional(),
-    shifts: z.string().min(5, "Shifts description is required"),
+    latitude: z.coerce.number(),
+    longitude: z.coerce.number(),
+    shiftsTime: z.string().min(5, "Shifts description is required"),
     startDate: z.string(),
     endDate: z.string(),
     housing: z.string().optional(),
@@ -76,7 +81,7 @@ const JobPostingForm = ({
     scrubsProvided: currentJob?.scrubsProvided || false,
     experience: currentJob?.experience || "",
     location: currentJob?.location || "",
-    shifts: currentJob?.shiftsTime || "",
+    shiftsTime: currentJob?.shiftsTime || "",
     startDate: currentJob
       ? currentJob.startDate.toISOString().slice(0, 10)
       : "",
@@ -294,10 +299,34 @@ const JobPostingForm = ({
                         <span className="text-sm font-thin">(optional)</span>
                       </FormLabel>
                       <FormControl>
-                        <Input
+                        <ReactGoogleAutocomplete
                           id="location"
-                          placeholder="Enter job location if different from facility location"
-                          {...field}
+                          apiKey={GOOGLE_MAPS_API_KEY}
+                          style={{
+                            width: "100%",
+                            height: "2.25rem",
+                            borderRadius: ".375rem",
+                            border: "1px solid rgba(0, 0, 0, 0.05)",
+                            backgroundColor: "transparent",
+                            padding: ".25rem .75rem",
+                            fontSize: ".875rem",
+                            boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                            transition: "color 0.15s ease-in-out",
+                          }}
+                          onPlaceSelected={(place) => {
+                            const location = place.formatted_address;
+                            const latitude = place.geometry.location.lat();
+                            const longitude = place.geometry.location.lng();
+
+                            form.setValue("location", location);
+                            form.setValue("latitude", latitude);
+                            form.setValue("longitude", longitude);
+                          }}
+                          options={{
+                            types: ["address"],
+                            componentRestrictions: { country: "ca" },
+                          }}
+                          defaultValue=""
                         />
                       </FormControl>
                     </FormItem>
@@ -307,19 +336,19 @@ const JobPostingForm = ({
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="shifts"
+                  name="shiftsTime"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Shifts</FormLabel>
                       <FormControl>
                         <Input
-                          id="shifts"
+                          id="shiftsTime"
                           placeholder="Enter shift details"
                           {...field}
                         />
                       </FormControl>
-                      {errors.shifts && (
-                        <FormMessage>{errors.shifts.message}</FormMessage>
+                      {errors.shiftsTime && (
+                        <FormMessage>{errors.shiftsTime.message}</FormMessage>
                       )}
                     </FormItem>
                   )}

@@ -1,3 +1,4 @@
+import { GeoLocation } from "@/app/staff/[id]/profile/components/staff-profile-form";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -106,4 +107,36 @@ export function combineDateAndTime(dateString: string, timeString: string): stri
   ));
 
   return utcDateTime.toISOString();
+}
+
+export interface IsWithinRadius {
+  userGeolocation: GeoLocation;
+  jobGeolocation: GeoLocation;
+  radius: number
+}
+
+export function isWithinRadius(input: IsWithinRadius): boolean {
+  const { latitude: lat1, longitude: lon1} = input.userGeolocation;
+  const { latitude: lat2, longitude: lon2} = input.jobGeolocation;
+  const radius = input.radius;
+
+  // Earth's radius in kilometers
+  const R = 6371; 
+
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+
+  // Converts decimal degrees to radians
+  function deg2rad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+
+  // Check if the distance is within the radius
+  return distance <= radius;
 }
