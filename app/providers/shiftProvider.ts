@@ -109,6 +109,10 @@ class ShiftProvider {
   }
 
   async startBreak(shiftId: string) {
+    prisma.shift.update({
+      where: { id: shiftId },
+      data: { status: "OnBreak" },
+    });
     return prisma.break.create({
       data: { shiftId: shiftId, start: new Date() },
     });
@@ -121,6 +125,11 @@ class ShiftProvider {
     });
 
     if (!ongoingBreak) throw new Error("No ongoing break found.");
+
+    prisma.shift.update({
+      where: { id: shiftId },
+      data: { status: "InProgress" },
+    });
 
     return prisma.break.update({
       where: { id: ongoingBreak.id },
