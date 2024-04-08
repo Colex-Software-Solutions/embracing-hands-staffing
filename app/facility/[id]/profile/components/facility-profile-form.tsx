@@ -87,6 +87,7 @@ const FacilityProfileForm = ({
     formData.append("city", data.city);
     formData.append("latitude", data.latitude.toString());
     formData.append("longitude", data.longitude.toString());
+
     if (profileImageFile) formData.append("profileImage", profileImageFile);
 
     try {
