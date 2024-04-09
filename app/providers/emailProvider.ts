@@ -95,7 +95,6 @@ class EmailProvider {
 
     return apiInstance.sendTransacEmail(sendSmtpEmail);
   }
-<<<<<<< HEAD
 
   async sendJobPostEmail(data: SendJobPostEmail) {
     const { emailTo, emailTemplateId, emailParams } = data;
@@ -106,8 +105,6 @@ class EmailProvider {
       emailParams,
     });
   }
-=======
->>>>>>> 9e98d4b9 (added email sending and middleware routes protection)
 }
 
 export const emailProvider = new EmailProvider();
