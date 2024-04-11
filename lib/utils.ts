@@ -97,16 +97,15 @@ export function combineDateAndTime(dateString: string, timeString: string): stri
   // Create a Date object using the 24-hour time
   let combinedDateTime = new Date(`${dateString}T${hours.padStart(2, '0')}:${minutes}:00`);
 
-  // Convert the local DateTime to UTC
-  const utcDateTime = new Date(Date.UTC(
+  const localDateTime = new Date(
     combinedDateTime.getFullYear(),
     combinedDateTime.getMonth(),
     combinedDateTime.getDate(),
     combinedDateTime.getHours(),
     combinedDateTime.getMinutes()
-  ));
+  );
 
-  return utcDateTime.toISOString();
+  return localDateTime.toString();
 }
 
 export interface IsWithinRadius {

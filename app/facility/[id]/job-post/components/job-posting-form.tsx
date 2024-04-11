@@ -29,6 +29,7 @@ import { useSession } from "next-auth/react";
 import { JobPost } from "@prisma/client";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import ReactGoogleAutocomplete from "react-google-autocomplete";
+import { format } from "date-fns";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -129,13 +130,14 @@ const JobPostingForm = ({
       }
       const requestBody = {
         ...data,
-        startDate: new Date(data.startDate).toISOString(),
-        endDate: new Date(data.endDate).toISOString(),
+        startDate: format(data.startDate, "yyyy-MM-dd"),
+        endDate: format(data.endDate, "yyyy-MM-dd"),
         procedures,
         tags,
         facilityId: session.user.facilityProfile.id,
         id: currentJob ? currentJob.id : null,
       };
+
       const response = await fetch("/api/job-post", {
         method: "POST",
         headers: {

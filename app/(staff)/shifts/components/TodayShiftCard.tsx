@@ -15,7 +15,6 @@ const TodayShiftCard = ({
   shift?: StaffShift;
   setFilteredShifts: React.Dispatch<React.SetStateAction<StaffShift[]>>;
 }) => {
-  console.log("today shift", shift);
   if (!shift) {
     return <div className="text-xl font-bold">No shifts today.</div>;
   }
