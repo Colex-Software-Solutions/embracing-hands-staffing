@@ -37,10 +37,9 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       <DialogTrigger asChild>
         <Button
           className={cn(
-            "w-full justify-start flex pl-2 font-normal hover:bg-primary hover:text-primary-foreground",
+            "w-full justify-center font-semibold flex pl-2  hover:bg-primary hover:text-primary-foreground",
             triggerButtonClassNames
           )}
-          variant="outline"
         >
           {triggerButtonText}
         </Button>
@@ -56,13 +55,15 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 {cancelButtonText}
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              variant="default"
-              className="bg-primary hover:bg-primary-light"
-            >
-              {confirmButtonText}
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                variant="default"
+                className="bg-primary hover:bg-primary-light"
+              >
+                {confirmButtonText}
+              </Button>
+            </DialogClose>
           </div>
         </form>
       </DialogContent>

@@ -155,7 +155,7 @@ model Shift {
 model Break {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   start     DateTime
-  end       DateTime
+  end       DateTime?
   shiftId   String   @db.ObjectId
   shift     Shift    @relation(fields: [shiftId], references: [id])
 }

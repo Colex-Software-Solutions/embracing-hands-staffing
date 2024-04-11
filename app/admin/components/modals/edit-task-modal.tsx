@@ -33,7 +33,6 @@ export function EditTaskModal({
   const [currentTask, setCurrentTask] = useState<Task>(task);
 
   const handleChange = (field: keyof Task, value: string) => {
-    console.log(field, value);
     setCurrentTask({ ...currentTask, [field]: value });
   };
 

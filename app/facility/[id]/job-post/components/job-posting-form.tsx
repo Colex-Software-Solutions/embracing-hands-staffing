@@ -105,7 +105,7 @@ const JobPostingForm = ({
     if (!tags.includes(tag)) {
       setTags([...tags, tag]);
     }
-  } 
+  };
 
   const handleAddProcedure = () => {
     if (procedureInput && !procedures.includes(procedureInput)) {
@@ -498,26 +498,26 @@ const JobPostingForm = ({
               </div>
               <div className="space-y-4 flex flex-col">
                 <Label htmlFor="tags">Tags</Label>
-                <SkillsCombobox handleAddSkill={handleAddSkill}>Select Tags</SkillsCombobox>
-                    <div className="flex gap-3 flex-wrap justify-start">
-                      {tags.map((tag, index) => (
-                        <div
-                          className="flex border rounded-lg items-center justify-center bg-secondary"
-                          key={index}
-                        >
-                          <div className="px-2">{tag}</div>
-                          <Button
-                            type="button"
-                            variant={"ghost"}
-                            onClick={() =>
-                              setTags(tags.filter((s) => s !== tag))
-                            }
-                          >
-                            <XIcon width={15} />
-                          </Button>
-                        </div>
-                      ))}
+                <SkillsCombobox handleAddSkill={handleAddSkill}>
+                  Select Tags
+                </SkillsCombobox>
+                <div className="flex gap-3 flex-wrap justify-start">
+                  {tags.map((tag, index) => (
+                    <div
+                      className="flex border rounded-lg items-center justify-center bg-secondary"
+                      key={index}
+                    >
+                      <div className="px-2">{tag}</div>
+                      <Button
+                        type="button"
+                        variant={"ghost"}
+                        onClick={() => setTags(tags.filter((s) => s !== tag))}
+                      >
+                        <XIcon width={15} />
+                      </Button>
                     </div>
+                  ))}
+                </div>
               </div>
               <div className="space-y-4">
                 <FormField
