@@ -84,9 +84,11 @@ const JobPostingForm = ({
     location: currentJob?.location || "",
     shiftsTime: currentJob?.shiftsTime || "",
     startDate: currentJob
-      ? currentJob.startDate.toISOString().slice(0, 10)
+      ? new Date(currentJob.startDate).toISOString().slice(0, 10)
       : "",
-    endDate: currentJob ? currentJob.endDate.toISOString().slice(0, 10) : "",
+    endDate: currentJob
+      ? new Date(currentJob.endDate).toISOString().slice(0, 10)
+      : "",
     housing: currentJob?.housing || "",
     patientPopulation: currentJob?.patientPopulation || "",
     mie: currentJob?.mie || 0,

@@ -31,8 +31,8 @@ export interface FetchedJobPost {
   experience: string;
   location: string;
   shiftsTime: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   housing: string;
   procedures: string[];
   patientPopulation: string;

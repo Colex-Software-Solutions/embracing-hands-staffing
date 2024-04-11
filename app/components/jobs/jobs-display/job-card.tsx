@@ -30,16 +30,14 @@ const JobCard: React.FC<JobCardProps> = (props) => {
         <p className="flex font-bold text-lg">{title}</p>
         <p>{location}</p>
         <p>
-          {formatDate(startDate)} -{" "}
-          <span className="tracking-wider">{duration}</span>
+          {startDate} - <span className="tracking-wider">{duration}</span>
         </p>
         <p>{shift}</p>
         <div className="flex gap-2 flex-wrap">
-        {
-          tags.map(tag => <JobSkillTag>{tag}</JobSkillTag>)
-        }
+          {tags.map((tag) => (
+            <JobSkillTag>{tag}</JobSkillTag>
+          ))}
         </div>
-        
       </div>
       <div className="flex flex-col w-1/4 items-end">
         <div

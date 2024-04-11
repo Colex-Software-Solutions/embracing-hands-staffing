@@ -45,12 +45,12 @@ export function formatCurrency(
   }).format(number / 100);
 }
 
-export function weeksBetween(startDate: Date, endDate: Date): string {
+export function weeksBetween(startDate: string, endDate: string): string {
   // One week in milliseconds
   const oneWeek = 1000 * 60 * 60 * 24 * 7;
   // Calculate the difference in milliseconds
   const differenceInMilliseconds = Math.abs(
-    endDate.getTime() - startDate.getTime()
+    new Date(endDate).getTime() - new Date(startDate).getTime()
   );
   // Convert the difference to weeks
   const differenceInWeeks = differenceInMilliseconds / oneWeek;

@@ -9,7 +9,7 @@ export interface Job {
   id: string;
   title: string;
   location: string;
-  startDate: Date;
+  startDate: string;
   duration: string;
   shift: string;
   paymentPerDay: number;
@@ -24,8 +24,8 @@ interface FetchedJobPost {
   location: string;
   paymentPerDay: number;
   shiftsTime: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   createdAt: Date;
   tags: string[];
 }

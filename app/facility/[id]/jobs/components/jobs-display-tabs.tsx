@@ -44,7 +44,7 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
       </TabsContent>
       <TabsContent value="list" className="max-h-screen">
         <DataTable
-          data={jobPosts as JobPost[]}
+          data={jobPosts as any[]}
           columns={columns({ handleJobPostUpdate, handleJobStatusUpdate })}
         />
       </TabsContent>
