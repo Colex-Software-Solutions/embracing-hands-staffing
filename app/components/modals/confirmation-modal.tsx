@@ -9,6 +9,7 @@ import {
   DialogClose,
 } from "@/app/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import Spinner from "../loading/spinner";
 
 interface ConfirmationModalProps {
   triggerButtonText: string;
@@ -17,6 +18,7 @@ interface ConfirmationModalProps {
   onConfirm: () => Promise<void> | void;
   confirmButtonText: string;
   cancelButtonText?: string;
+  loading?: boolean;
 }
 
 export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -26,6 +28,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onConfirm,
   confirmButtonText,
   cancelButtonText = "Cancel",
+  loading,
 }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,12 +39,13 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          disabled={loading}
           className={cn(
             "w-full justify-center font-semibold flex pl-2  hover:bg-primary hover:text-primary-foreground",
             triggerButtonClassNames
           )}
         >
-          {triggerButtonText}
+          {loading ? <Spinner /> : triggerButtonText}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

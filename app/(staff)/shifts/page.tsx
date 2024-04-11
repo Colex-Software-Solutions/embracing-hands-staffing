@@ -18,6 +18,8 @@ export default async function ShiftsPage() {
         : shift.jobPost.facilityProfile.address,
     facilityName: shift.jobPost.facilityProfile.name,
     staffName: shift.staffProfile.firstname + " " + shift.staffProfile.lastname,
+    latitude: shift.jobPost.latitude,
+    longitude: shift.jobPost.longitude,
   }));
 
   return (
