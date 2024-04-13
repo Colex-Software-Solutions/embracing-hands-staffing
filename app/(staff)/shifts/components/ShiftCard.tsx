@@ -5,11 +5,22 @@ import { CardContent, Card } from "@/app/components/ui/card";
 import { StaffShift } from "./ShiftsViewer";
 import StatusViewer from "./StatusViewer";
 
+const getDateRange = (startDate: Date, endDate: Date) => {
+  const formattedStartDate = format(startDate, "PPP");
+  const formattedEndDate = format(endDate, "PPP");
+
+  if (formattedStartDate === formattedEndDate) {
+    return formattedStartDate;
+  }
+
+  return `${format(startDate, "PPP")} - ${format(endDate, "PPP")}`;
+};
+
 export const ShiftCard = ({ shift }: { shift: StaffShift }) => {
   const isFutureShift = new Date(shift.start) > new Date();
   const startDate = parseISO(new Date(shift.start)?.toISOString());
   const endDate = parseISO(new Date(shift.end)?.toISOString());
-  const shiftDate = format(startDate, "PPP"); // Example: Mar 21, 2024
+  const shiftDate = getDateRange(startDate, endDate);
   const shiftTime = `${format(startDate, "p")} - ${format(endDate, "p")}`;
   return (
     <Card className="mb-4 p-4">

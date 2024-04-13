@@ -33,7 +33,7 @@ const FullJobPostInfo: React.FC<FullJobPostInfoProps> = ({ jobPost }) => {
     },
     {
       title: "Tentative Start Date",
-      descriptions: [formatDate(jobPost.startDate)],
+      descriptions: [formatDate(new Date(jobPost.startDate))],
       icon: <Calendar />,
     },
     {

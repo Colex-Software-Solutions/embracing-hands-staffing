@@ -21,6 +21,9 @@ import {
 import { Loader } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
+import ReactGoogleAutocomplete from "react-google-autocomplete";
+
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -33,6 +36,8 @@ const profileSchema = z.object({
     .min(1, "State/Province is required")
     .min(3, "Please enter full state/province name and not the shortcut"),
   city: z.string().min(3, "City is required"),
+  latitude: z.number(),
+  longitude: z.number(),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -51,6 +56,8 @@ const FacilityProfileForm = ({
     country: profile?.country ?? "",
     state: profile?.state ?? "",
     city: profile?.city ?? "",
+    latitude: profile?.latitude,
+    longitude: profile?.longitude,
   };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -78,6 +85,9 @@ const FacilityProfileForm = ({
     formData.append("country", data.country);
     formData.append("state", data.state);
     formData.append("city", data.city);
+    formData.append("latitude", data.latitude.toString());
+    formData.append("longitude", data.longitude.toString());
+
     if (profileImageFile) formData.append("profileImage", profileImageFile);
 
     try {
@@ -184,9 +194,38 @@ const FacilityProfileForm = ({
                     <FormItem>
                       <FormLabel>Address</FormLabel>
                       <FormControl>
-                        <Input
+                        {/* <Input
                           placeholder="Enter facility address"
                           {...field}
+                        /> */}
+                        <ReactGoogleAutocomplete
+                          id="location"
+                          apiKey={GOOGLE_MAPS_API_KEY}
+                          style={{
+                            width: "100%",
+                            height: "2.25rem",
+                            borderRadius: ".375rem",
+                            border: "1px solid rgba(0, 0, 0, 0.05)",
+                            backgroundColor: "transparent",
+                            padding: ".25rem .75rem",
+                            fontSize: ".875rem",
+                            boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                            transition: "color 0.15s ease-in-out",
+                          }}
+                          onPlaceSelected={(place) => {
+                            const location = place.formatted_address;
+                            const latitude = place.geometry.location.lat();
+                            const longitude = place.geometry.location.lng();
+
+                            form.setValue("address", location);
+                            form.setValue("latitude", latitude);
+                            form.setValue("longitude", longitude);
+                          }}
+                          options={{
+                            types: ["address"],
+                            componentRestrictions: { country: "ca" },
+                          }}
+                          defaultValue=""
                         />
                       </FormControl>
                       {errors.address && (

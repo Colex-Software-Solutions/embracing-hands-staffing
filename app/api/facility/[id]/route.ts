@@ -56,6 +56,8 @@ export async function POST(
     const country = formData.get("country") as string;
     const state = formData.get("state") as string;
     const city = formData.get("city") as string;
+    const latitude = formData.get("latitude") as string;
+    const longitude = formData.get("longitude") as string;
 
     const profileData: Omit<FacilityProfile, "id"> = {
       userId,
@@ -66,6 +68,8 @@ export async function POST(
       state,
       country,
       city,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
       profileImage: profileUrl || facility?.profileImage || null,
     };
 

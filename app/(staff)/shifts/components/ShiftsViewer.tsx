@@ -19,6 +19,8 @@ export interface StaffShift extends Shift {
   facilityName: string;
   title: string;
   breaks: Break[];
+  latitude: number;
+  longitude: number;
 }
 export function ShiftsViewer({ shifts }: { shifts: StaffShift[] }) {
   const [selectedRange, setSelectedRange] = useState<DateRange>({

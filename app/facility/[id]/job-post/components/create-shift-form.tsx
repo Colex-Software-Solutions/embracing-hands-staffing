@@ -30,6 +30,7 @@ import {
 import { combineDateAndTime } from "@/lib/utils";
 import { Shift } from "../../applications/jobPost/[jobPostId]/page";
 import useStaff from "@/lib/hooks/useStaff";
+import { format } from "date-fns";
 
 const now = new Date();
 
@@ -81,8 +82,8 @@ const CreateShiftForm = ({
 
   const defaultValues: Partial<CreateShiftFormValues> = {
     staff: "",
-    startDate: new Date().toISOString().slice(0, 10),
-    endDate: new Date().toISOString().slice(0, 10),
+    startDate: format(new Date(), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd"),
     startHour: "",
     endHour: "",
   };
@@ -213,7 +214,7 @@ const CreateShiftForm = ({
                         <FormLabel>Start Date</FormLabel>
                         <FormControl>
                           <Input
-                            min={new Date().toISOString().slice(0, 10)}
+                            min={format(new Date(), "yyyy-MM-dd")}
                             id="startDate"
                             type="date"
                             {...field}
@@ -271,7 +272,7 @@ const CreateShiftForm = ({
                         <FormLabel>End Date</FormLabel>
                         <FormControl>
                           <Input
-                            min={new Date().toISOString().slice(0, 10)}
+                            min={format(new Date(), "yyyy-MM-dd")}
                             id="endDate"
                             type="date"
                             {...field}
@@ -329,7 +330,7 @@ const CreateShiftForm = ({
             className="ml-auto mt-5"
           >
             {isSubmitting && <Loader className="animate-spin" />}{" "}
-            {currentJob ? "Save Changes" : "Post Job"}
+            {currentJob ? "Save Changes" : "Create Shift"}
           </Button>
         </div>
       </form>
