@@ -40,6 +40,10 @@ const accessRules: Record<string, AccessRule> = {
     roles: [Role.STAFF],
     methods: ["GET"],
   },
+  "/shifts": {
+    roles: [Role.STAFF],
+    methods: ["GET"],
+  },
 };
 
 export default accessRules;

@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { StaffShift } from "./ShiftsViewer";
