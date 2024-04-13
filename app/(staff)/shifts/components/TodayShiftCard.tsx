@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { StaffShift } from "./ShiftsViewer";
 import { format, parseISO } from "date-fns";
@@ -7,6 +7,8 @@ import StatusViewer from "./StatusViewer";
 import { ConfirmationModal } from "@/app/components/modals/confirmation-modal";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
+import { isWithinRadius } from "@/lib/utils";
+import { GeoLocation } from "@/app/staff/[id]/profile/components/staff-profile-form";
 
 const TodayShiftCard = ({
   shift,
@@ -15,12 +17,60 @@ const TodayShiftCard = ({
   shift?: StaffShift;
   setFilteredShifts: React.Dispatch<React.SetStateAction<StaffShift[]>>;
 }) => {
-  console.log("today shift", shift);
+  const { toast } = useToast();
+  const [locationLoading, setLocationLoading] = useState(false);
+
+  const handleStart = () => {
+    if (!shift) {
+      return;
+    }
+
+    setLocationLoading(true);
+
+    if (!navigator.geolocation) {
+      console.log("Geolocation is not supported by your browser");
+
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position: GeolocationPosition) => {
+        const isValidDistance = isWithinRadius({
+          radius: 0.5,
+          userGeolocation: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          },
+          jobGeolocation: {
+            latitude: shift.latitude,
+            longitude: shift.longitude,
+          },
+        });
+
+        setLocationLoading(false);
+
+        if (!isValidDistance) {
+          toast({
+            variant: "destructive",
+            title: "You are too far!",
+            description: "Please reach the facility before clocking in.",
+          });
+
+          return;
+        }
+
+        handleShiftActions("start");
+      },
+      (err: GeolocationPositionError) => {
+        console.log(err.message);
+      }
+    );
+  };
+
   if (!shift) {
     return <div className="text-xl font-bold">No shifts today.</div>;
   }
   const startDate = parseISO(new Date(shift.start).toISOString());
-  const { toast } = useToast();
   const endDate = parseISO(new Date(shift.end).toISOString());
   const shiftTime = `${format(startDate, "p")} - ${format(endDate, "p")}`;
   const ongoingBreak = shift.breaks.find((b) => b.start && !b.end);
@@ -28,6 +78,15 @@ const TodayShiftCard = ({
   const handleShiftActions = async (action: "confirm" | "start" | "end") => {
     try {
       const res = await axios.put(`/api/shift/${shift.id}`, { action });
+
+      if (action === "start") {
+        toast({
+          variant: "default",
+          title: "You are clocked in!",
+          description: "Have a great shift.",
+        });
+      }
+
       const updatedShift = res.data.shift;
       setFilteredShifts((prevShifts: StaffShift[]) => {
         const mappedShifts = prevShifts.map((shift) =>
@@ -89,9 +148,10 @@ const TodayShiftCard = ({
 
         {shift.status === "Confirmed" && (
           <ConfirmationModal
+            loading={locationLoading}
             triggerButtonText="Start Shift"
             confirmationQuestion="Are you sure you want to start this shift?"
-            onConfirm={() => handleShiftActions("start")}
+            onConfirm={() => handleStart()}
             confirmButtonText="Start"
           />
         )}

@@ -8,6 +8,12 @@ class FacilityProvider {
     });
   }
 
+  async getFacilityProfileById(facilityId: string) {
+    return await prisma.facilityProfile.findUnique({
+      where: { id: facilityId },
+    });
+  }
+
   async createfacilityProfile(data: Omit<FacilityProfile, "id">) {
     return await prisma.facilityProfile.create({
       data,

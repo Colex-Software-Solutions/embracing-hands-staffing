@@ -45,6 +45,8 @@ class ShiftProvider {
         jobPost: {
           select: {
             location: true,
+            latitude: true,
+            longitude: true,
             title: true,
             facilityProfile: {
               select: {

@@ -30,6 +30,13 @@ import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
 import Link from "next/link";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
+import { Switch } from "@/app/components/ui/switch";
+import Spinner from "@/app/components/loading/spinner";
+
+export interface GeoLocation {
+  latitude: number;
+  longitude: number;
+}
 
 const profileSchema = z.object({
   firstname: z.string().min(1, "First Name is required"),
@@ -62,6 +69,8 @@ const StaffProfileForm = ({
   const [resumeFile, setResumeFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
   const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl);
+  const [location, setLocation] = useState<GeoLocation | null>(null);
+  const [locationLoading, setLocationLoading] = useState(false);
 
   const handleProfileImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -81,6 +90,37 @@ const StaffProfileForm = ({
       alert("Only PDF files are allowed.");
       event.target.value = "";
     }
+  };
+
+  const handleLocationChange = (checked: boolean) => {
+    if (!checked) {
+      setLocation(null);
+
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      console.log("Geolocation is not supported by your browser");
+
+      return;
+    }
+
+    setLocationLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position: GeolocationPosition) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+
+        setLocationLoading(false);
+      },
+      (err: GeolocationPositionError) => {
+        console.log(err.message);
+        setLocationLoading(false);
+      }
+    );
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -122,7 +162,7 @@ const StaffProfileForm = ({
     if (!skills.includes(skill)) {
       setSkills([...skills, skill]);
     }
-  } 
+  };
 
   const { errors, isSubmitting } = form.formState;
 
@@ -282,7 +322,9 @@ const StaffProfileForm = ({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <SkillsCombobox handleAddSkill={handleAddSkill}>Select Skills</SkillsCombobox>
+                    <SkillsCombobox handleAddSkill={handleAddSkill}>
+                      Select Skills
+                    </SkillsCombobox>
                     <div className="flex gap-3 flex-wrap justify-start">
                       {skills.map((skill, index) => (
                         <div
@@ -305,6 +347,19 @@ const StaffProfileForm = ({
                   </div>
                 </CardContent>
               </Card>
+            </div>
+            <div className="flex items-center space-x-2">
+              {locationLoading ? (
+                <Spinner />
+              ) : (
+                <Switch
+                  id="location"
+                  checked={location ? true : false}
+                  onCheckedChange={handleLocationChange}
+                />
+              )}
+
+              <Label htmlFor="location">Location</Label>
             </div>
           </CardContent>
           <CardFooter>

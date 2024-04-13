@@ -72,6 +72,8 @@ model FacilityProfile {
   city            String?
   state           String?
   country         String?
+  latitude        Float
+  longitude       Float
   profileImage    String?       
   jobPosts        JobPost[]
   user            User     @relation(fields: [userId], references: [id])
@@ -86,9 +88,11 @@ model JobPost {
   scrubsProvided  Boolean
   experience      String
   location        String
+  latitude        Float
+  longitude       Float
   shiftsTime          String
-  startDate       DateTime
-  endDate         DateTime
+  startDate       String
+  endDate         String
   housing         String
   procedures      String[]
   patientPopulation String

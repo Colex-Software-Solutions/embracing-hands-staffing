@@ -1,3 +1,4 @@
+import { GeoLocation } from "@/app/staff/[id]/profile/components/staff-profile-form";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -44,12 +45,12 @@ export function formatCurrency(
   }).format(number / 100);
 }
 
-export function weeksBetween(startDate: Date, endDate: Date): string {
+export function weeksBetween(startDate: string, endDate: string): string {
   // One week in milliseconds
   const oneWeek = 1000 * 60 * 60 * 24 * 7;
   // Calculate the difference in milliseconds
   const differenceInMilliseconds = Math.abs(
-    endDate.getTime() - startDate.getTime()
+    new Date(endDate).getTime() - new Date(startDate).getTime()
   );
   // Convert the difference to weeks
   const differenceInWeeks = differenceInMilliseconds / oneWeek;
@@ -96,14 +97,45 @@ export function combineDateAndTime(dateString: string, timeString: string): stri
   // Create a Date object using the 24-hour time
   let combinedDateTime = new Date(`${dateString}T${hours.padStart(2, '0')}:${minutes}:00`);
 
-  // Convert the local DateTime to UTC
-  const utcDateTime = new Date(Date.UTC(
+  const localDateTime = new Date(
     combinedDateTime.getFullYear(),
     combinedDateTime.getMonth(),
     combinedDateTime.getDate(),
     combinedDateTime.getHours(),
     combinedDateTime.getMinutes()
-  ));
+  );
 
-  return utcDateTime.toISOString();
+  return localDateTime.toString();
+}
+
+export interface IsWithinRadius {
+  userGeolocation: GeoLocation;
+  jobGeolocation: GeoLocation;
+  radius: number
+}
+
+export function isWithinRadius(input: IsWithinRadius): boolean {
+  const { latitude: lat1, longitude: lon1} = input.userGeolocation;
+  const { latitude: lat2, longitude: lon2} = input.jobGeolocation;
+  const radius = input.radius;
+
+  // Earth's radius in kilometers
+  const R = 6371; 
+
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+
+  // Converts decimal degrees to radians
+  function deg2rad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+
+  // Check if the distance is within the radius
+  return distance <= radius;
 }
