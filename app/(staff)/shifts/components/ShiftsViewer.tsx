@@ -58,6 +58,7 @@ export function ShiftsViewer({ shifts }: { shifts: StaffShift[] }) {
   return (
     <>
       <TodayShiftCard
+        shifts={filteredShifts}
         shift={todayShift}
         setFilteredShifts={setFilteredShifts}
       />
@@ -75,7 +76,11 @@ export function ShiftsViewer({ shifts }: { shifts: StaffShift[] }) {
         <div className="shifts-grid">
           {filteredShifts.length > 0 ? (
             filteredShifts.map((shift) => (
-              <ShiftCard key={shift.id} shift={shift} />
+              <ShiftCard
+                key={shift.id}
+                shift={shift}
+                setFilteredShifts={setFilteredShifts}
+              />
             ))
           ) : (
             <div>No shifts found for this period.</div>

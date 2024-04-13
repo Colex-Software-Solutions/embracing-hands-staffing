@@ -40,6 +40,14 @@ const accessRules: Record<string, AccessRule> = {
     roles: [Role.STAFF],
     methods: ["GET"],
   },
+  "/shifts": {
+    roles: [Role.STAFF],
+    methods: ["GET"],
+  },
+  "/api/shift": {
+    roles: [Role.STAFF, Role.FACILITY],
+    methods: ["GET", "PUT", "DELETE", "POST"],
+  },
 };
 
 export default accessRules;
