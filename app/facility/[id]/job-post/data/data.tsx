@@ -1,23 +1,22 @@
-import {
-  CheckCircledIcon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-} from "@radix-ui/react-icons";
-
 export const statuses = [
   {
-    value: "OPEN",
-    label: "Open",
-    icon: QuestionMarkCircledIcon,
+    value: "Scheduled",
+    label: "Scheduled",
   },
   {
-    value: "COMPLETED",
+    value: "InProgress",
+    label: "In Progress",
+  },
+  {
+    value: "Confirmed",
+    label: "Confirmed",
+  },
+  {
+    value: "OnBreak",
+    label: "On Break",
+  },
+  {
+    value: "Completed",
     label: "Completed",
-    icon: CheckCircledIcon,
-  },
-  {
-    value: "CLOSED",
-    label: "Closed",
-    icon: CrossCircledIcon,
   },
 ];
