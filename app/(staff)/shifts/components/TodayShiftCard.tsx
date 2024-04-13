@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { StaffShift } from "./ShiftsViewer";
 import { format, parseISO } from "date-fns";
@@ -8,17 +8,28 @@ import { ConfirmationModal } from "@/app/components/modals/confirmation-modal";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
 import { isWithinRadius } from "@/lib/utils";
-import { GeoLocation } from "@/app/staff/[id]/profile/components/staff-profile-form";
+
+const formatBreakTime = (totalSeconds: number) => {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+};
 
 const TodayShiftCard = ({
   shift,
   setFilteredShifts,
 }: {
+  shifts: StaffShift[];
   shift?: StaffShift;
   setFilteredShifts: React.Dispatch<React.SetStateAction<StaffShift[]>>;
 }) => {
   const { toast } = useToast();
   const [locationLoading, setLocationLoading] = useState(false);
+  const [breakTime, setBreakTime] = useState(0);
+  const ongoingBreak = shift?.breaks.find((b) => b.start && !b.end);
 
   const handleStart = () => {
     if (!shift) {
@@ -67,13 +78,37 @@ const TodayShiftCard = ({
     );
   };
 
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | null = null;
+
+    if (ongoingBreak) {
+      const startTime = new Date(ongoingBreak.start).getTime();
+      const updateTimer = () => {
+        const currentTime = Date.now();
+        const newBreakTime = Math.floor((currentTime - startTime) / 1000);
+        setBreakTime(newBreakTime);
+      };
+
+      updateTimer();
+      timerId = setInterval(updateTimer, 1000);
+    } else {
+      setBreakTime(0);
+    }
+
+    return () => {
+      if (timerId) {
+        clearInterval(timerId);
+      }
+    };
+  }, [ongoingBreak]);
+
   if (!shift) {
     return <div className="text-xl font-bold">No shifts today.</div>;
   }
+
   const startDate = parseISO(new Date(shift.start).toISOString());
   const endDate = parseISO(new Date(shift.end).toISOString());
   const shiftTime = `${format(startDate, "p")} - ${format(endDate, "p")}`;
-  const ongoingBreak = shift.breaks.find((b) => b.start && !b.end);
 
   const handleShiftActions = async (action: "confirm" | "start" | "end") => {
     try {
@@ -105,12 +140,59 @@ const TodayShiftCard = ({
     }
   };
 
+  const handleBreakActions = async (action: "start" | "end") => {
+    try {
+      const res = await axios.put(`/api/shift/breaks/${shift.id}`, {
+        action,
+      });
+
+      toast({
+        variant: "default",
+        title: "Action Successful",
+        description: `You have successfully ${
+          action === "start" ? "started a break" : "ended the break"
+        }.`,
+      });
+
+      setFilteredShifts((prevShifts: any[]) => {
+        return prevShifts.map((s) => {
+          if (s.id === shift.id) {
+            return {
+              ...s,
+              breaks:
+                action === "start"
+                  ? [...s.breaks, res.data]
+                  : s.breaks.map((b: any) =>
+                      b.end ? b : { ...b, end: res.data.end }
+                    ),
+            };
+          }
+          return s;
+        });
+      });
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: "Error!",
+        description:
+          `Failed to ${action === "start" ? "start break" : "end break"}: ` +
+          error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <>
       {" "}
       <div className="flex items-center gap-4">
         <h1 className="text-2xl font-bold">Today's Shift</h1>
       </div>
+      {ongoingBreak && (
+        <div className="text-lg font-semibold">
+          Break Time: {formatBreakTime(breakTime)}
+        </div>
+      )}
       <div className="grid grid-cols-2 items-center gap-4">
         <div className="flex flex-col gap-1">
           <div className="font-semibold">Shift date</div>
@@ -161,13 +243,13 @@ const TodayShiftCard = ({
             <ConfirmationModal
               triggerButtonText="Start Break"
               confirmationQuestion="Are you sure you want to start a break?"
-              onConfirm={() => console.log("Start Break")} // Implement start break logic
+              onConfirm={() => handleBreakActions("start")} // Implement start break logic
               confirmButtonText="Start Break"
             />
             <ConfirmationModal
               triggerButtonText="End Shift"
               confirmationQuestion="Are you sure you want to end this shift?"
-              onConfirm={() => console.log("End Shift")} // Implement end shift logic
+              onConfirm={() => handleShiftActions("end")}
               confirmButtonText="End Shift"
             />
           </>
@@ -177,7 +259,7 @@ const TodayShiftCard = ({
           <ConfirmationModal
             triggerButtonText="End Break"
             confirmationQuestion="Are you sure you want to end the break?"
-            onConfirm={() => console.log("End Break")} // Implement end break logic
+            onConfirm={() => handleBreakActions("end")} // Implement end break logic
             confirmButtonText="End Break"
           />
         )}

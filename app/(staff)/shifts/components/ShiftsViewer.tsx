@@ -58,6 +58,7 @@ export function ShiftsViewer({ shifts }: { shifts: StaffShift[] }) {
   return (
     <>
       <TodayShiftCard
+        shifts={filteredShifts}
         shift={todayShift}
         setFilteredShifts={setFilteredShifts}
       />
