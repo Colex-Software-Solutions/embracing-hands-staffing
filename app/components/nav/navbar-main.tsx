@@ -137,7 +137,7 @@ const NavbarAnimated = ({
 
 const navItems = [
   {
-    href: "/home",
+    href: "/",
     label: "Home",
   },
   {
@@ -145,7 +145,7 @@ const navItems = [
     label: "Company",
   },
   {
-    href: "/",
+    href: "/home",
     label: "About",
   },
   { href: "/home", label: "Contact" },
