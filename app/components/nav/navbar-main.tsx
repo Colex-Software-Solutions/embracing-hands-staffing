@@ -141,14 +141,14 @@ const navItems = [
     label: "Home",
   },
   {
-    href: "/home",
+    href: "/work-in-progress",
     label: "Company",
   },
   {
-    href: "/home",
+    href: "/work-in-progress",
     label: "About",
   },
-  { href: "/home", label: "Contact" },
+  { href: "/work-in-progress", label: "Contact" },
 ];
 
 const getNavLinks = (session: Session | null) => {
@@ -162,10 +162,10 @@ const getNavLinks = (session: Session | null) => {
       label: "Find Jobs",
     },
     {
-      href: "/home",
+      href: "/work-in-progress",
       label: "About",
     },
-    { href: "/home", label: "Contact" },
+    { href: "/work-in-progress", label: "Contact" },
   ];
 
   if (session?.user.role === "STAFF") {
