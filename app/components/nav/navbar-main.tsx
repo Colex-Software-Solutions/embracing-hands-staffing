@@ -145,7 +145,7 @@ const navItems = [
     label: "Company",
   },
   {
-    href: "/home",
+    href: "/",
     label: "About",
   },
   { href: "/home", label: "Contact" },
@@ -154,7 +154,7 @@ const navItems = [
 const getNavLinks = (session: Session | null) => {
   const staffNavItems = [
     {
-      href: "/home",
+      href: "/",
       label: "Home",
     },
     {
