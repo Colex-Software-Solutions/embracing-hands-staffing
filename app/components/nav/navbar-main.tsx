@@ -137,35 +137,39 @@ const NavbarAnimated = ({
 
 const navItems = [
   {
-    href: "/home",
+    href: "/",
     label: "Home",
   },
   {
-    href: "/home",
+    href: "/work-in-progress",
     label: "Company",
   },
   {
-    href: "/home",
+    href: "/work-in-progress",
     label: "About",
   },
-  { href: "/home", label: "Contact" },
+  { href: "/work-in-progress", label: "Contact" },
 ];
 
 const getNavLinks = (session: Session | null) => {
   const staffNavItems = [
     {
-      href: "/home",
+      href: "/",
       label: "Home",
+    },
+    {
+      href: `/shifts`,
+      label: "My Shifts",
     },
     {
       href: `/find-jobs/${session?.user.id}`,
       label: "Find Jobs",
     },
     {
-      href: "/home",
+      href: "/work-in-progress",
       label: "About",
     },
-    { href: "/home", label: "Contact" },
+    { href: "/work-in-progress", label: "Contact" },
   ];
 
   if (session?.user.role === "STAFF") {
