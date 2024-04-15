@@ -158,6 +158,10 @@ const getNavLinks = (session: Session | null) => {
       label: "Home",
     },
     {
+      href: `/shifts`,
+      label: "My Shifts",
+    },
+    {
       href: `/find-jobs/${session?.user.id}`,
       label: "Find Jobs",
     },
