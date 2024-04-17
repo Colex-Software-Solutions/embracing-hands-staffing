@@ -153,11 +153,12 @@ const TodayShiftCard = ({
         }.`,
       });
 
-      setFilteredShifts((prevShifts: any[]) => {
+      setFilteredShifts((prevShifts: StaffShift[]) => {
         return prevShifts.map((s) => {
           if (s.id === shift.id) {
             return {
               ...s,
+              status: action === "start" ? "OnBreak" : "InProgress",
               breaks:
                 action === "start"
                   ? [...s.breaks, res.data]
@@ -254,7 +255,7 @@ const TodayShiftCard = ({
           </>
         )}
 
-        {shift.status === "InProgress" && ongoingBreak && (
+        {shift.status === "OnBreak" && ongoingBreak && (
           <ConfirmationModal
             triggerButtonText="End Break"
             confirmationQuestion="Are you sure you want to end the break?"
