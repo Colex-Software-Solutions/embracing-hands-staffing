@@ -121,10 +121,12 @@ class ShiftProvider {
   }
 
   async endBreak(shiftId: string) {
-    const ongoingBreak = await prisma.break.findFirst({
-      where: { shiftId: shiftId, end: null },
+    const breaks = await prisma.break.findMany({
+      where: { shiftId: shiftId },
       orderBy: { start: "desc" },
     });
+    // filtering for null in prisma didn't work
+    const ongoingBreak = breaks.find((b) => b.end === null);
 
     if (!ongoingBreak) throw new Error("No ongoing break found.");
 

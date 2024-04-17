@@ -31,7 +31,7 @@ export function ViewAndEditModal({
           View / Edit Job
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[1200px] max-h-[900px] overflow-auto">
+      <DialogContent className="sm:max-w-[1200px] max-h-full overflow-scroll my-2">
         <DialogHeader>
           <DialogTitle>Job Details</DialogTitle>
         </DialogHeader>

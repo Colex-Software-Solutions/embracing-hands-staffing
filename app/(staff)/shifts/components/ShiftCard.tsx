@@ -1,27 +1,50 @@
-"use client";
 import { Button } from "@/app/components/ui/button";
 import { format, parseISO } from "date-fns";
 import { CardContent, Card } from "@/app/components/ui/card";
 import { StaffShift } from "./ShiftsViewer";
 import StatusViewer from "./StatusViewer";
+import axios from "axios";
+import { useToast } from "@/app/components/ui/use-toast";
 
-const getDateRange = (startDate: Date, endDate: Date) => {
-  const formattedStartDate = format(startDate, "PPP");
-  const formattedEndDate = format(endDate, "PPP");
-
-  if (formattedStartDate === formattedEndDate) {
-    return formattedStartDate;
-  }
-
-  return `${format(startDate, "PPP")} - ${format(endDate, "PPP")}`;
-};
-
-export const ShiftCard = ({ shift }: { shift: StaffShift }) => {
+export const ShiftCard = ({
+  shift,
+  setFilteredShifts,
+}: {
+  shift: StaffShift;
+  setFilteredShifts: React.Dispatch<React.SetStateAction<StaffShift[]>>;
+}) => {
   const isFutureShift = new Date(shift.start) > new Date();
   const startDate = parseISO(new Date(shift.start)?.toISOString());
   const endDate = parseISO(new Date(shift.end)?.toISOString());
-  const shiftDate = getDateRange(startDate, endDate);
+  const shiftDate = format(startDate, "PPP"); // Example: Mar 21, 2024
   const shiftTime = `${format(startDate, "p")} - ${format(endDate, "p")}`;
+  const { toast } = useToast();
+  const confirmShift = async () => {
+    try {
+      const res = await axios.put(`/api/shift/${shift.id}`, {
+        action: "confirm",
+      });
+      toast({
+        title: "Confirmed Shift",
+        description: "You have confirmed your attendance to this shift!",
+      });
+      const updatedShift = res.data.shift;
+      setFilteredShifts((prevShifts: StaffShift[]) => {
+        const mappedShifts = prevShifts.map((shift) =>
+          shift.id === updatedShift.id ? { ...shift, ...updatedShift } : shift
+        );
+
+        return mappedShifts;
+      });
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        title: "Error!",
+        description: `Failed to confirm shift: ` + error.message,
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <Card className="mb-4 p-4">
       <CardContent className="flex flex-col gap-4">
@@ -51,7 +74,7 @@ export const ShiftCard = ({ shift }: { shift: StaffShift }) => {
                 </div>
 
                 {shift.status === "Scheduled" && (
-                  <Button>Acknowledge Shift</Button>
+                  <Button onClick={confirmShift}>Acknowledge Shift</Button>
                 )}
               </div>
             </>
@@ -63,11 +86,6 @@ export const ShiftCard = ({ shift }: { shift: StaffShift }) => {
             </>
           )}
         </div>
-        {isFutureShift && shift.status !== "Scheduled" && (
-          <div className="flex gap-2">
-            <Button>Clock In</Button>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

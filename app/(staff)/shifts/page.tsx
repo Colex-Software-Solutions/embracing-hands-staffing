@@ -6,9 +6,11 @@ import { shiftProvider } from "@/app/providers/shiftProvider";
 export default async function ShiftsPage() {
   const session = await getServerSession();
 
-  const shifts = await shiftProvider.getShiftsByStaffId(
-    session.user?.staffProfile.id ?? ""
-  );
+  const shifts = session
+    ? await shiftProvider.getShiftsByStaffId(
+        session.user?.staffProfile.id ?? ""
+      )
+    : [];
   const mappedShifts = shifts.map((shift) => ({
     ...shift,
     title: shift.jobPost.title,

@@ -44,9 +44,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         return;
       }
       if (result?.ok) {
-        router.replace(
-          Array.isArray(callbackurl) ? callbackurl[0] : callbackurl || "/"
-        );
+        router.replace("/");
       }
     } catch (error: any) {
       console.log(error);

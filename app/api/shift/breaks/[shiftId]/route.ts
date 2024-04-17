@@ -6,7 +6,7 @@ export async function PUT(
   { params }: { params: { shiftId: string } }
 ) {
   const { shiftId } = params;
-  const { action } = await req.json(); // start or end
+  const { action } = await req.json();
 
   try {
     switch (action) {
