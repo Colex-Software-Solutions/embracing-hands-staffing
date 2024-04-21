@@ -13,7 +13,7 @@ import {
 } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Alert } from "@/app/components/ui/alert";
-import { StaffProfile } from "@prisma/client";
+import { Document, StaffProfile } from "@prisma/client";
 import { TypeOf, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,11 +32,17 @@ import Link from "next/link";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
+import DocumentModal from "./DocumentModal";
 
 export interface GeoLocation {
   latitude: number;
   longitude: number;
 }
+
+const documentSchema = z.object({
+  name: z.string().nonempty("Document name is required"),
+  expiryDate: z.date().optional(),
+});
 
 const profileSchema = z.object({
   firstname: z.string().min(1, "First Name is required"),
@@ -49,9 +55,11 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 const StaffProfileForm = ({
   profile,
   userId,
+  documents = [],
 }: {
   profile: StaffProfile | null;
   userId: string;
+  documents?: Document[];
 }) => {
   const defaultValues: Partial<ProfileFormValues> = {
     firstname: profile?.firstname ?? "",
@@ -71,6 +79,38 @@ const StaffProfileForm = ({
   const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl);
   const [location, setLocation] = useState<GeoLocation | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
+  const [documentsList, setDocumentsList] = useState<Document[]>(documents);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
+    null
+  );
+
+  const handleRemoveDocument = async (documentId: string) => {
+    try {
+      await axios.delete(`/api/document/${documentId}`);
+      setDocumentsList(documentsList.filter((doc) => doc.id !== documentId));
+      toast({
+        variant: "default",
+        title: "Document removed successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to remove document",
+      });
+    }
+  };
+
+  const handleOpenDocumentModal = (document: Document | null = null) => {
+    setSelectedDocument(document);
+    setIsDocumentModalOpen(true);
+  };
+
+  const handleCloseDocumentModal = () => {
+    setIsDocumentModalOpen(false);
+    setSelectedDocument(null);
+  };
 
   const handleProfileImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -362,6 +402,54 @@ const StaffProfileForm = ({
               <Label htmlFor="location">Location</Label>
             </div>
           </CardContent>
+          {/* Documents Section */}
+          <CardContent>
+            <CardTitle>Documents</CardTitle>
+            {documentsList.length === 0 ? (
+              <div>No documents uploaded</div>
+            ) : (
+              <ul>
+                {documentsList.map((doc) => (
+                  <li key={doc.id}>
+                    {doc.name} - <a href={doc.documentUrl}>Download</a>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenDocumentModal(doc);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveDocument(doc.id);
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleOpenDocumentModal();
+              }}
+            >
+              Add New Document
+            </Button>
+          </CardContent>
+
+          <DocumentModal
+            isOpen={isDocumentModalOpen}
+            onClose={handleCloseDocumentModal}
+            selectedDocument={selectedDocument}
+            setDocumentsList={setDocumentsList}
+            userId={userId}
+          />
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
               {isSubmitting && <Loader />}Save
