@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "@/app/components/ui/label";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -21,7 +21,9 @@ import {
 import { Loader } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
-import ReactGoogleAutocomplete from "react-google-autocomplete";
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+} from "react-places-autocomplete";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -65,7 +67,33 @@ const FacilityProfileForm = ({
   });
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
+  const [location, setLocation] = useState<string>(defaultValues.address || "");
+  const [locationError, setLocationError] = useState<boolean>(false);
   const { toast } = useToast();
+
+  const verifyAddress = async () => {
+    try {
+      const results = await geocodeByAddress(location);
+
+      const latitude = results[0].geometry.location.lat();
+      const longitude = results[0].geometry.location.lng();
+
+      console.log(latitude);
+
+      if (!latitude || !longitude) {
+        setLocationError(true);
+        return;
+      }
+
+      setLocationError(false);
+    } catch (error) {
+      setLocationError(true);
+    }
+  };
+
+  useEffect(() => {
+    verifyAddress();
+  }, [location]);
 
   const handleProfileImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -77,16 +105,31 @@ const FacilityProfileForm = ({
     }
   };
   const onSubmit = async (data: ProfileFormValues) => {
+    const results = await geocodeByAddress(location);
+
+    const latitude = results[0].geometry.location.lat();
+    const longitude = results[0].geometry.location.lng();
+
+    if (!latitude || !longitude) {
+      toast({
+        title: "Error!",
+        description: "Please provide a valid address",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", data.name);
-    formData.append("address", data.address);
+    formData.append("address", location);
     formData.append("description", data.description ?? "");
     formData.append("facilityType", data.facilityType);
     formData.append("country", data.country);
     formData.append("state", data.state);
     formData.append("city", data.city);
-    formData.append("latitude", data.latitude.toString());
-    formData.append("longitude", data.longitude.toString());
+    formData.append("latitude", latitude.toString());
+    formData.append("longitude", longitude.toString());
 
     if (profileImageFile) formData.append("profileImage", profileImageFile);
 
@@ -193,11 +236,8 @@ const FacilityProfileForm = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        {/* <Input
-                          placeholder="Enter facility address"
-                          {...field}
-                        /> */}
+                      {/* <FormControl>
+                        
                         <ReactGoogleAutocomplete
                           id="location"
                           apiKey={GOOGLE_MAPS_API_KEY}
@@ -230,7 +270,61 @@ const FacilityProfileForm = ({
                       </FormControl>
                       {errors.address && (
                         <FormMessage>{errors.address.message}</FormMessage>
-                      )}
+                      )} */}
+                      <FormControl>
+                        <div className="relative">
+                          <GooglePlacesAutocomplete
+                            value={location}
+                            onChange={(val) => setLocation(val)}
+                            onSelect={async (
+                              address: string,
+                              placeId: string
+                            ) => {
+                              setLocation(address);
+                            }}
+                            debounce={300}
+                            searchOptions={{
+                              types: ["address"],
+                              componentRestrictions: { country: ["us", "ca"] },
+                            }}
+                          >
+                            {({
+                              getInputProps,
+                              suggestions,
+                              getSuggestionItemProps,
+                              loading,
+                            }) => (
+                              <div>
+                                <input
+                                  {...getInputProps({
+                                    placeholder: "Search Places ...",
+                                    className:
+                                      "border border-gray-300 p-2  rounded-md w-full",
+                                  })}
+                                />
+
+                                <div className="absolute z-30 w-full mt-1 bg-white">
+                                  {loading && <div>Loading...</div>}
+                                  {suggestions.map((suggestion) => (
+                                    <div
+                                      className="hover:bg-slate-100 cursor-pointer"
+                                      {...getSuggestionItemProps(suggestion)}
+                                      key={suggestion.placeId}
+                                    >
+                                      <span>{suggestion.description}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </GooglePlacesAutocomplete>
+                          {locationError && (
+                            <FormMessage>
+                              Please enter a valid address
+                            </FormMessage>
+                          )}
+                        </div>
+                      </FormControl>
                     </FormItem>
                   )}
                 />
