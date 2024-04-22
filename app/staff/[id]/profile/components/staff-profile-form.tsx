@@ -32,8 +32,6 @@ import Link from "next/link";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
-import DocumentModal from "./DocumentModal";
-import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 import DocumentsSection from "./DocumentsSection";
 
 export interface GeoLocation {
@@ -366,6 +364,18 @@ const StaffProfileForm = ({
               <Label htmlFor="location">Location</Label>
             </div>
           </CardContent>
+          {profile === null && (
+            <Alert className="m-4 w-[90%] text-lg" variant={"destructive"}>
+              Please Upload the following documents along with any additional
+              supporting documents:
+              <li>- Drivers License</li>
+              <li>- Resume</li>
+              <li>- Basic Life Support (BLS)</li>
+              <li>- Advanced Cardiac Life Support (ACLS)</li>
+              <li>- Pediatric Advanced Life Support (PALS) </li>
+              <li>- SSC</li>
+            </Alert>
+          )}
           {/* Documents Section */}
           <DocumentsSection documents={documents} userId={userId} />
           <CardFooter>

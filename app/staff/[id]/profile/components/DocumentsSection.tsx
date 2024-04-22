@@ -70,7 +70,7 @@ const DocumentsSection = ({
         ) : (
           <ul className="my-4">
             {documentsList.map((doc) => (
-              <Card key={doc.id} className="p-4">
+              <Card key={doc.id} className="p-4 mt-4">
                 <div className="flex justify-between items-center">
                   <div>
                     <strong>{doc.name}</strong> -{" "}

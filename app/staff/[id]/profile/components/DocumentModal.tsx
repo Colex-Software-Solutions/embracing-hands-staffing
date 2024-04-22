@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +35,14 @@ const DocumentModal: React.FC<DocumentModalProps> = ({
   const [expiryDate, setExpiryDate] = useState<string | null>(
     selectedDocument?.expiryDate?.toISOString().split("T")[0] ?? null
   );
+  useEffect(() => {
+    if (selectedDocument) {
+      setDocumentName(selectedDocument.name);
+      setExpiryDate(
+        selectedDocument?.expiryDate?.toISOString().split("T")[0] ?? null
+      );
+    }
+  }, [selectedDocument]);
 
   const validateForm = () => {
     if (!documentName.trim()) {
@@ -59,9 +67,12 @@ const DocumentModal: React.FC<DocumentModalProps> = ({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+    const file = e.target.files && e.target.files[0];
+    if (file && file.type === "application/pdf") {
       setDocumentFile(file);
+    } else {
+      alert("Only PDF files are allowed.");
+      e.target.value = "";
     }
   };
 
@@ -152,7 +163,7 @@ const DocumentModal: React.FC<DocumentModalProps> = ({
           </div>
 
           <div className="flex justify-end mt-4">
-            <Button type="submit">Add</Button>
+            <Button type="submit">{selectedDocument ? "Save" : "Add"}</Button>
           </div>
         </form>
       </DialogContent>
