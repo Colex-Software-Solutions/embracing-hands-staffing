@@ -236,41 +236,6 @@ const FacilityProfileForm = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Address</FormLabel>
-                      {/* <FormControl>
-                        
-                        <ReactGoogleAutocomplete
-                          id="location"
-                          apiKey={GOOGLE_MAPS_API_KEY}
-                          style={{
-                            width: "100%",
-                            height: "2.25rem",
-                            borderRadius: ".375rem",
-                            border: "1px solid rgba(0, 0, 0, 0.05)",
-                            backgroundColor: "transparent",
-                            padding: ".25rem .75rem",
-                            fontSize: ".875rem",
-                            boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-                            transition: "color 0.15s ease-in-out",
-                          }}
-                          onPlaceSelected={(place) => {
-                            const location = place.formatted_address;
-                            const latitude = place.geometry.location.lat();
-                            const longitude = place.geometry.location.lng();
-
-                            form.setValue("address", location);
-                            form.setValue("latitude", latitude);
-                            form.setValue("longitude", longitude);
-                          }}
-                          options={{
-                            types: ["address"],
-                            componentRestrictions: { country: "ca" },
-                          }}
-                          defaultValue=""
-                        />
-                      </FormControl>
-                      {errors.address && (
-                        <FormMessage>{errors.address.message}</FormMessage>
-                      )} */}
                       <FormControl>
                         <div className="relative">
                           <GooglePlacesAutocomplete
