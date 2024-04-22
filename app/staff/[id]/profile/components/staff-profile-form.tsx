@@ -68,9 +68,7 @@ const StaffProfileForm = ({
   const { toast } = useToast();
   const [skills, setSkills] = useState<string[]>(profile?.skills ?? []);
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
-  const [resumeFile, setResumeFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
-  const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl);
   const [location, setLocation] = useState<GeoLocation | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
 
@@ -80,16 +78,6 @@ const StaffProfileForm = ({
       setProfileImageFile(file);
     } else {
       alert("Only JPEG, PNG, or SVG files are allowed.");
-      event.target.value = "";
-    }
-  };
-
-  const handleResumeChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file && file.type === "application/pdf") {
-      setResumeFile(file);
-    } else {
-      alert("Only PDF files are allowed.");
       event.target.value = "";
     }
   };
@@ -134,7 +122,6 @@ const StaffProfileForm = ({
     formData.append("skills", JSON.stringify(skills));
 
     if (profileImageFile) formData.append("profileImage", profileImageFile);
-    if (resumeFile) formData.append("resume", resumeFile);
 
     try {
       const res = await axios.post(`/api/staff/${userId}`, formData, {
@@ -143,9 +130,7 @@ const StaffProfileForm = ({
         },
       });
       setProfileImageUrl(res.data.profile.profileImage);
-      setResumeUrl(res.data.profile.resumeUrl);
       setProfileImageFile(null);
-      setResumeFile(null);
       toast({
         title: "Profile Updated Successfully",
         variant: "default",
@@ -286,34 +271,7 @@ const StaffProfileForm = ({
                 </>
               )}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="resume">Resume</Label>
-              <Input
-                className={`${!resumeFile && resumeUrl && "hidden"}`}
-                accept=".pdf"
-                id="resume"
-                type="file"
-                onChange={handleResumeChange}
-              />
-              {resumeUrl && !resumeFile && (
-                <div className="flex items-center">
-                  <Link href={resumeUrl} target="_blank">
-                    <Button type="button" variant={"link"}>
-                      View current resume
-                    </Button>
-                  </Link>
-                  <p>
-                    <Button
-                      type="button"
-                      variant={"ghost"}
-                      onClick={() => document.getElementById("resume")?.click()}
-                    >
-                      Replace
-                    </Button>
-                  </p>
-                </div>
-              )}
-            </div>
+
             <div className="space-y-2">
               <Card>
                 <CardHeader>

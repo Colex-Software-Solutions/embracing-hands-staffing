@@ -3,7 +3,7 @@ import { StaffProfile } from "@prisma/client";
 
 export interface UpdateStaffProfile {
   userId: string;
-  data: Omit<StaffProfile, "id">;
+  data: Omit<StaffProfile, "id" | "resumeUrl">;
 }
 
 class StaffProvider {
