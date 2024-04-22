@@ -13,7 +13,7 @@ class StaffProvider {
     });
   }
 
-  async createStaffProfile(data: Omit<StaffProfile, "id">) {
+  async createStaffProfile(data: Omit<StaffProfile, "id" | "resumeUrl">) {
     return await prisma.staffProfile.create({
       data,
     });
