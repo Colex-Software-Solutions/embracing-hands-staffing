@@ -34,6 +34,7 @@ import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
 import DocumentModal from "./DocumentModal";
 import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
+import DocumentsSection from "./DocumentsSection";
 
 export interface GeoLocation {
   latitude: number;
@@ -74,52 +75,6 @@ const StaffProfileForm = ({
   const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl);
   const [location, setLocation] = useState<GeoLocation | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
-  const [documentsList, setDocumentsList] = useState<Document[]>(documents);
-  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
-    null
-  );
-  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
-  const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string | null>(
-    null
-  );
-
-  const openPdfViewer = (documentUrl: string) => {
-    setSelectedDocumentUrl(documentUrl);
-    setIsPdfViewerOpen(true);
-  };
-
-  const closePdfViewer = () => {
-    setIsPdfViewerOpen(false);
-    setSelectedDocumentUrl(null);
-  };
-
-  const handleRemoveDocument = async (documentId: string) => {
-    try {
-      await axios.delete(`/api/document/${documentId}`);
-      setDocumentsList(documentsList.filter((doc) => doc.id !== documentId));
-      toast({
-        variant: "default",
-        title: "Document removed successfully",
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        variant: "destructive",
-        title: "Failed to remove document",
-      });
-    }
-  };
-
-  const handleOpenDocumentModal = (document: Document | null = null) => {
-    setSelectedDocument(document);
-    setIsDocumentModalOpen(true);
-  };
-
-  const handleCloseDocumentModal = () => {
-    setIsDocumentModalOpen(false);
-    setSelectedDocument(null);
-  };
 
   const handleProfileImageChange = (event: any) => {
     const file = event.target.files[0];
@@ -412,72 +367,7 @@ const StaffProfileForm = ({
             </div>
           </CardContent>
           {/* Documents Section */}
-          <CardContent>
-            <CardTitle>Documents</CardTitle>
-            {documentsList.length === 0 ? (
-              <div>No documents uploaded</div>
-            ) : (
-              <ul>
-                {documentsList.map((doc) => (
-                  <li key={doc.id}>
-                    {doc.name} - <a href={doc.documentUrl}>Download</a>
-                    <Button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openPdfViewer(doc.documentUrl);
-                      }}
-                    >
-                      View
-                    </Button>{" "}
-                    <Button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenDocumentModal(doc);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveDocument(doc.id);
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <Button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpenDocumentModal();
-              }}
-            >
-              Add New Document
-            </Button>
-          </CardContent>
-
-          <DocumentModal
-            isOpen={isDocumentModalOpen}
-            onClose={handleCloseDocumentModal}
-            selectedDocument={selectedDocument}
-            setDocumentsList={setDocumentsList}
-            userId={userId}
-          />
-          {/* PDF Viewer Modal */}
-          {selectedDocumentUrl && (
-            <PdfViewerModal
-              isOpen={isPdfViewerOpen}
-              documentUrl={selectedDocumentUrl}
-              onClose={closePdfViewer}
-            />
-          )}
+          <DocumentsSection documents={documents} userId={userId} />
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
               {isSubmitting && <Loader />}Save
