@@ -33,17 +33,12 @@ import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
 import DocumentModal from "./DocumentModal";
+import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 
 export interface GeoLocation {
   latitude: number;
   longitude: number;
 }
-
-const documentSchema = z.object({
-  name: z.string().nonempty("Document name is required"),
-  expiryDate: z.date().optional(),
-});
-
 const profileSchema = z.object({
   firstname: z.string().min(1, "First Name is required"),
   lastname: z.string().min(1, "Last Name is required"),
@@ -84,6 +79,20 @@ const StaffProfileForm = ({
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
   );
+  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
+  const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string | null>(
+    null
+  );
+
+  const openPdfViewer = (documentUrl: string) => {
+    setSelectedDocumentUrl(documentUrl);
+    setIsPdfViewerOpen(true);
+  };
+
+  const closePdfViewer = () => {
+    setIsPdfViewerOpen(false);
+    setSelectedDocumentUrl(null);
+  };
 
   const handleRemoveDocument = async (documentId: string) => {
     try {
@@ -413,6 +422,16 @@ const StaffProfileForm = ({
                   <li key={doc.id}>
                     {doc.name} - <a href={doc.documentUrl}>Download</a>
                     <Button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openPdfViewer(doc.documentUrl);
+                      }}
+                    >
+                      View
+                    </Button>{" "}
+                    <Button
+                      type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleOpenDocumentModal(doc);
@@ -421,6 +440,7 @@ const StaffProfileForm = ({
                       Edit
                     </Button>
                     <Button
+                      type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRemoveDocument(doc.id);
@@ -450,6 +470,14 @@ const StaffProfileForm = ({
             setDocumentsList={setDocumentsList}
             userId={userId}
           />
+          {/* PDF Viewer Modal */}
+          {selectedDocumentUrl && (
+            <PdfViewerModal
+              isOpen={isPdfViewerOpen}
+              documentUrl={selectedDocumentUrl}
+              onClose={closePdfViewer}
+            />
+          )}
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
               {isSubmitting && <Loader />}Save

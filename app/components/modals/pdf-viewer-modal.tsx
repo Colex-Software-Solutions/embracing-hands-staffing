@@ -8,7 +8,6 @@ import {
   DialogClose,
 } from "@/app/components/ui/dialog";
 import { Button } from "@/app/components/ui/button";
-import { Document, Page } from "react-pdf";
 import { XIcon } from "lucide-react";
 
 interface PdfViewerModalProps {
@@ -24,23 +23,16 @@ const PdfViewerModal: React.FC<PdfViewerModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[1000px] bg-dark bg-opacity-75">
+      <DialogContent className="sm:max-w-[1000px] bg-dark bg-opacity-75 border-none">
         {" "}
-        {/* Dimming background */}
-        <DialogHeader className="flex justify-between items-center">
-          <DialogTitle>Document Viewer</DialogTitle>
-          <DialogClose asChild>
-            <Button variant="ghost">
-              <XIcon />
-            </Button>
-          </DialogClose>
-        </DialogHeader>
-        <div className="flex justify-center items-center h-full">
-          {" "}
-          {/* Centering content */}
-          <Document file={documentUrl}>
-            <Page pageNumber={1} /> {/* Display first page */}
-          </Document>
+        <div className="h-[90vh]">
+          <iframe
+            src={documentUrl}
+            width="100%"
+            height="100%"
+            style={{ border: "none" }}
+            title="PDF Viewer"
+          ></iframe>
         </div>
       </DialogContent>
     </Dialog>
