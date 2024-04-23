@@ -11,9 +11,11 @@ import axios from "axios";
 const DocumentsSection = ({
   documents = [],
   userId,
+  edit = false,
 }: {
   documents: Document[];
   userId: string;
+  edit?: boolean;
 }) => {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
@@ -94,52 +96,61 @@ const DocumentsSection = ({
                     >
                       View
                     </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenDocumentModal(doc);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveDocument(doc.id);
-                      }}
-                    >
-                      Remove
-                    </Button>
+                    {edit && (
+                      <>
+                        {" "}
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenDocumentModal(doc);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveDocument(doc.id);
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </Card>
             ))}
           </ul>
         )}
-        <Button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleOpenDocumentModal();
-          }}
-        >
-          Add New Document
-        </Button>
+        {edit && (
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenDocumentModal();
+            }}
+          >
+            Add New Document
+          </Button>
+        )}
       </CardContent>
 
-      <DocumentModal
-        isOpen={isDocumentModalOpen}
-        onClose={handleCloseDocumentModal}
-        selectedDocument={selectedDocument}
-        setDocumentsList={setDocumentsList}
-        userId={userId}
-      />
+      {edit && (
+        <DocumentModal
+          isOpen={isDocumentModalOpen}
+          onClose={handleCloseDocumentModal}
+          selectedDocument={selectedDocument}
+          setDocumentsList={setDocumentsList}
+          userId={userId}
+        />
+      )}
       {/* PDF Viewer Modal */}
       {selectedDocumentUrl && (
         <PdfViewerModal

@@ -1,19 +1,20 @@
+"use client";
 import React from "react";
 import { Avatar } from "@/app/components/ui/avatar";
-import { Label } from "@/app/components/ui/label";
-import { StaffProfile, User } from "@prisma/client";
-import Link from "next/link";
-import { Button } from "@/app/components/ui/button";
+import { Document, StaffProfile, User } from "@prisma/client";
+import DocumentsSection from "@/app/staff/[id]/profile/components/DocumentsSection";
 
 const StaffProfileInfo = ({
   user,
   staffProfile,
+  documents,
 }: {
   user: User;
   staffProfile: StaffProfile;
+  documents: Document[];
 }) => {
   const { email, phone } = user;
-  const { firstname, lastname, profileImage, skills, about, title, resumeUrl } =
+  const { firstname, lastname, profileImage, skills, about, title } =
     staffProfile;
   return (
     <div className="grid gap-6 lg:grid-cols-3 m-12">
@@ -63,17 +64,9 @@ const StaffProfileInfo = ({
       </div>
       <div className="space-y-6 border-t pt-6 grid gap-4">
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold">Credentials & Resume</h2>
+          <h2 className="text-2xl font-bold">Credentials & Documents</h2>
           <div className="space-y-2">
-            <div>
-              <Label htmlFor="availability">Current Resume:</Label>
-
-              {resumeUrl && (
-                <Link href={resumeUrl} target="_blank">
-                  <Button variant={"secondary"}>View Resume</Button>
-                </Link>
-              )}
-            </div>
+            <DocumentsSection userId={user.id} documents={documents} />
           </div>
         </div>
       </div>
