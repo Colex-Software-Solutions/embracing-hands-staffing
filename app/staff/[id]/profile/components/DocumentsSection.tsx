@@ -16,6 +16,7 @@ const DocumentsSection = ({
   documents: Document[];
   userId: string;
   edit?: boolean;
+
 }) => {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
@@ -123,6 +124,7 @@ const DocumentsSection = ({
                         </Button>
                       </>
                     )}
+
                   </div>
                 </div>
               </Card>
@@ -151,6 +153,7 @@ const DocumentsSection = ({
           userId={userId}
         />
       )}
+
       {/* PDF Viewer Modal */}
       {selectedDocumentUrl && (
         <PdfViewerModal

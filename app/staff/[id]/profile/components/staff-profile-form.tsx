@@ -336,6 +336,7 @@ const StaffProfileForm = ({
           )}
           {/* Documents Section */}
           <DocumentsSection documents={documents} userId={userId} edit={true} />
+
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
               {isSubmitting && <Loader />}Save

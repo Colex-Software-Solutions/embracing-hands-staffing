@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardTitle,
   CardHeader,
@@ -28,10 +28,10 @@ import { useToast } from "@/app/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { JobPost } from "@prisma/client";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
-import ReactGoogleAutocomplete from "react-google-autocomplete";
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+} from "react-places-autocomplete";
 import { format } from "date-fns";
-
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const jobPostingSchema = z
   .object({
@@ -108,6 +108,34 @@ const JobPostingForm = ({
   const { data: session } = useSession();
   const [tags, setTags] = useState<string[]>(currentJob?.tags || []);
   const { toast } = useToast();
+  const [location, setLocation] = useState<string>(
+    defaultValues.location || ""
+  );
+  const [locationError, setLocationError] = useState<boolean>(false);
+
+  const verifyAddress = async () => {
+    try {
+      const results = await geocodeByAddress(location);
+
+      const latitude = results[0].geometry.location.lat();
+      const longitude = results[0].geometry.location.lng();
+
+      console.log(latitude);
+
+      if (!latitude || !longitude) {
+        setLocationError(true);
+        return;
+      }
+
+      setLocationError(false);
+    } catch (error) {
+      setLocationError(true);
+    }
+  };
+
+  useEffect(() => {
+    verifyAddress();
+  }, [location]);
 
   const handleAddSkill = (tag: string) => {
     if (!tags.includes(tag)) {
@@ -130,8 +158,32 @@ const JobPostingForm = ({
       if (session?.user.status !== "APPROVED") {
         throw new Error("Please wait until your account is approved");
       }
+
+      const results = await geocodeByAddress(location);
+
+      const latitude = results[0].geometry.location.lat();
+      const longitude = results[0].geometry.location.lng();
+
+      if (!latitude || !longitude) {
+        toast({
+          title: "Error!",
+          description: "Please provide a valid address",
+          variant: "destructive",
+        });
+
+        return;
+      }
+
+      // set location values
+      form.setValue("location", location);
+      form.setValue("latitude", latitude);
+      form.setValue("longitude", longitude);
+
       const requestBody = {
         ...data,
+        location,
+        latitude,
+        longitude,
         startDate: format(data.startDate, "yyyy-MM-dd"),
         endDate: format(data.endDate, "yyyy-MM-dd"),
         procedures,
@@ -165,7 +217,7 @@ const JobPostingForm = ({
     } catch (error: any) {
       toast({
         title: "Error!",
-        description: "Failed to create job post: " + error.message,
+        description: "Failed to create job post",
         variant: "destructive",
       });
       console.error("Failed to create job post", error);
@@ -303,35 +355,58 @@ const JobPostingForm = ({
                         <span className="text-sm font-thin">(optional)</span>
                       </FormLabel>
                       <FormControl>
-                        <ReactGoogleAutocomplete
-                          id="location"
-                          apiKey={GOOGLE_MAPS_API_KEY}
-                          style={{
-                            width: "100%",
-                            height: "2.25rem",
-                            borderRadius: ".375rem",
-                            border: "1px solid rgba(0, 0, 0, 0.05)",
-                            backgroundColor: "transparent",
-                            padding: ".25rem .75rem",
-                            fontSize: ".875rem",
-                            boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-                            transition: "color 0.15s ease-in-out",
-                          }}
-                          onPlaceSelected={(place) => {
-                            const location = place.formatted_address;
-                            const latitude = place.geometry.location.lat();
-                            const longitude = place.geometry.location.lng();
+                        <div className="relative">
+                          <GooglePlacesAutocomplete
+                            value={location}
+                            onChange={(val) => setLocation(val)}
+                            onSelect={async (
+                              address: string,
+                              placeId: string
+                            ) => {
+                              setLocation(address);
+                            }}
+                            debounce={300}
+                            searchOptions={{
+                              types: ["address"],
+                              componentRestrictions: { country: ["us", "ca"] },
+                            }}
+                          >
+                            {({
+                              getInputProps,
+                              suggestions,
+                              getSuggestionItemProps,
+                              loading,
+                            }) => (
+                              <div>
+                                <input
+                                  {...getInputProps({
+                                    placeholder: "Search Places ...",
+                                    className:
+                                      "border border-gray-300 p-2  rounded-md w-full",
+                                  })}
+                                />
 
-                            form.setValue("location", location);
-                            form.setValue("latitude", latitude);
-                            form.setValue("longitude", longitude);
-                          }}
-                          options={{
-                            types: ["address"],
-                            componentRestrictions: { country: "ca" },
-                          }}
-                          defaultValue=""
-                        />
+                                <div className="absolute z-30 w-full mt-1 bg-white">
+                                  {loading && <div>Loading...</div>}
+                                  {suggestions.map((suggestion) => (
+                                    <div
+                                      className="hover:bg-slate-100 cursor-pointer"
+                                      {...getSuggestionItemProps(suggestion)}
+                                      key={suggestion.placeId}
+                                    >
+                                      <span>{suggestion.description}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </GooglePlacesAutocomplete>
+                          {locationError && (
+                            <FormMessage>
+                              Please enter a valid address
+                            </FormMessage>
+                          )}
+                        </div>
                       </FormControl>
                     </FormItem>
                   )}
