@@ -5,6 +5,7 @@ import StaffProfileInfo from "./components/staff-profile-info";
 import { FacilityProfile, StaffProfile } from "@prisma/client";
 import StaffProfileInfoSkeleton from "./components/staff-info-skeleton";
 import FacilityProfileInfo from "./components/facility-profile-info";
+import { documentProvider } from "@/app/providers/documentProvider";
 
 export default async function UserProfilePage({
   params,
@@ -16,6 +17,7 @@ export default async function UserProfilePage({
     user?.role === "STAFF"
       ? await staffProvider.getStaffProfile(params.id)
       : await facilityProvider.getFacilityProfile(params.id);
+  const documents = await documentProvider.getDocumentsPerUser(params.id);
 
   if (!user || !profile) {
     return <StaffProfileInfoSkeleton />;
@@ -23,7 +25,11 @@ export default async function UserProfilePage({
   return (
     <>
       {user?.role === "STAFF" ? (
-        <StaffProfileInfo user={user} staffProfile={profile as StaffProfile} />
+        <StaffProfileInfo
+          user={user}
+          staffProfile={profile as StaffProfile}
+          documents={documents}
+        />
       ) : (
         <FacilityProfileInfo
           user={user}
