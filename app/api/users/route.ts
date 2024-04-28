@@ -13,10 +13,10 @@ const getUserProfileName = async (id: string, role: Role): Promise<string> => {
   }
 
   const userProfile = await userProvider.getFacilityProfileById(id);
-  if (!userProfile || !userProfile.facilityProfile) {
-    throw new Error("Could not find staff user profile");
+  if (!userProfile) {
+    throw new Error("Could not find facility user profile");
   }
-  return userProfile.facilityProfile.name;
+  return userProfile?.facilityProfile?.name || "";
 };
 
 interface RequestBody {
@@ -53,6 +53,7 @@ export async function POST(request: Request) {
     }
     return new Response(JSON.stringify({ success: true, user }));
   } catch (error) {
+    console.log(error)
     return new Response(JSON.stringify({ success: false, error }));
   }
 }

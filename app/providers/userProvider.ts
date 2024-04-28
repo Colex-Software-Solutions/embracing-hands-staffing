@@ -189,7 +189,7 @@ class UserProvider {
   }
 
   async updateUserStatus(id: string, status: "APPROVED" | "REJECTED") {
-    return await prisma.user.update({
+    return prisma.user.update({
       where: { id },
       data: {
         status,
