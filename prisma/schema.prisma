@@ -36,7 +36,6 @@ model User {
   email      String      @unique 
   password   String
   phone      String
-  stripeId   String?
   role   Role
   status     UserStatus  @default(PENDING)
   createdAt  DateTime    @default(now())
@@ -98,7 +97,6 @@ model JobPost {
   facilityId      String @db.ObjectId
   title           String
   description     String
-  parkingPay      Float?
   scrubsProvided  Boolean
   experience      String
   location        String
@@ -110,10 +108,7 @@ model JobPost {
   housing         String
   procedures      String[]
   patientPopulation String
-  mie             Float?
-  bonus           Float?
   tags            String[]
-  paymentPerDay   Float
   shifts  Shift[]
   status          JobStatus         @default(OPEN)
   createdAt       DateTime          @default(now())
@@ -132,7 +127,6 @@ model JobApplication {
   jobPost       JobPost         @relation(fields: [jobId], references: [id])
   staffProfile  StaffProfile    @relation(fields: [staffId], references: [id])
 }
-
 
 enum Status {
   Scheduled

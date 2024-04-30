@@ -17,7 +17,6 @@ const JobCard: React.FC<JobCardProps> = (props) => {
     startDate,
     duration,
     shift,
-    paymentPerDay,
     isFavorite,
     createdAt,
     tags,
@@ -47,12 +46,6 @@ const JobCard: React.FC<JobCardProps> = (props) => {
         >
           <JobCardFavoriteIcon isFavorite={isFavorite || false} />
         </div>
-        <p className="text-green-800 mt-5">
-          <span className="text-lg font-bold">
-            {formatCurrency(paymentPerDay)}
-          </span>{" "}
-          /day
-        </p>
         <div className="text-sm text-gray-400 mt-2">
           Posted on: {formatDate(createdAt)}
         </div>
