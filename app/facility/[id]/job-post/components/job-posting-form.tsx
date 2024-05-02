@@ -37,7 +37,6 @@ const jobPostingSchema = z
   .object({
     title: z.string().min(1, "Title is required"),
     description: z.string().min(1, "Description is required"),
-    parkingPay: z.coerce.number().optional(),
     scrubsProvided: z.boolean(),
     experience: z.string().min(5, "Experience description is required"),
     location: z.string().optional(),
@@ -48,9 +47,6 @@ const jobPostingSchema = z
     endDate: z.string(),
     housing: z.string().optional(),
     patientPopulation: z.string().optional(),
-    mie: z.coerce.number().optional(),
-    bonus: z.coerce.number().optional(),
-    paymentPerDay: z.coerce.number().min(1, "Payment per day is required"),
   })
   .refine((data) => new Date(data.startDate).getTime() > new Date().getTime(), {
     message: "Start date must be after today",
@@ -78,7 +74,6 @@ const JobPostingForm = ({
   const defaultValues: Partial<JobPostingFormValues> = {
     title: currentJob?.title || "",
     description: currentJob?.description || "",
-    parkingPay: currentJob?.parkingPay || 0,
     scrubsProvided: currentJob?.scrubsProvided || false,
     experience: currentJob?.experience || "",
     location: currentJob?.location || "",
@@ -91,9 +86,6 @@ const JobPostingForm = ({
       : "",
     housing: currentJob?.housing || "",
     patientPopulation: currentJob?.patientPopulation || "",
-    mie: currentJob?.mie || 0,
-    bonus: currentJob?.bonus || 0,
-    paymentPerDay: currentJob?.paymentPerDay || 0,
   };
   const form = useForm<JobPostingFormValues>({
     resolver: zodResolver(jobPostingSchema),
@@ -270,29 +262,6 @@ const JobPostingForm = ({
                       </FormControl>
                       {errors.description && (
                         <FormMessage>{errors.description.message}</FormMessage>
-                      )}
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="parkingPay"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Parking Pay</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="parkingPay"
-                          placeholder="Enter parking pay"
-                          step="0.01"
-                          type="number"
-                          {...field}
-                        />
-                      </FormControl>
-                      {errors.parkingPay && (
-                        <FormMessage>{errors.parkingPay.message}</FormMessage>
                       )}
                     </FormItem>
                   )}
@@ -560,50 +529,6 @@ const JobPostingForm = ({
                   )}
                 />
               </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="mie"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>MIE</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="Enter MIE payment"
-                          {...field}
-                        />
-                      </FormControl>
-                      {errors.mie && (
-                        <FormMessage>{errors.mie.message}</FormMessage>
-                      )}
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="bonus"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bonus</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="Enter bonus payment"
-                          {...field}
-                        />
-                      </FormControl>
-                      {errors.bonus && (
-                        <FormMessage>{errors.bonus.message}</FormMessage>
-                      )}
-                    </FormItem>
-                  )}
-                />
-              </div>
               <div className="space-y-4 flex flex-col">
                 <Label htmlFor="tags">Tags</Label>
                 <SkillsCombobox handleAddSkill={handleAddSkill}>
@@ -626,30 +551,6 @@ const JobPostingForm = ({
                     </div>
                   ))}
                 </div>
-              </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="paymentPerDay"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Payment Per Day</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="Enter payment per day"
-                          {...field}
-                        />
-                      </FormControl>
-                      {errors.paymentPerDay && (
-                        <FormMessage>
-                          {errors.paymentPerDay.message}
-                        </FormMessage>
-                      )}
-                    </FormItem>
-                  )}
-                />
               </div>
             </div>
             <CardFooter>

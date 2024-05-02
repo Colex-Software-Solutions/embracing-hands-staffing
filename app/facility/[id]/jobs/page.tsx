@@ -3,6 +3,12 @@ import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { getServerSession } from "@/lib/getServerSession";
 import JobPostsManager from "./components/JobPostsManager";
 import Script from "next/script";
+import { Loader } from "@googlemaps/js-api-loader";
+
+const loader = new Loader({
+  apiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
+  version: "weekly",
+});
 
 export const metadata: Metadata = {
   title: "Jobs",
@@ -14,6 +20,7 @@ async function getJobPosts(id: string) {
     const jobPosts = await jobPostProvider.getJobPostsPerFacility(id);
     return jobPosts;
   } catch (error) {
+    console.log(error);
     console.error("server error");
     return [];
   }
@@ -25,9 +32,10 @@ export default async function JobsPage() {
 
   return (
     <>
-      <Script
+      <script
+        async
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-        strategy="beforeInteractive"
+        // strategy="afterInteractive"
       />
       <div className="h-full flex-1 flex-col space-y-8 p-8 flex">
         <div className="flex items-center justify-between space-y-2">

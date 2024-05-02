@@ -39,11 +39,6 @@ export default async function facilityLayout({
               href: `${baseUrl}/applications`,
             },
             {
-              title: "Billing",
-              icon: <CreditCard className="md:mr-2 h-4 w-4" />,
-              href: `${baseUrl}/billing`,
-            },
-            {
               title: "Profile Settings",
               icon: <Settings className="md:mr-2 h-4 w-4" />,
               href: `${baseUrl}/profile`,

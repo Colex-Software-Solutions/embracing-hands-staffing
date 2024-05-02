@@ -12,7 +12,6 @@ export interface Job {
   startDate: string;
   duration: string;
   shift: string;
-  paymentPerDay: number;
   isFavorite?: boolean;
   createdAt: Date;
   tags: string[];
@@ -22,7 +21,6 @@ interface FetchedJobPost {
   id: string;
   title: string;
   location: string;
-  paymentPerDay: number;
   shiftsTime: string;
   startDate: string;
   endDate: string;
@@ -40,7 +38,6 @@ const mapFetchedJobPostToJobPost = (
         id: fetchedJobPost.id,
         title: fetchedJobPost.title,
         location: fetchedJobPost.location,
-        paymentPerDay: fetchedJobPost.paymentPerDay,
         shift: fetchedJobPost.shiftsTime,
         createdAt: fetchedJobPost.createdAt,
         duration: weeksBetween(

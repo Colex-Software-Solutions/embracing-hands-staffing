@@ -3,7 +3,7 @@ import { User } from "@prisma/client";
 import prisma from "@/db/prisma";
 
 class UserProvider {
-  async createUser(data: Omit<User, "createdAt" | "updatedAt" | "stripeId">) {
+  async createUser(data: Omit<User, "createdAt" | "updatedAt">) {
     return await prisma.user.create({
       data,
     });
@@ -86,7 +86,6 @@ class UserProvider {
         phone: true,
         role: true,
         status: true,
-        stripeId: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -189,7 +188,7 @@ class UserProvider {
   }
 
   async updateUserStatus(id: string, status: "APPROVED" | "REJECTED") {
-    return await prisma.user.update({
+    return prisma.user.update({
       where: { id },
       data: {
         status,
