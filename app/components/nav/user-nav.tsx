@@ -62,10 +62,6 @@ export function UserNav({ session }: { session: Session }) {
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
           <Link href={`/${role.toLowerCase()}/${id}/profile`}>
             <DropdownMenuItem>
               Settings

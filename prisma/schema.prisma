@@ -36,13 +36,13 @@ model User {
   email      String      @unique 
   password   String
   phone      String
-  stripeId   String?
   role   Role
   status     UserStatus  @default(PENDING)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   staffProfile StaffProfile?
   facilityProfile FacilityProfile?
+  documents    Document[]
 }
 
 model StaffProfile {
@@ -60,7 +60,20 @@ model StaffProfile {
   favoriteJobPostIds  String[]
   user                User     @relation(fields: [userId], references: [id])
   jobApplication      JobApplication[]
+
 }
+
+model Document {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId String  @db.ObjectId
+  documentUrl  String
+  name         String
+  expiryDate   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id])
+}
+
 
 model FacilityProfile {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -84,7 +97,6 @@ model JobPost {
   facilityId      String @db.ObjectId
   title           String
   description     String
-  parkingPay      Float?
   scrubsProvided  Boolean
   experience      String
   location        String
@@ -96,10 +108,7 @@ model JobPost {
   housing         String
   procedures      String[]
   patientPopulation String
-  mie             Float?
-  bonus           Float?
   tags            String[]
-  paymentPerDay   Float
   shifts  Shift[]
   status          JobStatus         @default(OPEN)
   createdAt       DateTime          @default(now())
@@ -117,19 +126,6 @@ model JobApplication {
   status        ApplicationStatus @default(PENDING)
   jobPost       JobPost         @relation(fields: [jobId], references: [id])
   staffProfile  StaffProfile    @relation(fields: [staffId], references: [id])
-  payment       Payment?
-}
-
-model Payment {
-  id                    String            @id @default(auto()) @map("_id") @db.ObjectId
-  applicationId         String @unique @db.ObjectId
-  stripePaymentIntentId String
-  invoiceId             String
-  amount                Float
-  adminFee              Float
-  netAmount             Float
-  status                String
-  jobApplication        JobApplication?   @relation(fields: [applicationId], references: [id])
 }
 
 enum Status {

@@ -19,10 +19,10 @@ export async function POST(
       );
     const staff = await staffProvider.getStaffProfile(userId);
 
-    let profileImage, resume, profileUrl, resumeUrl;
+    let profileImage, profileUrl;
     const formData = await request.formData();
 
-    // resume and profile url will only be required on first creation
+    // profile url will only be required on first creation
     // otherwise the previous files should be deleted from S3
     if (formData.has("profileImage")) {
       if (staff?.profileImage) {
@@ -36,19 +36,11 @@ export async function POST(
         profileImage.type
       );
     }
-    if (formData.has("resume")) {
-      if (staff?.resumeUrl) {
-        deleteFile(staff.resumeUrl);
-      }
-      resume = formData.get("resume") as File;
-      const resumeBuffer = Buffer.from(await resume.arrayBuffer());
-      resumeUrl = await uploadFile(resumeBuffer, resume.name, resume.type);
-    }
 
-    if (!staff && (!profileImage || !resume)) {
+    if (!staff && !profileImage) {
       return NextResponse.json(null, {
         status: 400,
-        statusText: "Resume and profile image are required",
+        statusText: "profile image is required",
       });
     }
 
@@ -60,7 +52,7 @@ export async function POST(
 
     const skillsArray = skills ? JSON.parse(skills) : [];
 
-    const profileData: Omit<StaffProfile, "id"> = {
+    const profileData: Omit<StaffProfile, "id" | "resumeUrl"> = {
       userId,
       firstname,
       lastname,
@@ -68,7 +60,6 @@ export async function POST(
       title,
       skills: skillsArray,
       profileImage: profileUrl || staff?.profileImage || null,
-      resumeUrl: resumeUrl || staff?.resumeUrl || null,
       profileSetupComplete: true,
       favoriteJobPostIds: [],
     };

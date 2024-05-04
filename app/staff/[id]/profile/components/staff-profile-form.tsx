@@ -13,7 +13,7 @@ import {
 } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Alert } from "@/app/components/ui/alert";
-import { StaffProfile } from "@prisma/client";
+import { Document, StaffProfile } from "@prisma/client";
 import { TypeOf, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,12 +32,12 @@ import Link from "next/link";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
+import DocumentsSection from "./DocumentsSection";
 
 export interface GeoLocation {
   latitude: number;
   longitude: number;
 }
-
 const profileSchema = z.object({
   firstname: z.string().min(1, "First Name is required"),
   lastname: z.string().min(1, "Last Name is required"),
@@ -49,9 +49,11 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 const StaffProfileForm = ({
   profile,
   userId,
+  documents = [],
 }: {
   profile: StaffProfile | null;
   userId: string;
+  documents?: Document[];
 }) => {
   const defaultValues: Partial<ProfileFormValues> = {
     firstname: profile?.firstname ?? "",
@@ -66,9 +68,7 @@ const StaffProfileForm = ({
   const { toast } = useToast();
   const [skills, setSkills] = useState<string[]>(profile?.skills ?? []);
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
-  const [resumeFile, setResumeFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
-  const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl);
   const [location, setLocation] = useState<GeoLocation | null>(null);
   const [locationLoading, setLocationLoading] = useState(false);
 
@@ -78,16 +78,6 @@ const StaffProfileForm = ({
       setProfileImageFile(file);
     } else {
       alert("Only JPEG, PNG, or SVG files are allowed.");
-      event.target.value = "";
-    }
-  };
-
-  const handleResumeChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file && file.type === "application/pdf") {
-      setResumeFile(file);
-    } else {
-      alert("Only PDF files are allowed.");
       event.target.value = "";
     }
   };
@@ -132,7 +122,6 @@ const StaffProfileForm = ({
     formData.append("skills", JSON.stringify(skills));
 
     if (profileImageFile) formData.append("profileImage", profileImageFile);
-    if (resumeFile) formData.append("resume", resumeFile);
 
     try {
       const res = await axios.post(`/api/staff/${userId}`, formData, {
@@ -141,9 +130,7 @@ const StaffProfileForm = ({
         },
       });
       setProfileImageUrl(res.data.profile.profileImage);
-      setResumeUrl(res.data.profile.resumeUrl);
       setProfileImageFile(null);
-      setResumeFile(null);
       toast({
         title: "Profile Updated Successfully",
         variant: "default",
@@ -284,34 +271,7 @@ const StaffProfileForm = ({
                 </>
               )}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="resume">Resume</Label>
-              <Input
-                className={`${!resumeFile && resumeUrl && "hidden"}`}
-                accept=".pdf"
-                id="resume"
-                type="file"
-                onChange={handleResumeChange}
-              />
-              {resumeUrl && !resumeFile && (
-                <div className="flex items-center">
-                  <Link href={resumeUrl} target="_blank">
-                    <Button type="button" variant={"link"}>
-                      View current resume
-                    </Button>
-                  </Link>
-                  <p>
-                    <Button
-                      type="button"
-                      variant={"ghost"}
-                      onClick={() => document.getElementById("resume")?.click()}
-                    >
-                      Replace
-                    </Button>
-                  </p>
-                </div>
-              )}
-            </div>
+
             <div className="space-y-2">
               <Card>
                 <CardHeader>
@@ -362,6 +322,21 @@ const StaffProfileForm = ({
               <Label htmlFor="location">Location</Label>
             </div>
           </CardContent>
+          {profile === null && (
+            <Alert className="m-4 w-[90%] text-lg" variant={"destructive"}>
+              Please Upload the following documents along with any additional
+              supporting documents:
+              <li>- Drivers License</li>
+              <li>- Resume</li>
+              <li>- Basic Life Support (BLS)</li>
+              <li>- Advanced Cardiac Life Support (ACLS)</li>
+              <li>- Pediatric Advanced Life Support (PALS) </li>
+              <li>- SSC</li>
+            </Alert>
+          )}
+          {/* Documents Section */}
+          <DocumentsSection documents={documents} userId={userId} edit={true} />
+
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
               {isSubmitting && <Loader />}Save

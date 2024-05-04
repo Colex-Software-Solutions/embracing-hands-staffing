@@ -25,8 +25,6 @@ export interface FetchedJobPost {
   facilityId: string;
   title: string;
   description: string;
-  paymentPerDay: number;
-  parkingPay: number;
   scrubsProvided: boolean;
   experience: string;
   location: string;
@@ -36,8 +34,6 @@ export interface FetchedJobPost {
   housing: string;
   procedures: string[];
   patientPopulation: string;
-  mie: number;
-  bonus: number;
   tags: string[];
   createdAt: Date;
   facilityProfile: FacilityProfile;

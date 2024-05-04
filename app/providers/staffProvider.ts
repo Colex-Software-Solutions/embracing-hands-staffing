@@ -3,7 +3,7 @@ import { StaffProfile } from "@prisma/client";
 
 export interface UpdateStaffProfile {
   userId: string;
-  data: Omit<StaffProfile, "id">;
+  data: Omit<StaffProfile, "id" | "resumeUrl">;
 }
 
 class StaffProvider {
@@ -13,7 +13,7 @@ class StaffProvider {
     });
   }
 
-  async createStaffProfile(data: Omit<StaffProfile, "id">) {
+  async createStaffProfile(data: Omit<StaffProfile, "id" | "resumeUrl">) {
     return await prisma.staffProfile.create({
       data,
     });
