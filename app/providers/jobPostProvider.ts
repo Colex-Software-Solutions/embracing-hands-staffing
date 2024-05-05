@@ -101,6 +101,37 @@ class JobPostProvider {
       },
     });
   }
+
+  async getJobSummaryByJobId(jobId: string) {
+    return prisma.jobPost.findUnique({
+      where: { id: jobId },
+      include: {
+        shifts: {
+          include: {
+            staffProfile: {
+              select: {
+                firstname: true,
+                lastname: true,
+                user: {
+                  select: {
+                    email: true,
+                  },
+                },
+              },
+            },
+            breaks: {
+              select: {
+                id: true,
+                start: true,
+                end: true,
+                shiftId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }
 
 export const jobPostProvider = new JobPostProvider();

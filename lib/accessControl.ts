@@ -48,6 +48,10 @@ const accessRules: Record<string, AccessRule> = {
     roles: [Role.STAFF, Role.FACILITY],
     methods: ["GET", "PUT", "DELETE", "POST"],
   },
+  "/api/document": {
+    roles: [Role.STAFF],
+    methods: ["GET", "PUT", "DELETE", "POST"],
+  },
 };
 
 export default accessRules;
