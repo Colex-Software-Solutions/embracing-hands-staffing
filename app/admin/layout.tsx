@@ -9,6 +9,7 @@ import {
   Settings,
   User,
   Building,
+  Briefcase,
 } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
 
@@ -51,6 +52,16 @@ export default function adminLayout({
 
                 icon: <User className="md:mr-2 h-4 w-4" />,
                 href: "/admin/users",
+              },
+              {
+                title: "Jobs",
+                icon: <Briefcase className="md:mr-2 h-4 w-4" />,
+                href: `/admin/jobs`,
+              },
+              {
+                title: "Jobs",
+                icon: <Briefcase className="md:mr-2 h-4 w-4" />,
+                href: `/admin/jobs-copy`,
               },
               {
                 title: "Sent",

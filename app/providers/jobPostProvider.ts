@@ -74,6 +74,11 @@ class JobPostProvider {
     return await prisma.jobPost.findMany({
       select: {
         id: true,
+        facilityProfile: {
+          select:{
+            name: true
+          }
+        },
         title: true,
         location: true,
         shifts: true,
