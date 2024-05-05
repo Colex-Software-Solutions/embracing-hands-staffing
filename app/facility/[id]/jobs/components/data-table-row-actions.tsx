@@ -58,6 +58,10 @@ export function DataTableRowActions<TData>({
           {" "}
           <DropdownMenuItem>View Shifts</DropdownMenuItem>
         </Link>
+        <Link href={`facility/${facilityId}/jobs/${id}`}>
+          {" "}
+          <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         {row.getValue("status") !== "CLOSED" &&
           row.getValue("status") !== "COMPLETED" && (
