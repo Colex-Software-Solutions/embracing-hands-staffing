@@ -58,29 +58,7 @@ export default function adminLayout({
                 icon: <Briefcase className="md:mr-2 h-4 w-4" />,
                 href: `/admin/jobs`,
               },
-              {
-                title: "Jobs",
-                icon: <Briefcase className="md:mr-2 h-4 w-4" />,
-                href: `/admin/jobs-copy`,
-              },
-              {
-                title: "Sent",
-                label: "",
-                icon: <Send className="md:mr-2 h-4 w-4" />,
-                href: "ghost",
-              },
-              {
-                title: "Junk",
-                label: "23",
-                icon: <ArchiveX className="md:mr-2 h-4 w-4" />,
-                href: "ghost",
-              },
-              {
-                title: "Trash",
-                label: "",
-                icon: <Trash2 className="md:mr-2 h-4 w-4" />,
-                href: "ghost",
-              },
+
               {
                 title: "Settings",
                 icon: <Settings className="md:mr-2 h-4 w-4" />,

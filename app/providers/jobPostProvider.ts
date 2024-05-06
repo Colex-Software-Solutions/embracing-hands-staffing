@@ -75,9 +75,9 @@ class JobPostProvider {
       select: {
         id: true,
         facilityProfile: {
-          select:{
-            name: true
-          }
+          select: {
+            name: true,
+          },
         },
         title: true,
         location: true,
@@ -111,6 +111,7 @@ class JobPostProvider {
     return prisma.jobPost.findUnique({
       where: { id: jobId },
       include: {
+        invoices: {},
         shifts: {
           include: {
             staffProfile: {

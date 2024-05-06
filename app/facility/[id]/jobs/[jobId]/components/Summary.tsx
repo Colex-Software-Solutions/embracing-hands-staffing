@@ -17,14 +17,17 @@ import {
 import { ShiftsSummary } from "../page";
 import SummaryStatsCard from "./SummaryStatsCard";
 import { formatDateTime } from "@/lib/utils";
-import { JobPost } from "@prisma/client";
+import { Invoice, JobPost } from "@prisma/client";
+import InvoiceViewingSection from "./InvoiceViewingSection";
 
 const Summary = ({
   shifts,
   jobPost,
+  invoices,
 }: {
   shifts: ShiftsSummary[];
   jobPost: JobPost;
+  invoices: Invoice[];
 }) => {
   const [expandedShiftId, setExpandedShiftId] = useState<string | null>(null);
 
@@ -164,6 +167,8 @@ const Summary = ({
             ))}
           </TableBody>
         </Table>
+        {/* View Invoices  */}
+        <InvoiceViewingSection invoices={invoices} />
         {/* Job Summary Section */}
         <div className="my-4 p-4 border-t-2">
           <h3 className="text-2xl font-semibold">Overall Job Summary</h3>

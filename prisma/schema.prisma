@@ -74,6 +74,16 @@ model Document {
   user User @relation(fields: [userId], references: [id])
 }
 
+model Invoice {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  jobPostId String  @db.ObjectId
+  url  String
+  paid Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  jobPost JobPost @relation(fields: [jobPostId], references: [id])
+}
+
 
 model FacilityProfile {
    id            String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -109,11 +119,13 @@ model JobPost {
   procedures      String[]
   patientPopulation String
   tags            String[]
+
   shifts  Shift[]
   status          JobStatus         @default(OPEN)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   applications    JobApplication[]
+  invoices        Invoice[]
   facilityProfile FacilityProfile   @relation(fields: [facilityId], references: [id])
 }
 
@@ -159,4 +171,5 @@ model Break {
   shiftId   String   @db.ObjectId
   shift     Shift    @relation(fields: [shiftId], references: [id])
 }
+
 
