@@ -1,10 +1,9 @@
 import { shiftProvider } from "@/app/providers/shiftProvider";
 import React from "react";
-import Summary from "./components/Summary";
 import { Break, JobPost, Shift } from "@prisma/client";
 import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { Alert } from "@/app/components/ui/alert";
-import { XCircle } from "lucide-react";
+import Summary from "@/app/facility/[id]/jobs/[jobId]/components/Summary";
 
 export interface ShiftsSummary extends Shift {
   staffProfile: {
@@ -28,7 +27,7 @@ export default async function JobSummaryPage({
     const { shifts, invoices, ...jobPost } = jobSummary;
 
     return (
-      <div>
+      <div className="w-full mx-4">
         <Summary shifts={shifts} jobPost={jobPost} invoices={invoices} />
       </div>
     );

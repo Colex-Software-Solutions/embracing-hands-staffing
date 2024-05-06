@@ -7,16 +7,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from "@/app/components/ui/dropdown-menu";
-import { ViewAndEditModal } from "./modals/view-and-edit-job-details";
-import { CloseJobModal } from "./modals/close-job-confirm-modal";
+
 import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { CompleteJobModal } from "./modals/complete-job-confirm-modal";
+import UploadInvoiceModal from "../../components/modals/upload-invoice-modal";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -44,32 +40,11 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <ViewAndEditModal
-          row={row}
-          id={id}
-          handleJobPostUpdate={handleJobPostUpdate}
-        />
-        <Link href={`facility/${facilityId}/applications?jobId=${id}`}>
+        <Link href={`admin/jobs/${id}`}>
           {" "}
-          <DropdownMenuItem>View Applicants</DropdownMenuItem>
+          <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
         </Link>
-        <DropdownMenuSeparator />
-        <Link href={`facility/${facilityId}/applications/jobPost/${id}`}>
-          {" "}
-          <DropdownMenuItem>View Shifts</DropdownMenuItem>
-        </Link>
-        <DropdownMenuSeparator />
-        {/* {row.getValue("status") !== "CLOSED" &&
-          row.getValue("status") !== "COMPLETED" && (
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
-
-              <DropdownMenuSubContent>
-                <CompleteJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
-                <CloseJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          )} */}
+        <UploadInvoiceModal jobId={id} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
