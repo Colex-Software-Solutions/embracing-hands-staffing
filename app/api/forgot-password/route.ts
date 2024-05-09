@@ -51,32 +51,38 @@ export async function POST(req: NextRequest) {
 
 // Function to validate the 6 digit code entered by the user
 export async function PUT(req: NextRequest) {
-  const { code, email } = await req.json();
-  console.log(code);
-  const user = await userProvider.getUserByEmail(email);
-  if (!user) {
-    return NextResponse.json(
-      { message: "Cannot validate the code" },
-      { status: 400 }
-    );
-  }
-  const resetRecord = await prisma.passwordReset.findFirst({
-    where: {
-      userId: user.id,
-      code,
-      expiresAt: {
-        gt: new Date(),
+  try {
+    const { code, email } = await req.json();
+    const user = await userProvider.getUserByEmail(email);
+    if (!user) {
+      return NextResponse.json(
+        { message: "Cannot validate the code" },
+        { status: 400 }
+      );
+    }
+    const resetRecord = await prisma.passwordReset.findFirst({
+      where: {
+        userId: user.id,
+        code,
+        expiresAt: {
+          gt: new Date(),
+        },
       },
-    },
-  });
-  console.log(resetRecord);
+    });
 
-  if (!resetRecord) {
+    if (!resetRecord) {
+      return NextResponse.json(
+        { message: "Invalid or expired code." },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ message: "Code verified successfully." });
+  } catch (error: any) {
+    console.log(error);
     return NextResponse.json(
-      { message: "Invalid or expired code." },
-      { status: 400 }
+      { error: error.message },
+      { status: 500, statusText: error.message }
     );
   }
-
-  return NextResponse.json({ message: "Code verified successfully." });
 }
