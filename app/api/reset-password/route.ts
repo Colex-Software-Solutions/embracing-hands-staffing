@@ -1,29 +1,34 @@
 import { userProvider } from "@/app/providers/userProvider";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import * as bcrypt from "bcrypt";
+import prisma from "@/db/prisma";
 
-export async function GET(req: NextRequest) {
+export async function PUT(req: NextRequest) {
   try {
-    const userEmail = req.nextUrl.searchParams.get("email");
-    const token = req.nextUrl.searchParams.get("token");
-    if (!userEmail) {
-      return new Response(null, {
-        status: 400,
-        statusText: "Please provide your email address",
-      });
+    const { email, newPassword } = await req.json();
+    const user = await userProvider.getUserByEmail(email);
+    if (!user) {
+      return NextResponse.json(
+        { message: "user does not exist" },
+        { status: 400 }
+      );
     }
-    const user = await userProvider.getUserByEmail(userEmail);
-    if (!user || !token) {
-      return new Response(null, {
-        status: 400,
-        statusText: "Your Token is expired",
-      });
-    }
-    const secret = process.env.SECRET_KEY + user.password;
-    // if the payload is not verified it will trigger an exception
-    const payload = jwt.verify(token, secret);
-    // TODO: Validate the payload and send the approved response
-    return new Response(JSON.stringify({ success: true }));
+    const { id } = user;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await prisma.user.update({
+      where: { id: id },
+      data: { password: hashedPassword },
+    });
+
+    await prisma.passwordReset.deleteMany({
+      where: { userId: id },
+    });
+
+    return NextResponse.json({
+      message: "Password has been reset successfully.",
+    });
   } catch (error: any) {
     console.log(error);
     return new Response(null, {

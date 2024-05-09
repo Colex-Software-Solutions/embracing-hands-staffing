@@ -1,89 +1,174 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { Alert } from "@/app/components/ui/alert";
-import { Loader, XCircle } from "lucide-react";
-import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
+import axios from "axios";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/app/components/ui/input-otp";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { PasswordInput } from "@/app/components/ui/passwordInput";
+import { Alert } from "@/app/components/ui/alert";
 
 export function ForgotPasswordForm() {
-  const { data: session } = useSession();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState("");
-  const [email, setEmail] = useState("");
-  const { toast } = useToast();
+  const [step, setStep] = useState(1);
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<null | string>(null);
 
-  const onSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleRequestReset = async () => {
+    setLoading(true);
     try {
-      setError("");
-      setIsLoading(true);
-      const res = await axios.post("/api/forgot-password", { email });
-      toast({
-        title: "Password Reset Initiated",
-        description:
-          "A link to reset your password will be sent shortly if an account associated with your email address is found. Please check your inbox, and don't forget to look in your spam or junk folder as well.",
-      });
-      setTimeout(() => {
-        router.push("/login");
-      }, 5000);
+      await axios.post("/api/forgot-password", { email });
+      setStep(2);
+      toast({ title: "Check your email for the code." });
     } catch (error: any) {
-      console.log(error);
-      setError(error?.message);
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to send email.",
+      });
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (session?.user.accessToken) {
-      signOut();
+  const handleVerifyCode = async () => {
+    setLoading(true);
+    try {
+      await axios.put("/api/forgot-password", { email, code });
+      setStep(3);
+      toast({ title: "Code verified. Set your new password." });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Invalid code.",
+      });
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
+
+  const handleResetPassword = async () => {
+    if (newPassword.length < 6) {
+      setError("Password length must be a minimum of 6 Characters");
+
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      await axios.put("/api/reset-password", { email, newPassword });
+      toast({ title: "Password reset successfully." });
+      setTimeout(() => {
+        router.replace("/auth/login");
+      }, 3000);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description:
+          error.response?.data?.message || "Failed to reset password.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className={"grid gap-6"}>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          {error.length > 0 && (
-            <Alert className="text-red-500 mb-2 bg-red-100">
-              <div className="flex">
-                {" "}
-                <XCircle
-                  onClick={() => setError("")}
-                  className="mr-2 cursor-pointer"
-                />{" "}
-                {error}
-              </div>
-            </Alert>
-          )}
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              name="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={isLoading}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <Button disabled={isLoading}>
-            {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-            Send Reset Email
+    <div>
+      {step === 1 && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRequestReset();
+          }}
+        >
+          <Input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
+          <Button className="w-full mt-4" disabled={loading}>
+            Send Reset Code{" "}
+            {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
           </Button>
-        </div>
-      </form>
+        </form>
+      )}
+
+      {step === 2 && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleVerifyCode();
+          }}
+        >
+          <InputOTP
+            maxLength={6}
+            value={code}
+            onChange={setCode}
+            autoFocus
+            className="otp-input"
+          >
+            {" "}
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+          <Button className="w-full mt-4" disabled={loading}>
+            Verify Code{" "}
+            {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+          </Button>
+        </form>
+      )}
+
+      {step === 3 && (
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleResetPassword();
+          }}
+        >
+          {error && <Alert className="text-red-500">{error}</Alert>}
+          <PasswordInput
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            type="password"
+            placeholder="Enter your new password"
+          />
+          <PasswordInput
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            type="password"
+            placeholder="Confirm your new password"
+          />
+          <Button className="w-full mt-4" disabled={loading}>
+            Reset Password{" "}
+            {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+          </Button>
+        </form>
+      )}
     </div>
   );
 }
