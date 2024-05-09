@@ -15,8 +15,8 @@ export default function ForgotPasswordPage() {
           alt="Auth Image"
           width={800}
           height={400}
-          className="relative hidden h-full flex-col bg-muted  text-white lg:flex dark:border-r"
-          src="/auth-bg.jpeg"
+          className="relative hidden h-full flex-col bg-muted opacity-70  text-white lg:flex dark:border-r"
+          src="/auth-bg2.png"
         />
         <div className="lg:p-8 mt-[15%] sm:mt-0">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
