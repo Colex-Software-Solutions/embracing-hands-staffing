@@ -52,7 +52,13 @@ export const config = {
     "/profile/:path*",
     "/api/staff/:path*",
     "/api/facility/:path*",
+    "/api/document/:path*",
+    "/api/invoices/:path*",
     "/api/job-application/:path*",
+    "/api/job-post/:path*",
+    "/api/shift/:path*",
     "/find-jobs/:path*",
+    "/job-posts/:path*",
+    "/shifts/:path*",
   ],
 };
