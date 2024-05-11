@@ -40,6 +40,10 @@ const accessRules: Record<string, AccessRule> = {
     roles: [Role.STAFF],
     methods: ["GET"],
   },
+  "/job-posts": {
+    roles: [Role.STAFF, Role.FACILITY, Role.ADMIN],
+    methods: ["GET"],
+  },
   "/shifts": {
     roles: [Role.STAFF],
     methods: ["GET"],
@@ -50,6 +54,10 @@ const accessRules: Record<string, AccessRule> = {
   },
   "/api/document": {
     roles: [Role.STAFF],
+    methods: ["GET", "PUT", "DELETE", "POST"],
+  },
+  "/api/users": {
+    roles: [Role.ADMIN],
     methods: ["GET", "PUT", "DELETE", "POST"],
   },
 };
