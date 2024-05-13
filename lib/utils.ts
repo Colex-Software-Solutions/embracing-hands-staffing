@@ -139,3 +139,33 @@ export function isWithinRadius(input: IsWithinRadius): boolean {
   // Check if the distance is within the radius
   return distance <= radius;
 }
+
+export function getMotionVariants(startFrom?: "left" | "right", delay?: number) {
+  const getX = () => {
+    if (startFrom == "left") {
+      return -50
+    }
+    if (startFrom == "right") {
+      return 50
+    }
+    
+    return 0;
+  };
+
+  return {
+    hidden: { opacity: 0, x: getX() }, // Start from 50 pixels left
+    visible: {
+      opacity: 1,
+      x: 0, // End at its normal position
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 30,
+        when: "beforeChildren",
+        staggerChildren: 0.3,
+        delay
+      },
+    },
+    exit: { opacity: 0, x: 200 },
+  };
+}

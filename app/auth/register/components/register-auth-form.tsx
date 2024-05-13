@@ -15,6 +15,7 @@ import { Button } from "@/app/components/ui/button";
 import { z } from "zod";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { PasswordInput } from "@/app/components/ui/passwordInput";
 import { Role, User } from "@prisma/client";
@@ -22,6 +23,9 @@ import { signIn } from "next-auth/react";
 import { useToast } from "@/app/components/ui/use-toast";
 
 export default function RegisterForm({ users }: { users: Partial<User>[] }) {
+  const router = useRouter();
+  const params = useSearchParams();
+  const paramsRole = params.get("role") as string | null;
   const { toast } = useToast();
   const registrationSchema = z
     .object({
@@ -53,14 +57,12 @@ export default function RegisterForm({ users }: { users: Partial<User>[] }) {
     password: "",
     confirmPassword: "",
     phone: "",
-    role: "STAFF",
+    role: paramsRole === "facility" ? "FACILITY" : "STAFF",
   };
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registrationSchema),
     defaultValues,
   });
-
-  const router = useRouter();
 
   // Assume this function is called after successful login
   const redirectToProfileSetup = (role: Role, userId: string) => {
