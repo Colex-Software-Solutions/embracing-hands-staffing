@@ -60,10 +60,6 @@ model StaffProfile {
   availableStartDate             DateTime?
   desiredPay                     Float?
   employmentDesired              String?
-  hasBlsCertification            Boolean?
-  hasPalsCertification           Boolean?
-  hasAclsCertification           Boolean?
-  otherCertifications            String[]
   licensure                      Licensure[]
   hasRestrictionsOnLicense       Boolean?
   licenseRestrictionsExplanation String?
