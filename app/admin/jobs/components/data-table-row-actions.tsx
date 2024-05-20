@@ -13,6 +13,7 @@ import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import UploadInvoiceModal from "../../components/modals/upload-invoice-modal";
+import { ViewFacilityUserDetailsModal } from "../../components/modals/view-facility-user-details-modal";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -45,6 +46,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
         </Link>
         <UploadInvoiceModal jobId={id} />
+        <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
       </DropdownMenuContent>
     </DropdownMenu>
   );

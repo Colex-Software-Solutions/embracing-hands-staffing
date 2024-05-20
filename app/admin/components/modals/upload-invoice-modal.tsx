@@ -11,6 +11,9 @@ import { Button } from "../../../components/ui/button";
 import { useToast } from "../../../components/ui/use-toast";
 import axios from "axios";
 import { Input } from "@/app/components/ui/input";
+import Link from "next/link";
+
+// TODO remove invoice modal
 
 export default function UploadInvoiceModal({ jobId }: { jobId: string }) {
   const { toast } = useToast();
@@ -60,13 +63,23 @@ export default function UploadInvoiceModal({ jobId }: { jobId: string }) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      {/* <DialogTrigger asChild>
         <Button
           className="w-full border-0 justify-start flex pl-2 font-normal"
           variant="outline"
         >
           Upload Invoice
         </Button>
+      </DialogTrigger> */}
+      <DialogTrigger asChild>
+        <Link href={`/admin/jobs/${jobId}/invoices`} className="w-full">
+          <Button
+            className="w-full border-0 justify-start flex pl-2 font-normal"
+            variant="outline"
+          >
+            Invoices
+          </Button>
+        </Link>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
