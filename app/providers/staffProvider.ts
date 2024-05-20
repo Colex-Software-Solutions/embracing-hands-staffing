@@ -3,20 +3,19 @@ import { StaffProfile } from "@prisma/client";
 
 export interface UpdateStaffProfile {
   userId: string;
-  data: Omit<StaffProfile, "id" | "resumeUrl">;
+  data: Partial<StaffProfile>;
 }
 
 class StaffProvider {
   async getStaffProfile(userId: string) {
     return await prisma.staffProfile.findUnique({
       where: { userId },
+      include: { staffSchoolInfo: {} },
     });
   }
 
-  async createStaffProfile(data: Omit<StaffProfile, "id" | "resumeUrl">) {
-    return await prisma.staffProfile.create({
-      data,
-    });
+  async createStaffProfile(data: StaffProfile) {
+    return await prisma.staffProfile.create({ data });
   }
 
   async updateStaffProfile(input: UpdateStaffProfile) {

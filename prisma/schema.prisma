@@ -32,124 +32,196 @@ enum ApplicationStatus {
 }
 
 model User {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  email      String      @unique 
-  password   String
-  phone      String
-  role   Role
-  status     UserStatus  @default(PENDING)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  staffProfile StaffProfile?
-  facilityProfile FacilityProfile?
-  documents       Document[]
-  passwordReset   PasswordReset[]
+  id                 String       @id @default(auto()) @map("_id") @db.ObjectId
+  email              String       @unique 
+  password           String
+  phone              String
+  role               Role
+  status             UserStatus   @default(PENDING)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  staffProfile       StaffProfile?
+  facilityProfile    FacilityProfile?
+  documents          Document[]
+  passwordReset      PasswordReset[]
 }
 
 model StaffProfile {
-   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId              String   @unique @db.ObjectId
-  firstname           String
-  lastname            String
-  about               String?
-  title               String
-  skills              String[]
-  profileImage        String?
-  shifts  Shift[]
-  profileSetupComplete Boolean @default(false)
-  resumeUrl           String?
-  favoriteJobPostIds  String[]
-  user                User     @relation(fields: [userId], references: [id])
-  jobApplication      JobApplication[]
+  id                             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                         String   @unique @db.ObjectId
+  firstname                      String
+  lastname                       String
+  dateOfBirth                    DateTime?
+  address                        String?
+  referredBy                     String?
+  emergencyContactName           String?
+  emergencyContactPhone          String?
+  position                       String?
+  availableStartDate             DateTime?
+  desiredPay                     Float?
+  employmentDesired              String?
+  hasBlsCertification            Boolean?
+  hasPalsCertification           Boolean?
+  hasAclsCertification           Boolean?
+  otherCertifications            String[]
+  licensure                      Licensure[]
+  hasRestrictionsOnLicense       Boolean?
+  licenseRestrictionsExplanation String?
+  hasLicenseIssues               Boolean?
+  licenseIssuesExplanation       String?
+  hasConviction                  Boolean?
+  convictionExplanation          String?
+  hasPrisonRecord                Boolean?
+  prisonRecordExplanation        String?
+  hasPendingCriminalCase         Boolean?
+  pendingCriminalCaseExplanation String?
+  awareOfMalpracticeSuit         Boolean?
+  malpracticeSuitExplanation     String?
+  references                     Reference[]
+  employmentHistory              EmploymentHistory[]
+  staffSchoolInfo                StaffSchoolInfo[]
+  electronicSignatureDisclaimer  String?
+  signatureDate                  DateTime?
+  about                          String?
+  title                          String
+  skills                         String[]
+  profileImage                   String?
+  shifts                         Shift[]
+  profileSetupComplete           Boolean   @default(false)
+  favoriteJobPostIds             String[]
+  user                           User      @relation(fields: [userId], references: [id])
+  jobApplication                 JobApplication[]
+}
 
+model StaffSchoolInfo {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  schoolName                     String
+  schoolAddress                  String
+  startDate                      DateTime
+  endDate                        DateTime
+  degreeReceived                 String
+  staffProfileId  String      @db.ObjectId
+  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
+}
+
+model Licensure {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  licensureNumber String
+  state           String
+  expirationDate  DateTime
+  staffProfileId  String      @db.ObjectId
+  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
+}
+
+model Reference {
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+  firstname        String
+  lastname         String
+  address          String
+  phone            String
+  staffProfileId   String      @db.ObjectId
+  staffProfile     StaffProfile @relation(fields: [staffProfileId], references: [id])
+}
+
+model EmploymentHistory {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  company         String
+  jobTitle        String
+  address         String
+  employedForm    DateTime
+  employedTo      DateTime
+  supervisor      String
+  payRate         Float?
+  phoneNumber     String
+  staffProfileId  String      @db.ObjectId
+  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
 }
 
 model Document {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId String  @db.ObjectId
+  userId       String   @db.ObjectId
   documentUrl  String
   name         String
   expiryDate   DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  user User @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 model Invoice {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  jobPostId String  @db.ObjectId
-  url  String
-  paid Boolean
+  jobPostId    String   @db.ObjectId
+  url          String
+  paid         Boolean
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  jobPost JobPost @relation(fields: [jobPostId], references: [id])
+  updatedAt    DateTime @default(now())
+  jobPost      JobPost  @relation(fields: [jobPostId], references: [id])
 }
 
 model PasswordReset {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  code      String
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-
-  user User @relation(fields: [userId], references: [id])
+  userId       String   @db.ObjectId
+  code         String
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  user         User     @relation(fields: [userId], references: [id])
 }
 
-
 model FacilityProfile {
-   id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String   @unique @db.ObjectId
-  name            String
-  facilityType    String
-  description     String?
-  address         String
-  city            String?
-  state           String?
-  country         String?
-  latitude        Float
-  longitude       Float
-  profileImage    String?       
-  jobPosts        JobPost[]
-  user            User     @relation(fields: [userId], references: [id])
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @unique @db.ObjectId
+  name         String
+  facilityType String
+  description  String?
+  address      String
+  city         String?
+  state        String?
+  country      String?
+  latitude     Float
+  longitude    Float
+  profileImage String?       
+  jobPosts     JobPost[]
+  user         User      @relation(fields: [userId], references: [id])
 }
 
 model JobPost {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  facilityId      String @db.ObjectId
-  title           String
-  description     String
-  scrubsProvided  Boolean
-  experience      String
-  location        String
-  latitude        Float
-  longitude       Float
-  shiftsTime          String
-  startDate       String
-  endDate         String
-  housing         String
-  procedures      String[]
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  facilityId       String        @db.ObjectId
+  title            String
+  description      String
+  scrubsProvided   Boolean
+  experience       String
+  location         String
+  latitude         Float
+  longitude        Float
+  shiftsTime       String
+  startDate        String
+  endDate          String
+  housing          String
+  procedures       String[]
   patientPopulation String
-  tags            String[]
-
-  shifts  Shift[]
-  status          JobStatus         @default(OPEN)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  applications    JobApplication[]
-  invoices        Invoice[]
-  facilityProfile FacilityProfile   @relation(fields: [facilityId], references: [id])
+  tags             String[]
+  shifts           Shift[]
+  status           JobStatus     @default(OPEN)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  applications     JobApplication[]
+  invoices         Invoice[]
+  facilityProfile  FacilityProfile @relation(fields: [facilityId], references: [id])
 }
 
 model JobApplication {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  jobId         String  @db.ObjectId
-  staffId       String  @db.ObjectId
-  createdAt       DateTime?          @default(now())
-  updatedAt       DateTime?          @updatedAt
-  status        ApplicationStatus @default(PENDING)
-  jobPost       JobPost         @relation(fields: [jobId], references: [id])
-  staffProfile  StaffProfile    @relation(fields: [staffId], references: [id])
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  jobId          String        @db.ObjectId
+  staffId        String        @db.ObjectId
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @updatedAt
+  status         ApplicationStatus @default(PENDING)
+  jobPost        JobPost       @relation(fields: [jobId], references: [id])
+  staffProfile   StaffProfile  @relation(fields: [staffId], references: [id])
 }
+
+
 
 enum Status {
   Scheduled
@@ -160,27 +232,25 @@ enum Status {
 }
 
 model Shift {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  jobPostId      String   @db.ObjectId
-  staffProfileId String   @db.ObjectId
-  start        DateTime
-  end            DateTime
-  status       Status    @default(Scheduled)
-  clockInTime  DateTime?
-  clockOutTime DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  jobPost        JobPost  @relation(fields: [jobPostId], references: [id])
-  staffProfile   StaffProfile @relation(fields: [staffProfileId], references: [id])
-  breaks         Break[]  // This line adds a list of Breaks related to the Shift
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  jobPostId       String      @db.ObjectId
+  staffProfileId  String      @db.ObjectId
+  start           DateTime
+  end             DateTime
+  status          Status      @default(Scheduled)
+  clockInTime     DateTime?
+  clockOutTime    DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  jobPost         JobPost     @relation(fields: [jobPostId], references: [id])
+  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
+  breaks          Break[]     // This line adds a list of Breaks related to the Shift
 }
 
 model Break {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  start     DateTime
-  end       DateTime?
-  shiftId   String   @db.ObjectId
-  shift     Shift    @relation(fields: [shiftId], references: [id])
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  start           DateTime
+  end             DateTime?
+  shiftId         String      @db.ObjectId
+  shift           Shift       @relation(fields: [shiftId], references: [id])
 }
-
-
