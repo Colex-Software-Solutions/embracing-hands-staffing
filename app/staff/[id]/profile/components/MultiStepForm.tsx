@@ -7,10 +7,15 @@ import Certifications from "./steps/Certifications";
 import Licensure from "./steps/Licensure";
 import BackgroundInformation from "./steps/BackgroundInformation";
 import ProfessionalReferences from "./steps/ProfessionalReferenences";
-import EmploymentHistory from "./steps/EmploymentHistory";
+import EmploymentHistorySection from "./steps/EmploymentHistory";
 import { Button } from "@/app/components/ui/button";
 import { useToast } from "@/app/components/ui/use-toast";
-import { Document, StaffProfile, StaffSchoolInfo } from "@prisma/client";
+import {
+  Document,
+  EmploymentHistory,
+  StaffProfile,
+  StaffSchoolInfo,
+} from "@prisma/client";
 import Stepper from "./steps/Stepper";
 
 interface MultiStepFormProps {
@@ -18,6 +23,7 @@ interface MultiStepFormProps {
   profile: StaffProfile | null;
   documents: Document[];
   staffSchoolInfo: StaffSchoolInfo[];
+  employmentHistory: EmploymentHistory[];
 }
 
 export interface StepComponentProps {
@@ -27,6 +33,7 @@ export interface StepComponentProps {
   documents?: Document[];
   isInitialSetup: boolean;
   staffSchoolInfo: StaffSchoolInfo[];
+  employmentHistory: EmploymentHistory[];
 }
 
 const steps = [
@@ -37,7 +44,7 @@ const steps = [
   { name: "Licensure", component: Licensure },
   { name: "Background Information", component: BackgroundInformation },
   { name: "Professional References", component: ProfessionalReferences },
-  { name: "Employment History", component: EmploymentHistory },
+  { name: "Employment History", component: EmploymentHistorySection },
 ];
 
 const MultiStepForm: React.FC<MultiStepFormProps> = ({

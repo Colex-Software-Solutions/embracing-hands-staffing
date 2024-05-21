@@ -119,7 +119,7 @@ model EmploymentHistory {
   company         String
   jobTitle        String
   address         String
-  employedForm    DateTime
+  employedFrom    DateTime
   employedTo      DateTime
   supervisor      String
   payRate         Float?

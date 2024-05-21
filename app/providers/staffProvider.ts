@@ -15,7 +15,7 @@ class StaffProvider {
   async getFullStaffProfile(userId: string) {
     return await prisma.staffProfile.findUnique({
       where: { userId },
-      include: { staffSchoolInfo: {} },
+      include: { staffSchoolInfo: {}, employmentHistory: {} },
     });
   }
 
