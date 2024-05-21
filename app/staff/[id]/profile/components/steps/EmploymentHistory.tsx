@@ -93,6 +93,12 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
       });
       return;
     }
+    let res;
+    if (isInitialSetup) {
+      res = await axios.post(`/api/staff/${userId}`, {
+        profileSetupComplete: true,
+      });
+    }
 
     toast({
       title: "Employment History Updated Successfully",
@@ -100,7 +106,7 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
     });
 
     if (isInitialSetup) {
-      onNext(employments);
+      onNext(res?.data?.profile ?? {});
     }
   };
 
@@ -290,7 +296,7 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
               className="ml-auto mt-4"
               onClick={onSubmit}
             >
-              {isSubmitting && <Loader />} Save and Next Step
+              {isSubmitting && <Loader />} Save Profile
             </Button>
           </CardFooter>
         </Card>

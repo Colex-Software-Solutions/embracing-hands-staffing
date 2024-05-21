@@ -147,7 +147,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
       });
 
       if (isInitialSetup) {
-        onNext(educations);
+        onNext({});
       }
     } catch (error: any) {
       console.error(error);

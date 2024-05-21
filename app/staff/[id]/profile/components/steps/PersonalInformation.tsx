@@ -153,11 +153,7 @@ const PersonalInformationForm = ({
     };
 
     try {
-      const res = await axios.post(`/api/staff/${userId}`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(`/api/staff/${userId}`, payload);
       setProfileImageUrl(res.data.profile.profileImage);
       setProfileImageFile(null);
       toast({
@@ -165,7 +161,7 @@ const PersonalInformationForm = ({
         variant: "default",
       });
       if (isInitialSetup) {
-        onNext(payload);
+        onNext(res.data.profile);
       }
     } catch (error: any) {
       console.error(error);

@@ -69,7 +69,7 @@ const BackgroundInformation: React.FC<BackgroundInformationProps> = ({
 
   const onSubmit = async (data: BackgroundFormValues) => {
     try {
-      await axios.post(`/api/staff/${userId}`, data);
+      const res = await axios.post(`/api/staff/${userId}`, data);
 
       toast({
         title: "Background Information Updated Successfully",
@@ -77,7 +77,7 @@ const BackgroundInformation: React.FC<BackgroundInformationProps> = ({
       });
 
       if (isInitialSetup) {
-        onNext(data);
+        onNext(res.data.profile);
       }
     } catch (error: any) {
       console.error(error);

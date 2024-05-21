@@ -68,7 +68,7 @@ const PositionDetails: React.FC<StepComponentProps> = ({
         variant: "default",
       });
       if (isInitialSetup) {
-        onNext(data);
+        onNext(res.data.profile);
       }
     } catch (error: any) {
       console.error(error);

@@ -52,6 +52,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   profile,
   documents,
   staffSchoolInfo,
+  employmentHistory,
 }) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [formData, setFormData] = useState<StaffProfile | null>(profile);
@@ -59,11 +60,18 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   const CurrentStepComponent = steps[currentStep].component;
 
-  const handleNext = (data: Partial<StaffProfile>) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      ...data,
-    }));
+  const handleNext = (data: StaffProfile) => {
+    setFormData((prevData) => {
+      if (prevData) {
+        return {
+          ...prevData,
+          ...data,
+        };
+      }
+      return data;
+    });
+    if (currentStep === steps.length - 1) {
+    }
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
@@ -110,6 +118,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
           documents={documents}
           isInitialSetup={isInitialSetup}
           staffSchoolInfo={staffSchoolInfo}
+          employmentHistory={employmentHistory}
         />
       </div>
     </div>

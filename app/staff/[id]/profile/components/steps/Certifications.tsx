@@ -126,7 +126,7 @@ const Certifications: React.FC<CertificationsProps> = ({
         });
 
       if (isInitialSetup) {
-        onNext(data);
+        onNext({});
       }
     } catch (error: any) {
       console.error(error);
