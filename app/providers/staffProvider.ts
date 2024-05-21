@@ -3,7 +3,7 @@ import { StaffProfile } from "@prisma/client";
 
 export interface UpdateStaffProfile {
   userId: string;
-  data: Omit<StaffProfile, "id" | "resumeUrl">;
+  data: Partial<StaffProfile>;
 }
 
 class StaffProvider {
@@ -12,11 +12,15 @@ class StaffProvider {
       where: { userId },
     });
   }
-
-  async createStaffProfile(data: Omit<StaffProfile, "id" | "resumeUrl">) {
-    return await prisma.staffProfile.create({
-      data,
+  async getFullStaffProfile(userId: string) {
+    return await prisma.staffProfile.findUnique({
+      where: { userId },
+      include: { staffSchoolInfo: {}, employmentHistory: {} },
     });
+  }
+
+  async createStaffProfile(data: StaffProfile) {
+    return await prisma.staffProfile.create({ data });
   }
 
   async updateStaffProfile(input: UpdateStaffProfile) {

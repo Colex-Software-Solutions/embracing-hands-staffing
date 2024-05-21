@@ -24,15 +24,16 @@ import {
   FormMessage,
   FormField,
   FormItem,
+  FormDescription,
 } from "@/app/components/ui/form";
 import { Loader, XIcon } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
-import Link from "next/link";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
-import DocumentsSection from "./DocumentsSection";
+import CustomDatePicker from "../DatePicker";
+import DocumentsSection from "../DocumentsSection";
 
 export interface GeoLocation {
   latitude: number;
@@ -43,23 +44,41 @@ const profileSchema = z.object({
   lastname: z.string().min(1, "Last Name is required"),
   about: z.string().optional(),
   title: z.string().min(1, "Title is required"),
+  dateOfBirth: z.date().refine((date) => date <= new Date(), {
+    message: "Date of Birth cannot be in the future",
+  }),
+  address: z.string().min(1, "Address is required"),
+  referredBy: z.string().min(1, "Referral Source is required"),
+  emergencyContactName: z.string().min(1, "Emergency Contact Name is required"),
+  emergencyContactPhone: z
+    .string()
+    .min(1, "Emergency Contact Phone is required"),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-const StaffProfileForm = ({
+const PersonalInformationForm = ({
   profile,
   userId,
   documents = [],
+  isInitialSetup = true,
+  onNext,
 }: {
   profile: StaffProfile | null;
   userId: string;
   documents?: Document[];
+  isInitialSetup?: boolean;
+  onNext: (data: Partial<ProfileFormValues>) => void;
 }) => {
   const defaultValues: Partial<ProfileFormValues> = {
     firstname: profile?.firstname ?? "",
     lastname: profile?.firstname ?? "",
     about: profile?.about ?? "",
     title: profile?.title ?? "",
+    dateOfBirth: profile?.dateOfBirth ?? undefined,
+    address: profile?.address ?? "",
+    referredBy: profile?.referredBy ?? "",
+    emergencyContactName: profile?.emergencyContactName ?? "",
+    emergencyContactPhone: profile?.emergencyContactPhone ?? "",
   };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -131,21 +150,19 @@ const StaffProfileForm = ({
       ...data,
       skills,
       profileImage: profileImageBase64,
-      //location,
     };
 
     try {
-      const res = await axios.post(`/api/staff/${userId}`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(`/api/staff/${userId}`, payload);
       setProfileImageUrl(res.data.profile.profileImage);
       setProfileImageFile(null);
       toast({
         title: "Profile Updated Successfully",
         variant: "default",
       });
+      if (isInitialSetup) {
+        onNext(res.data.profile);
+      }
     } catch (error: any) {
       console.error(error);
       toast({
@@ -248,6 +265,100 @@ const StaffProfileForm = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Date of Birth</FormLabel>
+
+                  <CustomDatePicker
+                    selectedDate={field.value}
+                    onDateChange={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                  />
+                  {errors.dateOfBirth && (
+                    <FormMessage>{errors.dateOfBirth.message}</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your address" {...field} />
+                  </FormControl>
+                  {errors.address && (
+                    <FormMessage>{errors.address.message}</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="referredBy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Referred By</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter referral source" {...field} />
+                  </FormControl>
+                  {errors.referredBy && (
+                    <FormMessage>{errors.referredBy.message}</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="emergencyContactName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Emergency Contact Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter emergency contact name"
+                        {...field}
+                      />
+                    </FormControl>
+                    {errors.emergencyContactName && (
+                      <FormMessage>
+                        {errors.emergencyContactName.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="emergencyContactPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Emergency Contact Phone</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="tel"
+                        placeholder="Enter emergency contact phone"
+                        {...field}
+                      />
+                    </FormControl>
+                    {errors.emergencyContactPhone && (
+                      <FormMessage>
+                        {errors.emergencyContactPhone.message}
+                      </FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="profileImage">Profile Image</Label>
@@ -359,4 +470,4 @@ const StaffProfileForm = ({
   );
 };
 
-export default StaffProfileForm;
+export default PersonalInformationForm;
