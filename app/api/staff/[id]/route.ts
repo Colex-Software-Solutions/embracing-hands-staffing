@@ -59,7 +59,6 @@ export async function POST(
         profileImage: profileUrl || null,
       };
     }
-    console.log(updatedProfileData);
     const updatedProfile = staff
       ? await staffProvider.updateStaffProfile({
           userId,
