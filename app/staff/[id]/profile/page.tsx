@@ -8,7 +8,7 @@ export default async function StaffProfileEdit({
 }: {
   params: { id: string };
 }) {
-  const profile = await staffProvider.getStaffProfile(params.id);
+  const profile = await staffProvider.getFullStaffProfile(params.id);
   const documents = await documentProvider.getDocumentsPerUser(params.id);
   const staffSchoolInfo = profile?.staffSchoolInfo ?? [];
   return (

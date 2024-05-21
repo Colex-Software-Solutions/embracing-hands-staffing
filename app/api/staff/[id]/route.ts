@@ -20,7 +20,7 @@ export async function POST(
       profileImage, // assuming profileImage is sent as a URL or base64 string
       ...profileData // other fields will be part of the profileData object
     } = body;
-
+    console.log(profileData);
     const staff = await staffProvider.getStaffProfile(userId);
     // Handle profile image upload
     let profileUrl;

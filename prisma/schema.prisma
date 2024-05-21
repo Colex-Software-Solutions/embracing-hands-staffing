@@ -61,8 +61,6 @@ model StaffProfile {
   desiredPay                     Float?
   employmentDesired              String?
   licensure                      Licensure[]
-  hasRestrictionsOnLicense       Boolean?
-  licenseRestrictionsExplanation String?
   hasLicenseIssues               Boolean?
   licenseIssuesExplanation       String?
   hasConviction                  Boolean?
@@ -109,14 +107,11 @@ model Licensure {
   staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
 }
 
-model Reference {
-  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+type Reference {
   firstname        String
   lastname         String
   address          String
   phone            String
-  staffProfileId   String      @db.ObjectId
-  staffProfile     StaffProfile @relation(fields: [staffProfileId], references: [id])
 }
 
 model EmploymentHistory {
