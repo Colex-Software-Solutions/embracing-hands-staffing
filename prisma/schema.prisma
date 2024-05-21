@@ -141,6 +141,8 @@ model Document {
 
 model Invoice {
   id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  facilityName      String
+  facilityAddress   String
   jobPostId         String           @db.ObjectId
   invoiceNumber     Int
   paid              Boolean

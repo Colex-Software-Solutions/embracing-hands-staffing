@@ -1,11 +1,10 @@
 "use client";
 import { z } from "zod";
-import { CreateInvoiceData, CreateInvoiceShift } from "../../create/page";
+import { CreateInvoiceData } from "../../create/page";
 import InvoicePreview from "./invoice-preview";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,67 +16,34 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/app/components/ui/use-toast";
 import { Button } from "@/app/components/ui/button";
 import { Plus } from "lucide-react";
-
-const shiftSchema = z.object({
-  dateOfService: z.date({
-    required_error: "Date of Service cannot be empty.",
-    invalid_type_error: "Invalid date format.",
-  }),
-  serviceDetails: z.string().min(1, {
-    message: "Service Details cannot be empty.",
-  }),
-  employee: z.string().min(1, {
-    message: "Employee cannot be empty.",
-  }),
-  in: z.string().min(1, {
-    message: "In time cannot be empty.",
-  }),
-  out: z.string().min(1, {
-    message: "Out time cannot be empty.",
-  }),
-  hoursWorked: z.number().min(0, {
-    message: "Hours Worked cannot be negative.",
-  }),
-});
-
-const createInvoiceSchema = z.object({
-  facilityName: z.string().min(1, {
-    message: "Facility name cannot be empty.",
-  }),
-  facilityAddress: z.string().min(1, {
-    message: "Address cannot be empty.",
-  }),
-  shifts: z.array(shiftSchema),
-});
-
-type CreateInvoiceFormValues = z.infer<typeof createInvoiceSchema>;
+import {
+  CreateInvoiceFormValues,
+  createInvoiceSchema,
+} from "@/app/admin/jobs/data/schema";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface CreateInvoiceFormProps {
+  jobId: string;
   createInvoiceData: CreateInvoiceData;
+  defaultValues: Partial<CreateInvoiceFormValues>;
+  setIsDisabled: Dispatch<SetStateAction<boolean>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setSubmit: Dispatch<SetStateAction<boolean>>;
+  submit: boolean;
 }
 
-const transformShifts = (shifts: CreateInvoiceShift[]) => {
-  return shifts.map((shift) => ({
-    dateOfService: shift.start,
-    serviceDetails: "N/A",
-    employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
-    in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
-    out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
-    hoursWorked:
-      (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /
-      (1000 * 60 * 60),
-  }));
-};
-
 const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
+  jobId,
   createInvoiceData,
+  defaultValues,
+  setIsDisabled,
+  setIsLoading,
+  setSubmit,
+  submit,
 }) => {
-  const defaultValues: Partial<CreateInvoiceFormValues> = {
-    facilityName: createInvoiceData.facilityName,
-    facilityAddress: createInvoiceData.facilityAddress,
-    shifts: transformShifts(createInvoiceData.shifts || []),
-  };
-
+  const router = useRouter();
   const form = useForm<CreateInvoiceFormValues>({
     resolver: zodResolver(createInvoiceSchema),
     defaultValues,
@@ -89,25 +55,45 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
     name: "shifts",
   });
 
-  function onSubmit(data: any) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  useEffect(() => {
+    console.log("form shifts", form.watch("shifts"));
+    const subscription = form.watch((value) => {
+      const validationResult = createInvoiceSchema.safeParse(value);
+      setIsDisabled(
+        !validationResult.success || form.watch("shifts").length === 0
+      );
     });
-  }
+    return () => subscription.unsubscribe();
+  }, [form.watch, setIsDisabled]);
+
+  const onSubmit = async (data: CreateInvoiceFormValues) => {
+    try {
+      console.log(data);
+      await axios.post(`/api/invoices/${jobId}`, data);
+
+      router.push(`/admin/jobs/${jobId}/invoices`);
+    } catch (error) {
+      toast({
+        title: "Failed to save invoice.",
+        variant: "destructive",
+      });
+    }
+
+    setIsLoading(false);
+    setSubmit(false);
+  };
+
+  useEffect(() => {
+    if (submit) {
+      form.handleSubmit(onSubmit)();
+    }
+  }, [submit]);
 
   return (
     <div className="flex bg-gray-100">
       <div className="w-1/3">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="p-5 space-y-2"
-          >
+          <form className="p-5 space-y-2">
             <p className="font-bold text-xl">Bill To</p>
             <FormField
               control={form.control}
@@ -148,23 +134,6 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
               {fields.map((field, index) => (
                 <div key={field.id} className="border p-2 my-2">
                   <p>Shift #{index + 1}</p>
-                  {/* <FormField
-                    control={form.control}
-                    name={`shifts.${index}.dateOfService`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Date of Service</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="bg-white"
-                            placeholder="Date of Service"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
                   <FormField
                     control={form.control}
                     name={`shifts.${index}.dateOfService`}
@@ -284,7 +253,28 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                       )}
                     />
                   </div>
-
+                  <FormField
+                    control={form.control}
+                    name={`shifts.${index}.hourlyRate`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hourly Rate</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            className="bg-white"
+                            placeholder="Hourly Rate"
+                            value={field.value}
+                            onChange={(e) =>
+                              field.onChange(parseFloat(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <Button
                     onClick={() => remove(index)}
                     variant="destructive"
@@ -297,6 +287,7 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
               <Button
                 variant="secondary"
                 className="w-full"
+                type="button"
                 onClick={() =>
                   append({
                     dateOfService: new Date(),
@@ -305,14 +296,13 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                     in: "",
                     out: "",
                     hoursWorked: 0,
+                    hourlyRate: 0,
                   })
                 }
               >
                 <Plus className="text-primary" />
               </Button>
             </div>
-
-            {/* <Button type="submit">Update profile</Button> */}
           </form>
         </Form>
       </div>
@@ -321,7 +311,7 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
           facilityName={form.watch("facilityName")}
           facilityAddress={form.watch("facilityAddress")}
           shifts={form.watch("shifts")}
-          createInvoiceData={createInvoiceData}
+          invoiceNumber={defaultValues.invoiceNumber || 0}
         />
       </div>
     </div>

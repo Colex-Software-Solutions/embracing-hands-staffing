@@ -169,3 +169,10 @@ export function getMotionVariants(startFrom?: "left" | "right", delay?: number) 
     exit: { opacity: 0, x: 200 },
   };
 }
+
+export function formatInvoiceNumber(number: number): string {
+  if (number < 1000) {
+    return number.toString().padStart(4, '0');
+  }
+  return number.toString();
+}

@@ -1,7 +1,13 @@
 import React from "react";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatInvoiceNumber } from "@/lib/utils";
 
-const InvoiceDateAndNumber: React.FC = () => {
+interface InvoiceDateAndNumberProps {
+  invoiceNumber: number;
+}
+
+const InvoiceDateAndNumber: React.FC<InvoiceDateAndNumberProps> = ({
+  invoiceNumber,
+}) => {
   return (
     <div className="overflow-x-auto mt-5">
       <table className="min-w-full border border-gray-200">
@@ -27,7 +33,7 @@ const InvoiceDateAndNumber: React.FC = () => {
               {formatDate(new Date())}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              0001
+              #{formatInvoiceNumber(invoiceNumber)}
             </td>
           </tr>
         </tbody>

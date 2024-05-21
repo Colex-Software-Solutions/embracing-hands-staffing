@@ -28,7 +28,7 @@ const InvoiceDetailsTable: React.FC<InvoiceDetailsTableProps> = ({
     in: shift.in,
     out: shift.out,
     hoursWorked: shift.hoursWorked.toFixed(2),
-    hourlyRate: "",
+    hourlyRate: shift.hourlyRate >= 0 ? shift.hourlyRate : 0,
   }));
 
   return (

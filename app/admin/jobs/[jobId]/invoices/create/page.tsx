@@ -1,7 +1,8 @@
 import { jobPostProvider } from "@/app/providers/jobPostProvider";
-import CreateInvoiceBanner from "../components/create-invoice/create-invoice-banner";
-import CreateInvoiceForm from "../components/create-invoice/create-invoice-form";
-import { differenceInHours } from "date-fns";
+import CreateForm from "../components/create-invoice/create-form";
+import { CreateInvoiceFormValues } from "../../../data/schema";
+import { createInvoiceSchema } from "../../../data/schema";
+import { invoiceProvider } from "@/app/providers/invoiceProvider";
 
 interface CreateInvoicePageProps {
   params: {
@@ -54,9 +55,29 @@ async function getCreateInvoiceData(id: string) {
   }
 }
 
+const transformShifts = (shifts: CreateInvoiceShift[]) => {
+  return shifts.map((shift) => ({
+    dateOfService: shift.start,
+    serviceDetails: "N/A",
+    employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
+    in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
+    out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
+    hourlyRate: 0,
+    hoursWorked: parseFloat(
+      (
+        (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /
+        (1000 * 60 * 60)
+      ).toFixed(2)
+    ),
+  }));
+};
+
 const CreateInvoicePage = async ({ params }: CreateInvoicePageProps) => {
   const { jobId } = params;
   const createInvoiceData = await getCreateInvoiceData(jobId);
+  const newInvoiceNumber = await invoiceProvider.getNewInvoiceNumberByJobPostId(
+    jobId
+  );
 
   if (!createInvoiceData) {
     return (
@@ -65,12 +86,21 @@ const CreateInvoicePage = async ({ params }: CreateInvoicePageProps) => {
       </div>
     );
   }
-  console.log(createInvoiceData.shifts);
+
+  const defaultValues: Partial<CreateInvoiceFormValues> = {
+    facilityName: createInvoiceData.facilityName,
+    facilityAddress: createInvoiceData.facilityAddress,
+    invoiceNumber: newInvoiceNumber,
+    shifts: transformShifts(createInvoiceData.shifts || []),
+  };
 
   return (
     <div className="flex-col w-full">
-      <CreateInvoiceBanner jobId={jobId} />
-      <CreateInvoiceForm createInvoiceData={createInvoiceData} />
+      <CreateForm
+        jobId={jobId}
+        defaultValues={defaultValues}
+        createInvoiceData={createInvoiceData}
+      />
     </div>
   );
 };

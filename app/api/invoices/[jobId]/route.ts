@@ -3,38 +3,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadFile } from "@/app/providers/S3Provider";
 import prisma from "@/db/prisma";
+import { invoiceProvider } from "@/app/providers/invoiceProvider";
 
 export async function POST(
   req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
   try {
-    const formData = await req.formData();
-    const invoiceFile = formData.get("invoice") as File;
-
-    if (!invoiceFile) {
-      return NextResponse.json(
-        { message: "Invoice file is required." },
-        { status: 400 }
-      );
-    }
-
-    const fileName = `invoice-${params.jobId}-${Date.now()}`;
-    const contentType = invoiceFile.type || "application/pdf";
-
-    const invoiceUrl = await uploadFile(
-      Buffer.from(await invoiceFile.arrayBuffer()),
-      fileName,
-      contentType
-    );
-
+    const data = await req.json();
+    const newInvoiceNumber = await invoiceProvider.getNewInvoiceNumberByJobPostId(params.jobId)
+    console.log("Test")
+console.log({newInvoiceNumber})
     const newInvoice = await prisma.invoice.create({
       data: {
         jobPostId: params.jobId,
-        url: invoiceUrl,
+        facilityName: data.facilityName,
+        facilityAddress: data.facilityAddress,
         paid: false,
+        invoiceNumber: newInvoiceNumber,
+        items: data.shifts
       },
     });
+    console.log("invoice file is", params.jobId, newInvoice)
 
     return NextResponse.json({ success: true, invoice: newInvoice });
   } catch (error: any) {

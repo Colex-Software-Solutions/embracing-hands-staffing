@@ -2,23 +2,33 @@ import React from "react";
 import InvoiceDateAndNumber from "./invoice-date-and-number";
 import BillTable from "../../bill-table";
 import InvoiceDetailsTable from "../../invoice-details-table";
-import { CreateInvoiceData } from "../../create/page";
 
 interface InvoicePreviewProps {
   facilityName: string;
   facilityAddress: string;
+  invoiceNumber: number;
   shifts: any[];
-  createInvoiceData: CreateInvoiceData;
 }
 
 const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   facilityName,
   facilityAddress,
   shifts,
-  createInvoiceData,
+  invoiceNumber,
 }) => {
+  const getTotalCost = () => {
+    const totalCost: number = shifts.reduce((total, shift) => {
+      const hourlyRate = shift.hourlyRate >= 0 ? shift.hourlyRate : 0;
+      const hoursWorked = shift.hoursWorked >= 0 ? shift.hoursWorked : 0;
+
+      return total + hourlyRate * hoursWorked;
+    }, 0);
+
+    return totalCost.toFixed(2);
+  };
+
   return (
-    <div className="flex-col bg-white shadow-lg m-5 p-3">
+    <div className="flex-col bg-white m-5 p-3">
       <div className="flex justify-between">
         <div className="flex-col">
           <p className="text-xl text-primary">
@@ -32,7 +42,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
         </div>
         <div className="flex-col">
           <p className="text-3xl text-primary font-bold">Invoice</p>
-          <InvoiceDateAndNumber />
+          <InvoiceDateAndNumber invoiceNumber={invoiceNumber} />
         </div>
       </div>
       <div className="flex">
@@ -43,7 +53,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
       </div>
       <div className="flex justify-end mt-3">
         <div className="border border-primary p-2">
-          <p className="text-primary mr-5 text-3xl">Total: ${1000.0}</p>
+          <p className="text-primary mr-5 text-3xl">Total: ${getTotalCost()}</p>
         </div>
       </div>
     </div>

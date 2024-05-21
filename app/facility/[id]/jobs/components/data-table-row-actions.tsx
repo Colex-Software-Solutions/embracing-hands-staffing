@@ -53,6 +53,10 @@ export function DataTableRowActions<TData>({
           {" "}
           <DropdownMenuItem>View Applicants</DropdownMenuItem>
         </Link>
+        <Link href={`facility/${facilityId}/jobs/${id}/invoices`}>
+          {" "}
+          <DropdownMenuItem>Invoices</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <Link href={`facility/${facilityId}/applications/jobPost/${id}`}>
           {" "}
