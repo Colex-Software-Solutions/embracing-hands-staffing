@@ -9,6 +9,10 @@ interface FacilityInvoicesPageProps {
   };
 }
 
+interface InvoiceJobPost {
+  title: string;
+}
+
 export interface Invoice {
   id: string;
   facillityName: string;
@@ -17,7 +21,14 @@ export interface Invoice {
   paid: boolean;
   createdAt: string;
   items: any;
+  jobPost: InvoiceJobPost;
 }
+
+// const handlePaymentStatusChange = async (invoiceId: string, paid: boolean) => {
+//   const updatedInvoices = await invoiceProvider.updateInvoicePaymentStatus(invoiceId, paid)
+
+//   return updatedInvoices;
+// };
 
 const FacilityInvoicesPage = async ({ params }: FacilityInvoicesPageProps) => {
   const { jobId } = params;
@@ -26,14 +37,17 @@ const FacilityInvoicesPage = async ({ params }: FacilityInvoicesPageProps) => {
   )) as Invoice[];
 
   return (
-    <div>
-      <h1 className="font-bold text-2xl">Invoices</h1>
-      <Link href={`/admin/jobs/${jobId}/invoices/create`}>
-        <Button variant="default" className="mt-3">
-          New Invoice
-        </Button>
-      </Link>
-      <InvoiceTable invoices={invoices} />
+    <div className="w-full p-5">
+      <div className="flex justify-between items-center">
+        <h1 className="font-bold text-2xl">Invoices</h1>
+        <Link href={`/admin/jobs/${jobId}/invoices/create`}>
+          <Button variant="default" className="mt-3">
+            New Invoice
+          </Button>
+        </Link>
+      </div>
+
+      <InvoiceTable initialInvoices={invoices} adminMode={true} />
     </div>
   );
 };

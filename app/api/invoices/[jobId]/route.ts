@@ -1,7 +1,6 @@
 // pages/api/invoices/[jobId].ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { uploadFile } from "@/app/providers/S3Provider";
 import prisma from "@/db/prisma";
 import { invoiceProvider } from "@/app/providers/invoiceProvider";
 
@@ -24,11 +23,10 @@ console.log({newInvoiceNumber})
         items: data.shifts
       },
     });
-    console.log("invoice file is", params.jobId, newInvoice)
 
     return NextResponse.json({ success: true, invoice: newInvoice });
   } catch (error: any) {
-    console.error("Failed to upload invoice:", error);
+    console.error("Failed to create invoice:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
