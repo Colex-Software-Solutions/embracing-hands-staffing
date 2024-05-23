@@ -11,8 +11,7 @@ export async function POST(
   try {
     const data = await req.json();
     const newInvoiceNumber = await invoiceProvider.getNewInvoiceNumberByJobPostId(params.jobId)
-    console.log("Test")
-console.log({newInvoiceNumber})
+    
     const newInvoice = await prisma.invoice.create({
       data: {
         jobPostId: params.jobId,

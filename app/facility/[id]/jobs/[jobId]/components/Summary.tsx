@@ -167,8 +167,6 @@ const Summary = ({
             ))}
           </TableBody>
         </Table>
-        {/* View Invoices  */}
-        <InvoiceViewingSection invoices={invoices} />
         {/* Job Summary Section */}
         <div className="my-4 p-4 border-t-2">
           <h3 className="text-2xl font-semibold">Overall Job Summary</h3>

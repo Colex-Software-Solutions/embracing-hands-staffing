@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { Toaster } from "@/app/components/ui/toaster";
-import { JobPost, JobStatus } from "@prisma/client";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Invoice } from "../../jobs/[jobId]/invoices/page";
@@ -25,7 +23,6 @@ const InvoicesManager = ({ initialInvoices }: IInvoicessManager) => {
         : invoice
     ) as AdminTableInvoice[];
 
-    console.log("updates", newInvoices);
     setInvoices(newInvoices);
   };
 
@@ -43,7 +40,6 @@ const InvoicesManager = ({ initialInvoices }: IInvoicessManager) => {
         data={invoices as any[]}
         columns={columns({ handleInvoiceUpdate, handleDeleteInvoice })}
       />
-      <Toaster />
     </>
   );
 };

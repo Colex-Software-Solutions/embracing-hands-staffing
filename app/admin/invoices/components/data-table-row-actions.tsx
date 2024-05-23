@@ -9,9 +9,6 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@/app/components/ui/dropdown-menu";
-
-import { JobPost, JobStatus } from "@prisma/client";
-import { ViewFacilityUserDetailsModal } from "../../components/modals/view-facility-user-details-modal";
 import { ViewInvoiceModal } from "../../components/modals/view-invoice-modal";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -22,8 +19,8 @@ import { DeleteInvoiceModal } from "../../components/modals/delete-invoice-modal
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
-  handleInvoiceUpdate?: (newInvoice: AdminTableInvoice) => void;
-  handleDeleteInvoice?: (invoiceId: string) => void;
+  handleInvoiceUpdate: (newInvoice: AdminTableInvoice) => void;
+  handleDeleteInvoice: (invoiceId: string) => void;
 }
 
 export function DataTableRowActions<TData>({
@@ -42,20 +39,16 @@ export function DataTableRowActions<TData>({
     });
 
     if (newInvoiceResponse.data.success && newInvoiceResponse.data.invoice) {
-      console.log("new invoice", newInvoiceResponse.data.invoice);
       handleInvoiceUpdate(newInvoiceResponse.data.invoice as Invoice);
     }
   };
 
   const fetchInvoice = async (invoiceId: string) => {
-    console.log("fetch");
     const response = (await axios.get(
       `/api/invoices/invoice/${invoiceId}`
     )) as Invoice;
-    if (response.data.success) {
-      if (response.data.invoice) {
-        setInvoice(response.data.invoice);
-      }
+    if (response.data.success && response.data.invoice) {
+      setInvoice(response.data.invoice);
     }
   };
 

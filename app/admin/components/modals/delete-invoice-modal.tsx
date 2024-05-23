@@ -29,13 +29,14 @@ export function DeleteInvoiceModal({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="">
+      <DialogContent>
         Permanently delete invoice?
         <DialogFooter>
           <Button
             type="submit"
             variant="destructive"
             onClick={() => deleteInvoice(invoice.id)}
+            disabled={isLoading}
           >
             Delete
           </Button>

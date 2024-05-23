@@ -22,12 +22,12 @@ const FacilityInvoicesPage = async ({ params }: FacilityInvoicesPageProps) => {
   const { jobId } = params;
   const invoices = (await invoiceProvider.getInvoiceByJobPostId(
     jobId
-  )) as Invoice[];
+  )) as unknown as Invoice[];
 
   return (
     <div>
       <h1 className="font-bold text-2xl">Invoices</h1>
-      <InvoiceTable invoices={invoices} />
+      <InvoiceTable initialInvoices={invoices} />
     </div>
   );
 };

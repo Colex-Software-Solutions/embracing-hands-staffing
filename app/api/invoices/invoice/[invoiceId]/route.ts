@@ -17,11 +17,8 @@ export async function GET(
 
     const invoice = await invoiceProvider.getInvoiceById(invoiceId);
 
-    console.log({invoice})
-
     return NextResponse.json({ success: true, invoice });
   } catch (error: any) {
-    console.error("Failed to fetch invoice:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -44,7 +41,6 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("Failed to delete invoice:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -56,7 +56,6 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
   });
 
   useEffect(() => {
-    console.log("form shifts", form.watch("shifts"));
     const subscription = form.watch((value) => {
       const validationResult = createInvoiceSchema.safeParse(value);
       setIsDisabled(

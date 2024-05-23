@@ -25,17 +25,11 @@ export interface Invoice {
   jobPost: InvoiceJobPost;
 }
 
-// const handlePaymentStatusChange = async (invoiceId: string, paid: boolean) => {
-//   const updatedInvoices = await invoiceProvider.updateInvoicePaymentStatus(invoiceId, paid)
-
-//   return updatedInvoices;
-// };
-
 const FacilityInvoicesPage = async ({ params }: FacilityInvoicesPageProps) => {
   const { jobId } = params;
   const invoices = (await invoiceProvider.getInvoiceByJobPostId(
     jobId
-  )) as Invoice[];
+  )) as unknown as Invoice[];
 
   return (
     <div className="w-full p-5">

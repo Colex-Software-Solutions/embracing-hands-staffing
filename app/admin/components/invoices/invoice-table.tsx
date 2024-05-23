@@ -11,8 +11,7 @@ import {
 } from "@/app/components/ui/dropdown-menu";
 import { format } from "date-fns";
 import { ChevronDown, Trash2 } from "lucide-react";
-import { useCallback, useState } from "react";
-import { invoiceProvider } from "@/app/providers/invoiceProvider";
+import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
 import { DeleteInvoiceModal } from "../modals/delete-invoice-modal";
@@ -76,8 +75,6 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
         title: "Invoice deleted!",
       });
     } catch (error) {
-      console.log("Test");
-
       console.log(error);
       toast({
         variant: "destructive",
@@ -164,7 +161,6 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                     invoice={invoice}
                     isLoading={isLoading}
                   >
-                    {" "}
                     <button className=" text-red-600" disabled={isLoading}>
                       <Trash2 width={20} />
                     </button>
