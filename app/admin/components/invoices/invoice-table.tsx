@@ -1,6 +1,4 @@
 "use client";
-import Link from "next/link";
-import { Invoice } from "../../jobs/[jobId]/invoices/page";
 import { formatInvoiceNumber } from "@/lib/utils";
 import { ViewInvoiceModal } from "../modals/view-invoice-modal";
 import {
@@ -15,6 +13,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
 import { DeleteInvoiceModal } from "../modals/delete-invoice-modal";
+import { Invoice } from "../../jobs/[jobId]/invoices/page";
 
 interface InvoiceTableProps {
   initialInvoices: Invoice[];

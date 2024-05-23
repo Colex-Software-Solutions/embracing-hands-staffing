@@ -18,7 +18,6 @@ import { ShiftsSummary } from "../page";
 import SummaryStatsCard from "./SummaryStatsCard";
 import { formatDateTime } from "@/lib/utils";
 import { Invoice, JobPost } from "@prisma/client";
-import InvoiceViewingSection from "./InvoiceViewingSection";
 
 const Summary = ({
   shifts,

@@ -1,7 +1,5 @@
 import InvoiceTable from "@/app/admin/components/invoices/invoice-table";
-import { Button } from "@/app/components/ui/button";
 import { invoiceProvider } from "@/app/providers/invoiceProvider";
-import Link from "next/link";
 
 interface FacilityInvoicesPageProps {
   params: {
@@ -16,6 +14,9 @@ export interface Invoice {
   invoiceNumber: number;
   paid: boolean;
   createdAt: string;
+  items: any;
+  jobPost: any;
+  data: any;
 }
 
 const FacilityInvoicesPage = async ({ params }: FacilityInvoicesPageProps) => {

@@ -39,7 +39,7 @@ export function DataTableRowActions<TData>({
     });
 
     if (newInvoiceResponse.data.success && newInvoiceResponse.data.invoice) {
-      handleInvoiceUpdate(newInvoiceResponse.data.invoice as Invoice);
+      handleInvoiceUpdate(newInvoiceResponse.data.invoice);
     }
   };
 
