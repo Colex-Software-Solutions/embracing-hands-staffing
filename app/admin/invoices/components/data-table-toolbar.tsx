@@ -10,12 +10,10 @@ import { paidOptions } from "../data/schema";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  facilityNames: string[];
 }
 
 export function DataTableToolbar<TData>({
   table,
-  facilityNames,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 

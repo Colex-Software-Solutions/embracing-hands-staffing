@@ -14,7 +14,8 @@ import { Trash2, XIcon } from "lucide-react";
 import axios from "axios";
 
 interface DeleteInvoiceModalProps {
-  isLoading: boolean;
+  children: React.ReactNode;
+  isLoading?: boolean;
   deleteInvoice: (invoiceId: string) => Promise<void>;
   invoice: Invoice;
 }
@@ -23,14 +24,11 @@ export function DeleteInvoiceModal({
   deleteInvoice,
   invoice,
   isLoading,
+  children,
 }: DeleteInvoiceModalProps) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <button className=" text-red-600" disabled={isLoading}>
-          <Trash2 width={20} />
-        </button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="">
         Permanently delete invoice?
         <DialogFooter>

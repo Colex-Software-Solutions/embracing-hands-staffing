@@ -2,15 +2,23 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class InvoiceProvider {
+  async getInvoiceById(id: string) {
+    return await prisma.invoice.findFirst({
+      where: {
+        id,
+      },
+    });
+  }
+
   async getAllInvoices() {
     return await prisma.invoice.findMany({
       include: {
         jobPost: {
           select: {
-            title: true
-          }
-        }
-      }
+            title: true,
+          },
+        },
+      },
     });
   }
 
@@ -47,11 +55,11 @@ class InvoiceProvider {
         id: invoiceId,
       },
     });
-  
+
     return deletedInvoice;
   }
 }
 
-export const revalidate = 'no-store';
+export const revalidate = "no-store";
 
 export const invoiceProvider = new InvoiceProvider();

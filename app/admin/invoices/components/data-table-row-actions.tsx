@@ -5,26 +5,86 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from "@/app/components/ui/dropdown-menu";
 
 import { JobPost, JobStatus } from "@prisma/client";
-import Link from "next/link";
 import { ViewFacilityUserDetailsModal } from "../../components/modals/view-facility-user-details-modal";
+import { ViewInvoiceModal } from "../../components/modals/view-invoice-modal";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Invoice } from "../../jobs/[jobId]/invoices/page";
+import { AdminTableInvoice } from "../page";
+import { useToast } from "@/app/components/ui/use-toast";
+import { DeleteInvoiceModal } from "../../components/modals/delete-invoice-modal";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
-  handleJobPostUpdate: (newJob: JobPost) => void;
-  handleJobStatusUpdate: (id: string, status: JobStatus) => void;
+  handleInvoiceUpdate?: (newInvoice: AdminTableInvoice) => void;
+  handleDeleteInvoice?: (invoiceId: string) => void;
 }
 
 export function DataTableRowActions<TData>({
   row,
-  handleJobPostUpdate,
-  handleJobStatusUpdate,
+  handleInvoiceUpdate,
+  handleDeleteInvoice,
 }: DataTableRowActionsProps<TData>) {
+  const { toast } = useToast();
+  const [invoice, setInvoice] = useState<AdminTableInvoice | null>(null);
   const id = row.getValue("id") as string;
+
+  const updatePaymentStatus = async (paid: boolean) => {
+    const newInvoiceResponse = await axios.put("/api/invoices/", {
+      invoiceId: id,
+      paid,
+    });
+
+    if (newInvoiceResponse.data.success && newInvoiceResponse.data.invoice) {
+      console.log("new invoice", newInvoiceResponse.data.invoice);
+      handleInvoiceUpdate(newInvoiceResponse.data.invoice as Invoice);
+    }
+  };
+
+  const fetchInvoice = async (invoiceId: string) => {
+    console.log("fetch");
+    const response = (await axios.get(
+      `/api/invoices/invoice/${invoiceId}`
+    )) as Invoice;
+    if (response.data.success) {
+      if (response.data.invoice) {
+        setInvoice(response.data.invoice);
+      }
+    }
+  };
+
+  const deleteInvoice = async (invoiceId: string) => {
+    try {
+      const response = await axios.delete(`/api/invoices/invoice/${invoiceId}`);
+
+      if (response.data.success) {
+        handleDeleteInvoice(invoiceId);
+
+        toast({
+          variant: "default",
+          title: "Invoice deleted!",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to delete invoice",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!invoice) {
+      fetchInvoice(id);
+    }
+  }, []);
 
   return (
     <DropdownMenu>
@@ -37,20 +97,50 @@ export function DataTableRowActions<TData>({
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-[160px]">
-        <Link href={`admin/jobs/${id}`}>
-          {" "}
-          <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
-        </Link>
-        <Link href={`/admin/jobs/${id}/invoices`} className="w-full">
+        {invoice && (
+          <ViewInvoiceModal invoice={invoice}>
+            <Button
+              className="w-full border-0 justify-start flex pl-2 font-normal"
+              variant="outline"
+            >
+              View Invoice
+            </Button>
+          </ViewInvoiceModal>
+        )}
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="text-sm">
+            Update Payment Status
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <Button
+              onClick={() => updatePaymentStatus(true)}
+              className="w-full border-0 justify-start flex pl-2 font-normal hover:bg-green-600 hover:text-white"
+              variant="outline"
+            >
+              Paid
+            </Button>
+            <Button
+              onClick={() => updatePaymentStatus(false)}
+              className="w-full border-0 justify-start flex pl-2 font-normal hover:bg-red-600 hover:text-white"
+              variant="outline"
+            >
+              Unpaid
+            </Button>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DeleteInvoiceModal
+          deleteInvoice={deleteInvoice}
+          invoice={invoice as Invoice}
+        >
           <Button
-            className="w-full border-0 justify-start flex pl-2 font-normal"
+            className="w-full border-0 justify-start flex pl-2 font-normal hover:bg-red-600 hover:text-white"
             variant="outline"
           >
-            Invoices
+            Delete Invoice
           </Button>
-        </Link>
-        <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
+        </DeleteInvoiceModal>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -5,14 +5,16 @@ import { InvoiceSchema, paidOptions } from "../data/schema";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { JobPost, JobStatus } from "@prisma/client";
 import { CheckCircle, XCircle } from "lucide-react";
+import { Invoice } from "../../jobs/[jobId]/invoices/page";
+import { AdminTableInvoice } from "../page";
 
 interface JobColumnProps {
-  handleJobPostUpdate: (newJob: JobPost) => void;
-  handleJobStatusUpdate: (id: string, status: JobStatus) => void;
+  handleInvoiceUpdate: (newInvoice: AdminTableInvoice) => void;
+  handleDeleteInvoice: (invoiceId: string) => void;
 }
 export const columns = ({
-  handleJobPostUpdate,
-  handleJobStatusUpdate,
+  handleInvoiceUpdate,
+  handleDeleteInvoice,
 }: JobColumnProps): ColumnDef<InvoiceSchema>[] => [
   {
     accessorKey: "id",
@@ -56,7 +58,7 @@ export const columns = ({
         </div>
       );
     },
-    filterFn: (row, id, value) => {
+    filterFn: (row: any, id: string, value: string) => {
       return value
         ? row
             .getValue(id)
@@ -82,8 +84,8 @@ export const columns = ({
     cell: ({ row }) => (
       <DataTableRowActions
         row={row}
-        handleJobPostUpdate={handleJobPostUpdate}
-        handleJobStatusUpdate={handleJobStatusUpdate}
+        handleInvoiceUpdate={handleInvoiceUpdate}
+        handleDeleteInvoice={handleDeleteInvoice}
       />
     ),
   },

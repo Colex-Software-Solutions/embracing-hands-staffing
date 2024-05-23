@@ -27,7 +27,6 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-// import { FacilityJobPost } from "../page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -58,11 +57,7 @@ export function DataTable<TData, TValue>({
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
-    // onColumnFiltersChange: setColumnFilters,
-    onColumnFiltersChange: (val) => {
-      console.log("Value is dhan", val);
-      setColumnFilters(val);
-    },
+    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -71,17 +66,10 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-  React.useEffect(() => {
-    console.log("filters are cnow", columnFilters, table.getState());
-  }, [columnFilters]);
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar
-        table={table}
-        // facilityNames={uniqueFacilityNames(data as FacilityJobPost[])}
-        facilityNames={[]}
-      />
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

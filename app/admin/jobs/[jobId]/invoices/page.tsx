@@ -14,6 +14,7 @@ interface InvoiceJobPost {
 }
 
 export interface Invoice {
+  data: any;
   id: string;
   facillityName: string;
   facilityAddress: string;

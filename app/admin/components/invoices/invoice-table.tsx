@@ -163,7 +163,12 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                     deleteInvoice={deleteInvoice}
                     invoice={invoice}
                     isLoading={isLoading}
-                  />
+                  >
+                    {" "}
+                    <button className=" text-red-600" disabled={isLoading}>
+                      <Trash2 width={20} />
+                    </button>
+                  </DeleteInvoiceModal>
                 </td>
               </tr>
             ))}

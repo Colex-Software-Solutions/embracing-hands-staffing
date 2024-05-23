@@ -8,7 +8,6 @@ import {
 } from "../../../components/ui/dialog";
 import InvoicePreview from "../../jobs/[jobId]/invoices/components/create-invoice/invoice-preview";
 import { Invoice } from "../../jobs/[jobId]/invoices/page";
-import { XIcon } from "lucide-react";
 
 interface ViewInvoiceModalProps {
   children: React.ReactNode;
