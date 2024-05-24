@@ -31,20 +31,31 @@ class InvoiceProvider {
   }
 
   async getNewInvoiceNumberByJobPostId(jobPostId: string) {
+    const jobPost = await prisma.jobPost.findUnique({
+      where: { id: jobPostId },
+      select: { facilityId: true }
+    });
+  
+    if (!jobPost) {
+      throw new Error("Job post not found");
+    }
+  
     const latestInvoice = await prisma.invoice.findMany({
       where: {
-        jobPostId,
+        jobPost: {
+          facilityId: jobPost.facilityId,
+        },
       },
       orderBy: {
         invoiceNumber: "desc",
       },
-      take: 1,
+      take: 1
     });
-
+  
     if (latestInvoice.length === 0) {
       return 0; // Return 0 if no invoices are found
     }
-
+  
     return latestInvoice[0].invoiceNumber + 1;
   }
 
