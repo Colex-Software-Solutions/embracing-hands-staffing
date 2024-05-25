@@ -10,8 +10,13 @@ interface RequestBody {
 export async function POST(request: Request) {
   const body: RequestBody = await request.json();
 
+  console.log("Received login request for username:", body.username);
+
+
   const user = await userProvider.getUserByEmail(body.username);
 
+  console.log("user is", user)
+  
   if (user && (await bcrypt.compare(body.password, user.password))) {
     const { password, ...userWithoutPass } = user;
     const accessToken = signJwtAccessToken(userWithoutPass);
