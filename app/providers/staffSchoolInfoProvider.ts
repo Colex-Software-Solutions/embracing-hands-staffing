@@ -13,4 +13,10 @@ export const staffSchoolInfoProvider = {
   ): Promise<StaffSchoolInfo> {
     return prisma.staffSchoolInfo.create({ data });
   },
+
+  async deleteEducation(id: string): Promise<void> {
+    await prisma.staffSchoolInfo.delete({
+      where: { id },
+    });
+  },
 };

@@ -55,17 +55,13 @@ const ProfessionalReferences: React.FC<StepComponentProps> = ({
   const { errors, isSubmitting } = form.formState;
 
   const onSubmit = async (data: ReferenceFormValues) => {
-    console.log(data);
     try {
-      await axios.post(`/api/staff/${userId}`, data);
+      const res = await axios.post(`/api/staff/${userId}`, data);
       toast({
         title: "References Updated Successfully",
         variant: "default",
       });
-
-      if (isInitialSetup) {
-        onNext(data);
-      }
+      onNext(res.data.profile);
     } catch (error: any) {
       console.error(error);
       toast({

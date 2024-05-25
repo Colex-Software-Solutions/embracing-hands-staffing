@@ -75,10 +75,7 @@ const BackgroundInformation: React.FC<BackgroundInformationProps> = ({
         title: "Background Information Updated Successfully",
         variant: "default",
       });
-
-      if (isInitialSetup) {
-        onNext(res.data.profile);
-      }
+      onNext(res.data.profile);
     } catch (error: any) {
       console.error(error);
       toast({
@@ -374,7 +371,8 @@ const BackgroundInformation: React.FC<BackgroundInformationProps> = ({
           </CardContent>
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
-              {isSubmitting && <Loader />}Save and Next Step
+              {isSubmitting && <Loader />}{" "}
+              {isInitialSetup ? "Save And Next Step" : "save"}
             </Button>
           </CardFooter>
         </Card>

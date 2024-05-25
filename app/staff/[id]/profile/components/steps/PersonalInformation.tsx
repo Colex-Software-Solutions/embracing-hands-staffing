@@ -149,6 +149,7 @@ const PersonalInformationForm = ({
     const payload = {
       ...data,
       skills,
+      userId,
       profileImage: profileImageBase64,
     };
 
@@ -160,9 +161,7 @@ const PersonalInformationForm = ({
         title: "Profile Updated Successfully",
         variant: "default",
       });
-      if (isInitialSetup) {
-        onNext(res.data.profile);
-      }
+      onNext(res.data.profile);
     } catch (error: any) {
       console.error(error);
       toast({
@@ -192,7 +191,7 @@ const PersonalInformationForm = ({
             <h1 className="text-2xl text-secondary-foreground lg:text-3xl font-bold">
               Your Profile Information
             </h1>
-            {profile === null && (
+            {isInitialSetup && (
               <Alert variant={"destructive"}>
                 Please Complete Your profile setup in order to access the
                 platform
@@ -444,7 +443,7 @@ const PersonalInformationForm = ({
               <Label htmlFor="location">Location</Label>
             </div>
           </CardContent>
-          {profile === null && (
+          {/* {isInitialSetup && (
             <Alert className="m-4 w-[90%] text-lg" variant={"destructive"}>
               Please Upload the following documents along with any additional
               supporting documents:
@@ -455,13 +454,14 @@ const PersonalInformationForm = ({
               <li>- Pediatric Advanced Life Support (PALS) </li>
               <li>- SSC</li>
             </Alert>
-          )}
+          )} */}
           {/* Documents Section */}
-          <DocumentsSection documents={documents} userId={userId} edit={true} />
+          {/* <DocumentsSection documents={documents} userId={userId} edit={true} /> */}
 
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
-              {isSubmitting && <Loader />}Save
+              {isSubmitting && <Loader />}
+              {isInitialSetup ? "Save And Next Step" : "save"}
             </Button>
           </CardFooter>
         </Card>

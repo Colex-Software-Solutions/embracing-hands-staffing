@@ -6,7 +6,6 @@ import {
   PopoverContent,
 } from "@/app/components/ui/popover";
 import { Button } from "@/app/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
@@ -22,15 +21,22 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   disabled,
 }) => {
   const [month, setMonth] = useState<Date>(selectedDate || new Date());
+  const [isOpen, setIsOpen] = useState(false);
+
   const currentYear = new Date().getFullYear();
   const years = Array.from(
-    { length: currentYear - 1899 },
-    (_, i) => currentYear - i
+    { length: currentYear - 1899 + 10 },
+    (_, i) => currentYear - i + 10
   );
   const months = Array.from({ length: 12 }, (_, i) => i);
 
+  const handleDateChange = (date: Date | undefined) => {
+    onDateChange(date);
+    setIsOpen(false);
+  };
+
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -78,7 +84,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         <Calendar
           mode="single"
           selected={selectedDate}
-          onSelect={onDateChange}
+          onSelect={handleDateChange}
           month={month}
           onMonthChange={setMonth}
           disabled={disabled}

@@ -24,10 +24,8 @@ import {
   FormField,
   FormItem,
 } from "@/app/components/ui/form";
-import { Loader, TrashIcon, XIcon } from "lucide-react";
-import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
-import { Switch } from "@/app/components/ui/switch";
-import Spinner from "@/app/components/loading/spinner";
+import { Loader, TrashIcon } from "lucide-react";
+
 import CustomDatePicker from "../DatePicker";
 import { StepComponentProps } from "../MultiStepForm";
 
@@ -109,52 +107,66 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
     setFileErrors(newFileErrors);
     return Object.values(newFileErrors).every((error) => error === null);
   };
+  const uploadFiles = async () => {
+    const fileUploadPromises = [
+      "resume",
+      "socialSecurityCard",
+      "driversLicense",
+    ].map((fileType, index) => {
+      const formData = new FormData();
+      const file = [resumeFile, socialSecurityCardFile, driversLicenseFile][
+        index
+      ];
+      formData.append("documentFile", file!);
+      formData.append("userId", userId);
+      formData.append("name", fileType);
+
+      return axios.post(`/api/document`, formData);
+    });
+
+    await Promise.all(fileUploadPromises);
+  };
 
   const onSubmit = async () => {
-    if (educations.length === 0) {
-      toast({
-        title: "Validation Error",
-        description: "At least one education entry is required.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!validateFiles()) return;
-
     try {
-      const fileUploadPromises = [
-        "resume",
-        "socialSecurityCard",
-        "driversLicense",
-      ].map((fileType, index) => {
-        const formData = new FormData();
-        const file = [resumeFile, socialSecurityCardFile, driversLicenseFile][
-          index
-        ];
-        formData.append("documentFile", file!);
-        formData.append("userId", userId);
-        formData.append("name", fileType);
+      if (isInitialSetup) {
+        if (!validateFiles()) return;
+        await uploadFiles();
+      }
 
-        return axios.post(`/api/document`, formData);
-      });
-
-      await Promise.all(fileUploadPromises);
+      if (educations.length === 0) {
+        toast({
+          title: "Validation Error",
+          description: "At least one education entry is required.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Educational Background Updated Successfully",
         variant: "default",
       });
-
-      if (isInitialSetup) {
-        onNext({});
-      }
+      onNext({});
     } catch (error: any) {
       console.error(error);
       toast({
         title: "Server Side Error",
         description: error?.response?.statusText,
         variant: "destructive",
+      });
+    }
+  };
+
+  const handleRemoveEducation = async (id: string) => {
+    try {
+      await axios.delete(`/api/education/${id}`);
+      setEducations(educations.filter((education) => education.id !== id));
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to remove education",
       });
     }
   };
@@ -177,8 +189,12 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
                   className="relative p-4 flex flex-col space-y-2"
                 >
                   <button
+                    type="button"
                     className="absolute top-2 right-2 text-red-600"
-                    onClick={() => console.log("eee")}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveEducation(education.id);
+                    }}
                   >
                     <TrashIcon className="h-5 w-5" />
                   </button>
@@ -287,43 +303,45 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
               Add Education
             </Button>
           </CardContent>
-          <div className="w-full px-6">
-            <Label htmlFor="resume">Upload Resume</Label>
-            <Input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
-            />
-            {fileErrors.resume && (
-              <FormMessage>{fileErrors.resume}</FormMessage>
-            )}
+          {isInitialSetup && (
+            <div className="w-full px-6">
+              <Label htmlFor="resume">Upload Resume</Label>
+              <Input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
+              />
+              {fileErrors.resume && (
+                <FormMessage>{fileErrors.resume}</FormMessage>
+              )}
 
-            <Label htmlFor="socialSecurityCard">
-              Upload Social Security Card
-            </Label>
-            <Input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) =>
-                setSocialSecurityCardFile(e.target.files?.[0] || null)
-              }
-            />
-            {fileErrors.socialSecurityCard && (
-              <FormMessage>{fileErrors.socialSecurityCard}</FormMessage>
-            )}
+              <Label htmlFor="socialSecurityCard">
+                Upload Social Security Card
+              </Label>
+              <Input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) =>
+                  setSocialSecurityCardFile(e.target.files?.[0] || null)
+                }
+              />
+              {fileErrors.socialSecurityCard && (
+                <FormMessage>{fileErrors.socialSecurityCard}</FormMessage>
+              )}
 
-            <Label htmlFor="driversLicense">Upload Driver's License</Label>
-            <Input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) =>
-                setDriversLicenseFile(e.target.files?.[0] || null)
-              }
-            />
-            {fileErrors.driversLicense && (
-              <FormMessage>{fileErrors.driversLicense}</FormMessage>
-            )}
-          </div>
+              <Label htmlFor="driversLicense">Upload Driver's License</Label>
+              <Input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) =>
+                  setDriversLicenseFile(e.target.files?.[0] || null)
+                }
+              />
+              {fileErrors.driversLicense && (
+                <FormMessage>{fileErrors.driversLicense}</FormMessage>
+              )}
+            </div>
+          )}
           <CardFooter>
             <Button
               disabled={isSubmitting}

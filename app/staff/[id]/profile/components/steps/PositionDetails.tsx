@@ -67,9 +67,7 @@ const PositionDetails: React.FC<StepComponentProps> = ({
         title: "Profile Updated Successfully",
         variant: "default",
       });
-      if (isInitialSetup) {
-        onNext(res.data.profile);
-      }
+      onNext(res.data.profile);
     } catch (error: any) {
       console.error(error);
       toast({
