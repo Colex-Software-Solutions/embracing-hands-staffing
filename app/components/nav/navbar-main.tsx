@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { UserNav } from "./user-nav";
 import { Session } from "next-auth";
+import Image from "next/image";
 
 interface NavbarLink {
   label: string;
@@ -122,9 +123,13 @@ const NavbarAnimated = ({
             className
           )}
         >
-          <h1 className="w-[200px] text-xl text-primary font-bold">
-            Embracing hands HealthCare Staffing
-          </h1>
+          <Image
+            src="/images/logo.jpeg"
+            alt="Embracing Hands Healthcare Staffing logo"
+            className="mt-5"
+            width={150}
+            height={100}
+          />
           <div className="flex-justify-start space-x-6">
             {renderLinks(0, linkClassName)}
           </div>

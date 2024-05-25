@@ -1,13 +1,23 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { SignUpButton } from "../body";
+import Image from "next/image";
 
 const Footer = () => {
   return (
-    <div className="flex justify-center py-20 gap-10">
-      <h1 className="w-[200px] text-xl text-primary font-bold">
-        Embracing hands HealthCare Staffing
-      </h1>
+    <div className="flex justify-center items-center py-20 gap-10">
+      <Image
+        src="/images/logo.jpeg"
+        alt="Embracing Hands Healthcare Staffing logo"
+        width={200}
+        height={100}
+      />
+      <Image
+        src="/images/badge.webp"
+        alt="Embracing Hands Healthcare Staffing badge"
+        width={200}
+        height={50}
+      />
       <SignUpButton />
       <Link href="/about-us">
         <Button variant="secondary">About Us</Button>
