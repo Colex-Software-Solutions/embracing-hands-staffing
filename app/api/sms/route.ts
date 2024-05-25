@@ -20,11 +20,7 @@ export async function POST(request: NextRequest) {
           }
     }
 
-    
-
     const send = await smsProvider.sendBatchSMS(data);
-
-    console.log("response", send)
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
