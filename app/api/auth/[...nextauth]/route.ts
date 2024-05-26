@@ -44,6 +44,7 @@ export const authOptions = {
       },
     }),
   ],
+  debug: true,
   callbacks: {
     async jwt({ token, user }: { token: JWT; user: any }) {
       return { ...token, ...user };
