@@ -62,6 +62,8 @@ const StaffProfileInfo = ({
     references,
     employmentHistory,
     staffSchoolInfo,
+    electronicSignatureDisclaimer,
+    signatureDate,
   } = staffProfile;
 
   return (
@@ -293,6 +295,31 @@ const StaffProfileInfo = ({
           </Card>
         </div>
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Electronic Signature</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {electronicSignatureDisclaimer && (
+              <>
+                <CardDescription>Signature</CardDescription>
+                <img
+                  src={electronicSignatureDisclaimer}
+                  alt="Electronic Signature"
+                  className="border p-2"
+                />
+              </>
+            )}
+            <div>
+              <CardDescription>Signature Date</CardDescription>
+              <p>
+                {signatureDate ? format(new Date(signatureDate), "PPP") : "N/A"}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

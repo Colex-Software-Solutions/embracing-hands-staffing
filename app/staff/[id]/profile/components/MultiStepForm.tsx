@@ -23,6 +23,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/app/components/ui/dropdown-menu";
+import ElectronicSignature from "./steps/ElectroicSignature";
+import { useRouter } from "next/navigation";
 
 interface MultiStepFormProps {
   userId: string;
@@ -50,6 +52,7 @@ const steps = [
   { name: "Background Information", component: BackgroundInformation },
   { name: "Professional References", component: ProfessionalReferences },
   { name: "Employment History", component: EmploymentHistorySection },
+  { name: "Electronic Signature", component: ElectronicSignature },
 ];
 
 const MultiStepForm: React.FC<MultiStepFormProps> = ({
@@ -59,10 +62,10 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   staffSchoolInfo,
   employmentHistory,
 }) => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(7);
   const [formData, setFormData] = useState<StaffProfile | null>(profile);
-  const { toast } = useToast();
-  const isInitialSetup = !profile?.profileSetupComplete || false;
+  const router = useRouter();
+  const isInitialSetup = true; //!profile?.profileSetupComplete || true;
 
   const CurrentStepComponent = steps[currentStep].component;
 
@@ -78,6 +81,11 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     });
     if (currentStep !== steps.length - 1 && isInitialSetup) {
       setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    }
+    if (currentStep === steps.length - 1 && isInitialSetup) {
+      setTimeout(() => {
+        router.push(`/find-jobs/${userId}`);
+      }, 3000);
     }
   };
 

@@ -93,12 +93,8 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
       });
       return;
     }
-    let res;
     if (isInitialSetup) {
-      res = await axios.post(`/api/staff/${userId}`, {
-        profileSetupComplete: true,
-      });
-      onNext(res?.data?.profile ?? {});
+      onNext({});
     }
 
     toast({
