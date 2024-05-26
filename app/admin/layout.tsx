@@ -2,10 +2,9 @@ import { ThemeProvider } from "../components/theme-provider";
 import { Nav } from "@/app/components/ui/Nav";
 import {
   ArchiveX,
-  File,
   Inbox,
   Send,
-  Trash2,
+  File,
   Settings,
   User,
   Building,
@@ -58,7 +57,11 @@ export default function adminLayout({
                 icon: <Briefcase className="md:mr-2 h-4 w-4" />,
                 href: `/admin/jobs`,
               },
-
+              {
+                title: "Invoices",
+                icon: <File className="md:mr-2 h-4 w-4" />,
+                href: `/admin/invoices`,
+              },
               {
                 title: "Settings",
                 icon: <Settings className="md:mr-2 h-4 w-4" />,

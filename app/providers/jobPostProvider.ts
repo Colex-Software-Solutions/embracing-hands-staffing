@@ -70,6 +70,45 @@ class JobPostProvider {
     });
   }
 
+  async getJobPostInvoiceDataById(id: string) {
+    return await prisma.jobPost.findUnique({
+      select: {
+        id: true,
+        facilityId: true,
+        title: true,
+        location: true,
+        createdAt: true,
+        shifts: {
+          include: {
+            staffProfile: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+          },
+          where: {
+            status: "Completed",
+          },
+        },
+        facilityProfile: {
+          select: {
+            name: true,
+            address: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
+      where: {
+        id,
+      },
+    });
+  }
+
   async getAllJobPosts() {
     return await prisma.jobPost.findMany({
       select: {

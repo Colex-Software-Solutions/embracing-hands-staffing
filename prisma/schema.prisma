@@ -140,13 +140,16 @@ model Document {
 }
 
 model Invoice {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  jobPostId    String   @db.ObjectId
-  url          String
-  paid         Boolean
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
-  jobPost      JobPost  @relation(fields: [jobPostId], references: [id])
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  facilityName      String
+  facilityAddress   String
+  jobPostId         String           @db.ObjectId
+  invoiceNumber     Int
+  paid              Boolean
+  items             Json
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  jobPost           JobPost          @relation(fields: [jobPostId], references: [id])
 }
 
 model PasswordReset {
