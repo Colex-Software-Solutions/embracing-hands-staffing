@@ -52,7 +52,9 @@ const profileSchema = z.object({
   emergencyContactName: z.string().min(1, "Emergency Contact Name is required"),
   emergencyContactPhone: z
     .string()
-    .min(1, "Emergency Contact Phone is required"),
+    .regex(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, {
+      message: "Invalid phone number",
+    }),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
