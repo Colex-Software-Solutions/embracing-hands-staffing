@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardFooter } from "@/app/components/ui/card";
@@ -18,6 +18,10 @@ import { Loader, TrashIcon } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/app/components/ui/use-toast";
 import { Label } from "@/app/components/ui/label";
+import { StepComponentProps } from "../MultiStepForm";
+import DocumentsSection from "../DocumentsSection";
+import { Alert } from "@/app/components/ui/alert";
+import CustomDatePicker from "../DatePicker";
 
 const certificationsSchema = z.object({
   hasBLS: z.boolean(),
@@ -28,31 +32,31 @@ const certificationsSchema = z.object({
 
 type CertificationsFormValues = z.infer<typeof certificationsSchema>;
 
-interface CertificationsProps {
-  userId: string;
-  isInitialSetup: boolean;
-  profile: any;
-  onNext: (data: any) => void;
-}
-
-const Certifications: React.FC<CertificationsProps> = ({
+const Certifications: React.FC<StepComponentProps> = ({
   userId,
   isInitialSetup,
   profile,
+  documents,
   onNext,
 }) => {
   const [blsFile, setBlsFile] = useState<File | null>(null);
+  const [blsExpiry, setBlsExpiry] = useState<Date | undefined>(undefined);
   const [palsFile, setPalsFile] = useState<File | null>(null);
+  const [palsExpiry, setPalsExpiry] = useState<Date | undefined>(undefined);
   const [aclsFile, setAclsFile] = useState<File | null>(null);
+  const [aclsExpiry, setAclsExpiry] = useState<Date | undefined>(undefined);
   const [otherCertFiles, setOtherCertFiles] = useState<File[]>([]);
+  const [otherCertExpiries, setOtherCertExpiries] = useState<
+    (Date | undefined)[]
+  >([]);
 
   const form = useForm<CertificationsFormValues>({
     resolver: zodResolver(certificationsSchema),
     defaultValues: {
-      hasBLS: profile?.hasBLS || false,
-      hasPALS: profile?.hasPALS || false,
-      hasACLS: profile?.hasACLS || false,
-      hasOtherCertifications: profile?.hasOtherCertifications || false,
+      hasBLS: false,
+      hasPALS: false,
+      hasACLS: false,
+      hasOtherCertifications: false,
     },
   });
 
@@ -69,7 +73,11 @@ const Certifications: React.FC<CertificationsProps> = ({
       });
       return;
     } else if (blsFile) {
-      filesToUpload.push({ file: blsFile, name: "BLS Certification" });
+      filesToUpload.push({
+        file: blsFile,
+        name: "BLS Certification",
+        expiryDate: blsExpiry,
+      });
     }
 
     if (data.hasPALS && !palsFile) {
@@ -80,7 +88,11 @@ const Certifications: React.FC<CertificationsProps> = ({
       });
       return;
     } else if (palsFile) {
-      filesToUpload.push({ file: palsFile, name: "PALS Certification" });
+      filesToUpload.push({
+        file: palsFile,
+        name: "PALS Certification",
+        expiryDate: palsExpiry,
+      });
     }
 
     if (data.hasACLS && !aclsFile) {
@@ -91,7 +103,11 @@ const Certifications: React.FC<CertificationsProps> = ({
       });
       return;
     } else if (aclsFile) {
-      filesToUpload.push({ file: aclsFile, name: "ACLS Certification" });
+      filesToUpload.push({
+        file: aclsFile,
+        name: "ACLS Certification",
+        expiryDate: aclsExpiry,
+      });
     }
 
     if (data.hasOtherCertifications && otherCertFiles.length === 0) {
@@ -103,19 +119,28 @@ const Certifications: React.FC<CertificationsProps> = ({
       return;
     } else {
       otherCertFiles.forEach((file, index) => {
-        filesToUpload.push({ file, name: `Other Certification ${index + 1}` });
+        filesToUpload.push({
+          file,
+          name: file.name,
+          expiryDate: otherCertExpiries[index],
+        });
       });
     }
 
     try {
-      const fileUploadPromises = filesToUpload.map(({ file, name }) => {
-        const formData = new FormData();
-        formData.append("documentFile", file as File);
-        formData.append("userId", userId);
-        formData.append("name", name);
+      const fileUploadPromises = filesToUpload.map(
+        ({ file, name, expiryDate }) => {
+          const formData = new FormData();
+          formData.append("documentFile", file as File);
+          formData.append("userId", userId);
+          formData.append("name", name);
+          if (expiryDate) {
+            formData.append("expiryDate", expiryDate.toISOString());
+          }
 
-        return axios.post(`/api/document`, formData);
-      });
+          return axios.post(`/api/document`, formData);
+        }
+      );
 
       await Promise.all(fileUploadPromises);
 
@@ -124,10 +149,7 @@ const Certifications: React.FC<CertificationsProps> = ({
           title: "Certifications Updated Successfully",
           variant: "default",
         });
-
-      if (isInitialSetup) {
-        onNext({});
-      }
+      onNext({});
     } catch (error: any) {
       console.error(error);
       toast({
@@ -153,168 +175,245 @@ const Certifications: React.FC<CertificationsProps> = ({
     if (files) {
       const validFiles = Array.from(files);
       setOtherCertFiles([...otherCertFiles, ...validFiles]);
+      setOtherCertExpiries([
+        ...otherCertExpiries,
+        ...new Array(validFiles.length).fill(undefined),
+      ]);
     }
+  };
+
+  const handleOtherCertExpiryChange = (
+    index: number,
+    date: Date | undefined
+  ) => {
+    setOtherCertExpiries((prev) => {
+      const newExpiries = [...prev];
+      newExpiries[index] = date;
+      return newExpiries;
+    });
   };
 
   const removeOtherCertFile = (index: number) => {
     setOtherCertFiles(otherCertFiles.filter((_, i) => i !== index));
+    setOtherCertExpiries(otherCertExpiries.filter((_, i) => i !== index));
   };
 
   return (
-    <Form {...form}>
-      <form
-        className="w-full max-w-4xl py-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+    <>
+      {isInitialSetup ? (
+        <Form {...form}>
+          <form
+            className="w-full max-w-4xl py-4"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <Card className="py-2">
+              <CardContent className="space-y-4">
+                <h1 className="text-2xl text-secondary-foreground lg:text-3xl font-bold">
+                  Certifications and Licensure
+                </h1>
+                <FormField
+                  control={form.control}
+                  name="hasBLS"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Do you have BLS Certification?</FormLabel>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      {field.value && (
+                        <div className="mt-2">
+                          <Label htmlFor="blsFile">
+                            Upload BLS Certification Card
+                          </Label>
+                          <Input
+                            type="file"
+                            onChange={(e) => handleFileChange(e, setBlsFile)}
+                          />
+                          <div className="mt-2">
+                            <Label>Expiry Date (optional)</Label>
+                            <CustomDatePicker
+                              selectedDate={blsExpiry}
+                              onDateChange={setBlsExpiry}
+                              disabled={() => false}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {errors.hasBLS && (
+                        <FormMessage>{errors.hasBLS.message}</FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="hasPALS"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Do you have PALS Certification?</FormLabel>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      {field.value && (
+                        <div className="mt-2">
+                          <Label htmlFor="palsFile">
+                            Upload PALS Certification Card
+                          </Label>
+                          <Input
+                            type="file"
+                            onChange={(e) => handleFileChange(e, setPalsFile)}
+                          />
+                          <div className="mt-2">
+                            <Label>Expiry Date (optional)</Label>
+                            <CustomDatePicker
+                              selectedDate={palsExpiry}
+                              onDateChange={setPalsExpiry}
+                              disabled={() => false}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {errors.hasPALS && (
+                        <FormMessage>{errors.hasPALS.message}</FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="hasACLS"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Do you have ACLS Certification?</FormLabel>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      {field.value && (
+                        <div className="mt-2">
+                          <Label htmlFor="aclsFile">
+                            Upload ACLS Certification Card
+                          </Label>
+                          <Input
+                            type="file"
+                            onChange={(e) => handleFileChange(e, setAclsFile)}
+                          />
+                          <div className="mt-2">
+                            <Label>Expiry Date (optional)</Label>
+                            <CustomDatePicker
+                              selectedDate={aclsExpiry}
+                              onDateChange={setAclsExpiry}
+                              disabled={() => false}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {errors.hasACLS && (
+                        <FormMessage>{errors.hasACLS.message}</FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="hasOtherCertifications"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Do you have any other Certifications?
+                      </FormLabel>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      {field.value && (
+                        <div className="mt-2 space-y-2">
+                          <Label htmlFor="otherCertFiles">
+                            Upload Other Certifications
+                          </Label>
+                          <Input
+                            type="file"
+                            multiple
+                            onChange={handleOtherCertFileChange}
+                          />
+                          <div className="space-y-2">
+                            {otherCertFiles.map((file, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center space-x-2"
+                              >
+                                <p className="text-sm">{file.name}</p>
+                                <button
+                                  type="button"
+                                  onClick={() => removeOtherCertFile(index)}
+                                >
+                                  <TrashIcon className="h-5 w-5 text-red-600" />
+                                </button>
+                                <CustomDatePicker
+                                  selectedDate={otherCertExpiries[index]}
+                                  onDateChange={(date) =>
+                                    handleOtherCertExpiryChange(index, date)
+                                  }
+                                  disabled={() => false}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {errors.hasOtherCertifications && (
+                        <FormMessage>
+                          {errors.hasOtherCertifications.message}
+                        </FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+              <CardFooter>
+                <Button
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="ml-auto"
+                >
+                  {isSubmitting && <Loader />}Save and Next Step
+                </Button>
+              </CardFooter>
+            </Card>
+          </form>
+        </Form>
+      ) : (
         <Card className="py-2">
           <CardContent className="space-y-4">
             <h1 className="text-2xl text-secondary-foreground lg:text-3xl font-bold">
-              Certifications
+              Certifications and Licensure
             </h1>
-            <FormField
-              control={form.control}
-              name="hasBLS"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Do you have BLS Certification?</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  {field.value && (
-                    <div className="mt-2">
-                      <Label htmlFor="blsFile">
-                        Upload BLS Certification Card
-                      </Label>
-                      <Input
-                        type="file"
-                        onChange={(e) => handleFileChange(e, setBlsFile)}
-                      />
-                    </div>
-                  )}
-                  {errors.hasBLS && (
-                    <FormMessage>{errors.hasBLS.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="hasPALS"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Do you have PALS Certification?</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  {field.value && (
-                    <div className="mt-2">
-                      <Label htmlFor="palsFile">
-                        Upload PALS Certification Card
-                      </Label>
-                      <Input
-                        type="file"
-                        onChange={(e) => handleFileChange(e, setPalsFile)}
-                      />
-                    </div>
-                  )}
-                  {errors.hasPALS && (
-                    <FormMessage>{errors.hasPALS.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="hasACLS"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Do you have ACLS Certification?</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  {field.value && (
-                    <div className="mt-2">
-                      <Label htmlFor="aclsFile">
-                        Upload ACLS Certification Card
-                      </Label>
-                      <Input
-                        type="file"
-                        onChange={(e) => handleFileChange(e, setAclsFile)}
-                      />
-                    </div>
-                  )}
-                  {errors.hasACLS && (
-                    <FormMessage>{errors.hasACLS.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="hasOtherCertifications"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Do you have any other Certifications?</FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  {field.value && (
-                    <div className="mt-2 space-y-2">
-                      <Label htmlFor="otherCertFiles">
-                        Upload Other Certifications
-                      </Label>
-                      <Input
-                        type="file"
-                        multiple
-                        onChange={handleOtherCertFileChange}
-                      />
-                      <div className="space-y-2">
-                        {otherCertFiles.map((file, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center space-x-2"
-                          >
-                            <p className="text-sm">{file.name}</p>
-                            <button
-                              type="button"
-                              onClick={() => removeOtherCertFile(index)}
-                            >
-                              <TrashIcon className="h-5 w-5 text-red-600" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {errors.hasOtherCertifications && (
-                    <FormMessage>
-                      {errors.hasOtherCertifications.message}
-                    </FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
+            {documents ? (
+              <DocumentsSection
+                documents={documents}
+                userId={userId}
+                edit={true}
+              />
+            ) : (
+              <Alert>
+                Could not find any associated Documents and certifications,
+                Please refresh your profile and try again{" "}
+              </Alert>
+            )}
           </CardContent>
-          <CardFooter>
-            <Button disabled={isSubmitting} type="submit" className="ml-auto">
-              {isSubmitting && <Loader />}Save and Next Step
-            </Button>
-          </CardFooter>
         </Card>
-      </form>
-    </Form>
+      )}
+    </>
   );
 };
 

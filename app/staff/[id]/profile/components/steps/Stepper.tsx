@@ -4,14 +4,9 @@ import React from "react";
 interface StepperProps {
   currentStep: number;
   steps: string[];
-  onStepClick: (stepIndex: number) => void;
 }
 
-const Stepper: React.FC<StepperProps> = ({
-  currentStep,
-  steps,
-  onStepClick,
-}) => {
+const Stepper: React.FC<StepperProps> = ({ currentStep, steps }) => {
   return (
     <div className="flex flex-col items-start space-y-8 relative">
       {steps.map((step, i) => (
@@ -24,7 +19,6 @@ const Stepper: React.FC<StepperProps> = ({
                 ? "bg-primary"
                 : "bg-gray-500"
             }`}
-            onClick={() => onStepClick(i)}
           >
             {i < currentStep ? <Check size={24} /> : i + 1}
           </div>
@@ -36,7 +30,6 @@ const Stepper: React.FC<StepperProps> = ({
                 ? "text-primary"
                 : "text-gray-500"
             }`}
-            onClick={() => onStepClick(i)}
           >
             {step}
           </p>

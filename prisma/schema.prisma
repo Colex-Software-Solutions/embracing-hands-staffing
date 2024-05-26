@@ -97,6 +97,19 @@ model StaffSchoolInfo {
   staffProfileId  String      @db.ObjectId
   staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
 }
+model EmploymentHistory {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  company         String
+  jobTitle        String
+  address         String
+  employedFrom    DateTime
+  employedTo      DateTime
+  supervisor      String
+  payRate         Float?
+  phoneNumber     String
+  staffProfileId  String      @db.ObjectId
+  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
+}
 
 model Licensure {
   id              String      @id @default(auto()) @map("_id") @db.ObjectId
@@ -114,19 +127,7 @@ type Reference {
   phone            String
 }
 
-model EmploymentHistory {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  company         String
-  jobTitle        String
-  address         String
-  employedFrom    DateTime
-  employedTo      DateTime
-  supervisor      String
-  payRate         Float?
-  phoneNumber     String
-  staffProfileId  String      @db.ObjectId
-  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
-}
+
 
 model Document {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId

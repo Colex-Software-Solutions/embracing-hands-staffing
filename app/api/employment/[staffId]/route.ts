@@ -27,3 +27,29 @@ export async function POST(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { staffId: string } }
+) {
+  const employmentId = params.staffId;
+
+  if (!employmentId) {
+    return NextResponse.json(
+      { message: "Employment ID is required." },
+      { status: 400, statusText: "Bad Request" }
+    );
+  }
+
+  try {
+    await employmentProvider.deleteEmploymentHistory(employmentId);
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Error deleting employment:", error);
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500, statusText: "Internal Server Error" }
+    );
+  }
+}

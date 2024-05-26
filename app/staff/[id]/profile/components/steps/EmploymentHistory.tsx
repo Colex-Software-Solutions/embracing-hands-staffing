@@ -93,20 +93,26 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
       });
       return;
     }
-    let res;
     if (isInitialSetup) {
-      res = await axios.post(`/api/staff/${userId}`, {
-        profileSetupComplete: true,
-      });
+      onNext({});
     }
 
     toast({
       title: "Employment History Updated Successfully",
       variant: "default",
     });
+  };
 
-    if (isInitialSetup) {
-      onNext(res?.data?.profile ?? {});
+  const handleRemoveEmployment = async (id: string) => {
+    try {
+      await axios.delete(`/api/employment/${id}`);
+      setEmployments(employments.filter((employment) => employment.id !== id));
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to remove employement",
+      });
     }
   };
 
@@ -131,10 +137,14 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
                   className="relative p-4 flex flex-col space-y-2"
                 >
                   <button
+                    type="button"
                     className="absolute top-2 right-2 text-red-600"
-                    onClick={() => console.log("Remove employment")}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveEmployment(employment.id);
+                    }}
                   >
-                    <TrashIcon className="h-5 w-5" />
+                    <TrashIcon type="button" className="h-5 w-5" />
                   </button>
                   <p className="font-bold text-lg">{employment.company}</p>
                   <p className="text-sm text-muted-foreground">

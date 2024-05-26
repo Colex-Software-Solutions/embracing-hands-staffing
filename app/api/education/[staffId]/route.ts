@@ -37,3 +37,29 @@ export async function POST(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { staffId: string } }
+) {
+  const educationId = params.staffId;
+
+  if (!educationId) {
+    return NextResponse.json(
+      { message: "Education ID is required." },
+      { status: 400, statusText: "Bad Request" }
+    );
+  }
+
+  try {
+    await staffSchoolInfoProvider.deleteEducation(educationId);
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Error deleting education:", error);
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500, statusText: "Internal Server Error" }
+    );
+  }
+}

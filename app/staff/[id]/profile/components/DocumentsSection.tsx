@@ -16,7 +16,6 @@ const DocumentsSection = ({
   documents: Document[];
   userId: string;
   edit?: boolean;
-
 }) => {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
@@ -73,7 +72,14 @@ const DocumentsSection = ({
         ) : (
           <ul className="my-4">
             {documentsList.map((doc) => (
-              <Card key={doc.id} className="p-4 mt-4">
+              <Card
+                key={doc.id}
+                className={`p-4 mt-4 ${
+                  doc?.expiryDate &&
+                  new Date(doc.expiryDate).getTime() < new Date().getTime() &&
+                  "border-red-500"
+                }`}
+              >
                 <div className="flex justify-between items-center">
                   <div>
                     <strong>{doc.name}</strong> -{" "}
@@ -84,8 +90,13 @@ const DocumentsSection = ({
                     >
                       Download
                     </a>
+                    {doc?.expiryDate &&
+                      new Date(doc.expiryDate).getTime() <
+                        new Date().getTime() && (
+                        <span className="text-red-500"> (Expired)</span>
+                      )}
                   </div>
-                  <div className="space-x-2">
+                  <div className="space-x-2 flex">
                     <Button
                       variant="secondary"
                       size="sm"
@@ -111,7 +122,7 @@ const DocumentsSection = ({
                         >
                           Edit
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="destructive"
                           size="sm"
                           type="button"
@@ -121,10 +132,9 @@ const DocumentsSection = ({
                           }}
                         >
                           Remove
-                        </Button>
+                        </Button> */}
                       </>
                     )}
-
                   </div>
                 </div>
               </Card>

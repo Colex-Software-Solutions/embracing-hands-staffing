@@ -25,7 +25,11 @@ const referenceSchema = z.object({
         firstname: z.string().min(1, "First Name is required"),
         lastname: z.string().min(1, "Last Name is required"),
         address: z.string().min(1, "Address is required"),
-        phone: z.string().min(1, "Phone Number is required"),
+        phone: z
+          .string()
+          .regex(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, {
+            message: "Invalid phone number",
+          }),
       })
     )
     .length(3, "You must provide exactly 3 references"),
@@ -55,17 +59,13 @@ const ProfessionalReferences: React.FC<StepComponentProps> = ({
   const { errors, isSubmitting } = form.formState;
 
   const onSubmit = async (data: ReferenceFormValues) => {
-    console.log(data);
     try {
-      await axios.post(`/api/staff/${userId}`, data);
+      const res = await axios.post(`/api/staff/${userId}`, data);
       toast({
         title: "References Updated Successfully",
         variant: "default",
       });
-
-      if (isInitialSetup) {
-        onNext(data);
-      }
+      onNext(res.data.profile);
     } catch (error: any) {
       console.error(error);
       toast({
