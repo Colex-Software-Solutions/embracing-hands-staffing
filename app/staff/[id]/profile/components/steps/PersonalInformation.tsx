@@ -443,20 +443,6 @@ const PersonalInformationForm = ({
               <Label htmlFor="location">Location</Label>
             </div>
           </CardContent>
-          {/* {isInitialSetup && (
-            <Alert className="m-4 w-[90%] text-lg" variant={"destructive"}>
-              Please Upload the following documents along with any additional
-              supporting documents:
-              <li>- Drivers License</li>
-              <li>- Resume</li>
-              <li>- Basic Life Support (BLS)</li>
-              <li>- Advanced Cardiac Life Support (ACLS)</li>
-              <li>- Pediatric Advanced Life Support (PALS) </li>
-              <li>- SSC</li>
-            </Alert>
-          )} */}
-          {/* Documents Section */}
-          {/* <DocumentsSection documents={documents} userId={userId} edit={true} /> */}
 
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
