@@ -1,7 +1,6 @@
 "use client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +8,11 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/app/components/ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 import { ViewStaffUserDetailsModal } from "../../components/modals/view-staff-user-details-modal";
 import { ApproveStatusModal } from "../../components/modals/approve-status-modal";
 import { DeclineStatusModal } from "../../components/modals/decline-status-modal";
+import { Button } from "../../../components/ui/button";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
