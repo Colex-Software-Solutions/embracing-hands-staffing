@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-// import { DataTable } from "./data-table";
 import {
   DataTable,
   DataTableToolbarInput,
