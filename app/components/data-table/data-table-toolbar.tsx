@@ -7,9 +7,10 @@ import { Input } from "@/app/components/ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
 // import { statuses } from "../data/data";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { DataTableToolbarInput } from "./data-table";
+import { DataTableToolbarInput, DataTableToolbarOption } from "./data-table";
 
 interface DataTableToolbarProps<TData> {
+  dataTableToolbarOptions: DataTableToolbarOption[];
   dataTableToolbarInputs: DataTableToolbarInput[];
   table: Table<TData>;
 }
@@ -17,6 +18,7 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
   dataTableToolbarInputs,
+  dataTableToolbarOptions,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -42,6 +44,17 @@ export function DataTableToolbar<TData>({
               />
             )
         )}
+        {dataTableToolbarOptions &&
+          dataTableToolbarOptions.map(
+            (dataTableToolbarOption) =>
+              table.getColumn(dataTableToolbarOption.column) && (
+                <DataTableFacetedFilter
+                  column={table.getColumn(dataTableToolbarOption.column)}
+                  title={dataTableToolbarOption.column}
+                  options={dataTableToolbarOption.options}
+                />
+              )
+          )}
         {/* {table.getColumn("status") && (
           <DataTableFacetedFilter
             column={table.getColumn("status")}

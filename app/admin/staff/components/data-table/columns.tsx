@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/app/components/ui/badge";
-import { StaffUserSchema } from "../data/schema";
+import { StaffUserSchema } from "../../data/schema";
 import { DataTableColumnHeader } from "@/app/components/data-table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 

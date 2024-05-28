@@ -27,22 +27,38 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { IconProps } from "@radix-ui/react-icons/dist/types";
 
 export interface DataTableToolbarInput {
   placeholder: string;
   column: string;
 }
 
+export interface Option {
+  value: string;
+  label: string;
+  icon: React.ForwardRefExoticComponent<
+    IconProps & React.RefAttributes<SVGSVGElement>
+  >;
+}
+
+export interface DataTableToolbarOption {
+  column: string;
+  options: Option[];
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   dataTableToolbarInputs: DataTableToolbarInput[];
+  dataTableToolbarOptions: DataTableToolbarOption[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   dataTableToolbarInputs,
+  dataTableToolbarOptions,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -79,6 +95,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar
         table={table}
         dataTableToolbarInputs={dataTableToolbarInputs}
+        dataTableToolbarOptions={dataTableToolbarOptions}
       />
       <div className="rounded-md border">
         <Table>

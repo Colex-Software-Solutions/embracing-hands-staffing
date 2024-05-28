@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import {
   DataTable,
   DataTableToolbarInput,
-} from "../../../components/data-table/data-table";
+  DataTableToolbarOption,
+} from "../../../../components/data-table/data-table";
 import { columns } from "./columns";
 import { Toaster } from "@/app/components/ui/toaster";
-import { StaffUser } from "../page";
+import { StaffUser } from "../../page";
+import { statuses } from "../../data/data";
 
 const dataTableToolbarInputs: DataTableToolbarInput[] = [
   {
@@ -17,6 +19,13 @@ const dataTableToolbarInputs: DataTableToolbarInput[] = [
   {
     placeholder: "Filter by Phone number",
     column: "phone",
+  },
+];
+
+const dataTableToolbarOutputs: DataTableToolbarOption[] = [
+  {
+    column: "status",
+    options: statuses,
   },
 ];
 
@@ -47,6 +56,7 @@ const StaffUserManager = ({ initialStaffUsers }: IStaffUserManager) => {
         data={staffUsers as any[]}
         columns={columns(handleStaffUsersUpdate)}
         dataTableToolbarInputs={dataTableToolbarInputs}
+        dataTableToolbarOptions={dataTableToolbarOutputs}
       />
       <Toaster />
     </>

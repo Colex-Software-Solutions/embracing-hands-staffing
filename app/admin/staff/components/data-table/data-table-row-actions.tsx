@@ -8,11 +8,11 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import { ViewStaffUserDetailsModal } from "../../components/modals/view-staff-user-details-modal";
-import { ApproveStatusModal } from "../../components/modals/approve-status-modal";
-import { DeclineStatusModal } from "../../components/modals/decline-status-modal";
-import { Button } from "../../../components/ui/button";
+} from "../../../../components/ui/dropdown-menu";
+import { ViewStaffUserDetailsModal } from "../../../components/modals/view-staff-user-details-modal";
+import { ApproveStatusModal } from "../../../components/modals/approve-status-modal";
+import { DeclineStatusModal } from "../../../components/modals/decline-status-modal";
+import { Button } from "../../../../components/ui/button";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
