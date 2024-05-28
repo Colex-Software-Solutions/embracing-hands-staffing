@@ -1,9 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import { DataTable } from "./data-table";
+// import { DataTable } from "./data-table";
+import {
+  DataTable,
+  DataTableToolbarInput,
+} from "../../../components/data-table/data-table";
 import { columns } from "./columns";
 import { Toaster } from "@/app/components/ui/toaster";
 import { StaffUser } from "../page";
+
+const dataTableToolbarInputs: DataTableToolbarInput[] = [
+  {
+    placeholder: "Filter by Email",
+    column: "email",
+  },
+  {
+    placeholder: "Filter by Phone number",
+    column: "phone",
+  },
+];
 
 interface IStaffUserManager {
   initialStaffUsers: StaffUser[];
@@ -31,6 +46,7 @@ const StaffUserManager = ({ initialStaffUsers }: IStaffUserManager) => {
       <DataTable
         data={staffUsers as any[]}
         columns={columns(handleStaffUsersUpdate)}
+        dataTableToolbarInputs={dataTableToolbarInputs}
       />
       <Toaster />
     </>
