@@ -55,13 +55,6 @@ export function DataTableToolbar<TData>({
                 />
               )
           )}
-        {/* {table.getColumn("status") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
-            options={statuses}
-          />
-        )} */}
         {isFiltered && (
           <Button
             variant="ghost"
