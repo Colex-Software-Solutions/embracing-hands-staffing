@@ -52,6 +52,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   dataTableToolbarInputs: DataTableToolbarInput[];
   dataTableToolbarOptions: DataTableToolbarOption[];
+  totalCount: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -59,6 +60,7 @@ export function DataTable<TData, TValue>({
   data,
   dataTableToolbarInputs,
   dataTableToolbarOptions,
+  totalCount,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -147,7 +149,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} totalCount={totalCount} />
     </div>
   );
 }

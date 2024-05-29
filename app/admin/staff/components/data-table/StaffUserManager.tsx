@@ -30,8 +30,12 @@ const dataTableToolbarOutputs: DataTableToolbarOption[] = [
 
 interface IStaffUserManager {
   initialStaffUsers: StaffUser[];
+  totalCount: number;
 }
-const StaffUserManager = ({ initialStaffUsers }: IStaffUserManager) => {
+const StaffUserManager = ({
+  initialStaffUsers,
+  totalCount,
+}: IStaffUserManager) => {
   const [staffUsers, setStaffUsers] = useState(initialStaffUsers);
 
   // Function to update a staff user
@@ -56,6 +60,7 @@ const StaffUserManager = ({ initialStaffUsers }: IStaffUserManager) => {
         columns={columns(handleStaffUsersUpdate)}
         dataTableToolbarInputs={dataTableToolbarInputs}
         dataTableToolbarOptions={dataTableToolbarOutputs}
+        totalCount={totalCount}
       />
       <Toaster />
     </>
