@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { userProvider } from "@/app/providers/userProvider";
-import StaffUserManager from "./components/StaffUserManager";
+import StaffUserManager from "./components/data-table/StaffUserManager";
 
 export const metadata: Metadata = {
   title: "Staff",
