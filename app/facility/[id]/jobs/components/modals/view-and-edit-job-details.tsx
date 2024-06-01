@@ -8,7 +8,11 @@ import {
   DialogTrigger,
 } from "@/app/components/ui/dialog";
 import { JobPost } from "@prisma/client";
-import JobPostingForm from "../../../job-post/components/job-posting-form";
+import dynamic from "next/dynamic";
+const JobPostingForm = dynamic(
+  () => import("../../../job-post/components/job-posting-form"),
+  { ssr: false }
+);
 
 interface ViewAndEditModalProps {
   row: any;
@@ -16,7 +20,7 @@ interface ViewAndEditModalProps {
   handleJobPostUpdate: (newJob: JobPost) => void;
 }
 
-export function ViewAndEditModal({
+function ViewAndEditModal({
   row,
   id,
   handleJobPostUpdate,
@@ -43,3 +47,5 @@ export function ViewAndEditModal({
     </Dialog>
   );
 }
+
+export default ViewAndEditModal;

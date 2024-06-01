@@ -25,7 +25,7 @@ export default function adminLayout({
       disableTransitionOnChange
     >
       <div className="flex">
-        <div>
+        <div className="mt-6">
           <Nav
             isCollapsed={false}
             links={[

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Toaster } from "@/app/components/ui/toaster";
 import { JobPost, JobStatus } from "@prisma/client";
 import { FacilityJobPost } from "../page";
-import { DataTable } from "./data-table";
+import DataTable from "./data-table";
 import { columns } from "./columns";
 
 interface IJobPostsManager {
