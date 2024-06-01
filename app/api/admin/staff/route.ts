@@ -12,11 +12,8 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  console.log("values", pageSize, page)
-
   try {
     const staffUsers = await userProvider.getStaffUsers(Number(page), Number(pageSize));
-    console.log({staffUsers})
 
     return new Response(JSON.stringify({ success: true, staffUsers }));
   } catch (error) {
