@@ -50,7 +50,7 @@ export const config = {
     "/staff/:path*",
     "/facility/:path*",
     "/profile/:path*",
-    // "/api/staff/:path*",
+    "/api/staff/:path*",
     "/api/facility/:path*",
     "/api/document/:path*",
     "/api/invoices/:path*",

@@ -50,7 +50,7 @@ const StaffUserManager = ({
         page,
       };
 
-      const response = await axios.get("/api/staff", {
+      const response = await axios.get("/api/admin/staff", {
         params,
       });
 
