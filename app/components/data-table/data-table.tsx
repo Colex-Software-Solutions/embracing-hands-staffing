@@ -52,6 +52,12 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   dataTableToolbarInputs: DataTableToolbarInput[];
   dataTableToolbarOptions: DataTableToolbarOption[];
+  totalCount: number;
+  handlePagination: (
+    pageSize: number,
+    page: number,
+    increment?: boolean
+  ) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -59,6 +65,8 @@ export function DataTable<TData, TValue>({
   data,
   dataTableToolbarInputs,
   dataTableToolbarOptions,
+  totalCount,
+  handlePagination,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -67,6 +75,7 @@ export function DataTable<TData, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pageIndex, setPageIndex] = React.useState(0);
 
   const table = useReactTable({
     data,
@@ -89,6 +98,24 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+
+  const pageSize = table.getState().pagination.pageSize;
+
+  const pageCount = React.useMemo(() => {
+    return Math.ceil(totalCount / pageSize);
+  }, [totalCount, pageSize]);
+
+  table.setOptions((prev) => ({
+    ...prev,
+    pageCount: pageCount,
+    state: {
+      ...prev.state,
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
+    },
+  }));
 
   return (
     <div className="space-y-4">
@@ -147,7 +174,12 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination
+        table={table}
+        totalCount={totalCount}
+        handlePagination={handlePagination}
+        setPageIndex={setPageIndex}
+      />
     </div>
   );
 }

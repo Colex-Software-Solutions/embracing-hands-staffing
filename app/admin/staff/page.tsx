@@ -31,16 +31,22 @@ const mapDataToStaffUsers = (data: any): StaffUser[] => {
   return staffUsers;
 };
 
+const initialPage: number = 1;
+const initialPageSize: number = 10;
+
 async function getStaffUsers() {
-  const staffUserData = await userProvider.getStaffUsers();
+  const { users, totalCount } = await userProvider.getStaffUsers(
+    initialPage,
+    initialPageSize
+  );
 
-  const staffUsers = mapDataToStaffUsers(staffUserData);
+  const staffUsers = mapDataToStaffUsers(users);
 
-  return staffUsers;
+  return { staffUsers, totalCount };
 }
 
 export default async function StaffPage() {
-  const staffUsers = await getStaffUsers();
+  const { staffUsers, totalCount } = await getStaffUsers();
 
   return (
     <>
@@ -53,7 +59,10 @@ export default async function StaffPage() {
             </p>
           </div>
         </div>
-        <StaffUserManager initialStaffUsers={staffUsers} />
+        <StaffUserManager
+          initialStaffUsers={staffUsers}
+          totalCount={totalCount}
+        />
       </div>
     </>
   );

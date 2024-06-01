@@ -25,9 +25,10 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         {dataTableToolbarInputs.map(
-          (dataTableToolbarInput) =>
+          (dataTableToolbarInput, index) =>
             table.getColumn(dataTableToolbarInput.column) && (
               <Input
+                key={`dataTableToolbarInput-${index}`}
                 placeholder={dataTableToolbarInput.placeholder}
                 value={
                   (table
@@ -45,9 +46,10 @@ export function DataTableToolbar<TData>({
         )}
         {dataTableToolbarOptions &&
           dataTableToolbarOptions.map(
-            (dataTableToolbarOption) =>
+            (dataTableToolbarOption, index) =>
               table.getColumn(dataTableToolbarOption.column) && (
                 <DataTableFacetedFilter
+                  key={`dataTableToolbarInput-${index}`}
                   column={table.getColumn(dataTableToolbarOption.column)}
                   title={dataTableToolbarOption.column}
                   options={dataTableToolbarOption.options}
