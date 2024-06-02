@@ -9,9 +9,20 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { ApproveStatusModal } from "../../components/modals/approve-status-modal";
-import { DeclineStatusModal } from "../../components/modals/decline-status-modal";
-import { ViewFacilityUserDetailsModal } from "../../components/modals/view-facility-user-details-modal";
+import dynamic from "next/dynamic";
+const ApproveStatusModal = dynamic(
+  () => import("../../components/modals/approve-status-modal"),
+  { ssr: false }
+);
+const DeclineStatusModal = dynamic(
+  () => import("../../components/modals/decline-status-modal"),
+  { ssr: false }
+);
+
+const ViewFacilityUserDetailsModal = dynamic(
+  () => import("../../components/modals/view-facility-user-details-modal"),
+  { ssr: false }
+);
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

@@ -1,5 +1,8 @@
 import { FullJobPostInfo } from "@/app/components/jobs/FullJobPostInfo";
-import { StartApplicationModal } from "@/app/components/modals/startApplicationModal";
+import dynamic from "next/dynamic";
+const StartApplicationModal = dynamic(
+  () => import("@/app/components/modals/startApplicationModal")
+);
 import { jobApplicationProvider } from "@/app/providers/jobApplicationProvider";
 import { jobPostProvider } from "@/app/providers/jobPostProvider";
 

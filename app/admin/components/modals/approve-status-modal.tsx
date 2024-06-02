@@ -25,7 +25,7 @@ interface ApproveStatusModalProps {
   ) => void;
 }
 
-export function ApproveStatusModal({
+function ApproveStatusModal({
   row,
   id,
   role,
@@ -124,3 +124,4 @@ export function ApproveStatusModal({
     </Dialog>
   );
 }
+export default ApproveStatusModal;

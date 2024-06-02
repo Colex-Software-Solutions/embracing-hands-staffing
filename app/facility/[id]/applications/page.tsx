@@ -1,7 +1,13 @@
 import { jobApplicationProvider } from "@/app/providers/jobApplicationProvider";
 import React from "react";
 import { JobApplicationTableData } from "./data/schema";
-import ApplicationsManager from "./components/applications-manager";
+import dynamic from "next/dynamic";
+import { fa } from "@faker-js/faker";
+
+const ApplicationsManager = dynamic(
+  () => import("./components/applications-manager"),
+  { ssr: false }
+);
 
 const mapApplicationsToTableData = (
   applications: any[]

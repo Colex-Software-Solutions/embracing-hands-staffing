@@ -1,12 +1,38 @@
 "use client";
 import React, { useState } from "react";
-import PersonalInformation from "./steps/PersonalInformation";
-import PositionDetails from "./steps/PositionDetails";
-import EducationalBackground from "./steps/EducationalBackground";
-import Certifications from "./steps/Certifications";
-import BackgroundInformation from "./steps/BackgroundInformation";
-import ProfessionalReferences from "./steps/ProfessionalReferences";
-import EmploymentHistorySection from "./steps/EmploymentHistory";
+import dynamic from "next/dynamic";
+
+const PersonalInformation = dynamic(
+  () => import("./steps/PersonalInformation"),
+  { ssr: false }
+);
+const PositionDetails = dynamic(() => import("./steps/PositionDetails"), {
+  ssr: false,
+});
+
+const EducationalBackground = dynamic(
+  () => import("./steps/EducationalBackground"),
+  { ssr: false }
+);
+
+const Certifications = dynamic(() => import("./steps/Certifications"), {
+  ssr: false,
+});
+
+const BackgroundInformation = dynamic(
+  () => import("./steps/BackgroundInformation"),
+  { ssr: false }
+);
+
+const ProfessionalReferences = dynamic(
+  () => import("./steps/ProfessionalReferences"),
+  { ssr: false }
+);
+
+const EmploymentHistorySection = dynamic(
+  () => import("./steps/EmploymentHistory"),
+  { ssr: false }
+);
 import { Button } from "@/app/components/ui/button";
 import { useToast } from "@/app/components/ui/use-toast";
 import {

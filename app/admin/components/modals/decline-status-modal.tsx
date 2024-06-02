@@ -24,7 +24,7 @@ interface DeclineStatusModalProps {
   ) => void;
 }
 
-export function DeclineStatusModal({
+function DeclineStatusModal({
   id,
   role,
   handleStaffUsersUpdate,
@@ -124,3 +124,5 @@ export function DeclineStatusModal({
     </Dialog>
   );
 }
+
+export default DeclineStatusModal;

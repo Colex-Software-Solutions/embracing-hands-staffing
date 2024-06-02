@@ -1,7 +1,10 @@
 import { Dispatch, SetStateAction, useCallback, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import EmptyTabContent from "./empty-tab-content";
-import JobCard from "./job-card";
+import dynamic from "next/dynamic";
+const EmptyTabContent = dynamic(() => import("./empty-tab-content"), {
+  ssr: false,
+});
+const JobCard = dynamic(() => import("./job-card"), { ssr: false });
 import { Job } from "@/app/(staff)/find-jobs/[id]/page";
 import axios from "axios";
 import { debounce } from "@/lib/utils";

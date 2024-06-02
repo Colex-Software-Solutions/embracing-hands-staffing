@@ -3,7 +3,6 @@ import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { staffProvider } from "@/app/providers/staffProvider";
 import { weeksBetween } from "@/lib/utils";
 import { StaffProfile } from "@prisma/client";
-import { useSession } from "next-auth/react";
 
 export interface Job {
   id: string;
