@@ -6,12 +6,11 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuItem,
-  DropdownMenuSeparator,
 } from "@/app/components/ui/dropdown-menu";
 
 import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
-import { ViewFacilityUserDetailsModal } from "../../components/modals/view-facility-user-details-modal";
+import ViewFacilityUserDetailsModal from "../../components/modals/view-facility-user-details-modal";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

@@ -1,4 +1,6 @@
 "use client";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import {
   Tabs,
   TabsContent,
@@ -6,10 +8,12 @@ import {
   TabsTrigger,
 } from "@/app/components/ui/tabs";
 import { JobPost, JobStatus } from "@prisma/client";
-import { DataTable } from "./data-table";
+
+// Dynamically import DataTable and JobsCalendar
+import DataTable from "./data-table";
+const JobsCalendar = dynamic(() => import("./jobs-calendar"), { ssr: false });
+
 import { columns } from "./columns";
-import { useState } from "react";
-import JobsCalendar from "./jobs-calendar";
 
 interface JobDisplayTabsProps {
   jobPosts: JobPost[];

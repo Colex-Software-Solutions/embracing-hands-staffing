@@ -36,7 +36,7 @@ interface StartApplicationModalProps {
   appliedStaffProfiles: AppliedStaffProfileResponse[];
 }
 
-export function StartApplicationModal({
+function StartApplicationModal({
   jobPostId,
   appliedStaffProfiles,
 }: StartApplicationModalProps) {
@@ -145,3 +145,5 @@ export function StartApplicationModal({
     </Dialog>
   );
 }
+
+export default StartApplicationModal;

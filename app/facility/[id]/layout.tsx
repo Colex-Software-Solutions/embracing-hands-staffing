@@ -18,7 +18,7 @@ export default async function facilityLayout({
   const baseUrl = `/facility/${session?.user.id}`;
   return (
     <div className="flex">
-      <div>
+      <div className="mt-6">
         <Nav
           isCollapsed={false}
           links={[

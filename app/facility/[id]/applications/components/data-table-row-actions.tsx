@@ -10,10 +10,10 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
+  DropdownMenuSubContent,
 } from "@/app/components/ui/dropdown-menu";
 import Link from "next/link";
 import { JobApplicationTableData } from "../data/schema";
-import { DropdownMenuSubContent } from "@radix-ui/react-dropdown-menu";
 import { ConfirmationModal } from "@/app/components/modals/confirmation-modal";
 import { ApplicationStatus } from "@prisma/client";
 import { useToast } from "@/app/components/ui/use-toast";

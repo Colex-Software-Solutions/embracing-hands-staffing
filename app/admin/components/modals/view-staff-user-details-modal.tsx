@@ -31,7 +31,7 @@ const getStaffUserInfoFromRow = (row: any): StaffUser => {
   };
 };
 
-export function ViewStaffUserDetailsModal({ row }: any) {
+function ViewStaffUserDetailsModal({ row }: any) {
   const { firstName, lastName, email, id, phone, status } =
     getStaffUserInfoFromRow(row);
 
@@ -84,3 +84,5 @@ export function ViewStaffUserDetailsModal({ row }: any) {
     </Dialog>
   );
 }
+
+export default ViewStaffUserDetailsModal;

@@ -54,8 +54,6 @@ export default async function JobsPage() {
   const session = await getServerSession();
   const jobPosts = await getJobPosts();
 
-  console.log(jobPosts);
-
   return (
     <>
       <script

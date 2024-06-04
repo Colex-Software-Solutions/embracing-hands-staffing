@@ -1,12 +1,38 @@
 "use client";
 import React, { useState } from "react";
-import PersonalInformation from "./steps/PersonalInformation";
-import PositionDetails from "./steps/PositionDetails";
-import EducationalBackground from "./steps/EducationalBackground";
-import Certifications from "./steps/Certifications";
-import BackgroundInformation from "./steps/BackgroundInformation";
-import ProfessionalReferences from "./steps/ProfessionalReferences";
-import EmploymentHistorySection from "./steps/EmploymentHistory";
+import dynamic from "next/dynamic";
+
+const PersonalInformation = dynamic(
+  () => import("./steps/PersonalInformation"),
+  { ssr: false }
+);
+const PositionDetails = dynamic(() => import("./steps/PositionDetails"), {
+  ssr: false,
+});
+
+const EducationalBackground = dynamic(
+  () => import("./steps/EducationalBackground"),
+  { ssr: false }
+);
+
+const Certifications = dynamic(() => import("./steps/Certifications"), {
+  ssr: false,
+});
+
+const BackgroundInformation = dynamic(
+  () => import("./steps/BackgroundInformation"),
+  { ssr: false }
+);
+
+const ProfessionalReferences = dynamic(
+  () => import("./steps/ProfessionalReferences"),
+  { ssr: false }
+);
+
+const EmploymentHistorySection = dynamic(
+  () => import("./steps/EmploymentHistory"),
+  { ssr: false }
+);
 import { Button } from "@/app/components/ui/button";
 import { useToast } from "@/app/components/ui/use-toast";
 import {
@@ -62,10 +88,11 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   staffSchoolInfo,
   employmentHistory,
 }) => {
-  const [currentStep, setCurrentStep] = useState<number>(7);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [formData, setFormData] = useState<StaffProfile | null>(profile);
   const router = useRouter();
-  const isInitialSetup = !profile?.profileSetupComplete || true;
+
+  const isInitialSetup = profile?.profileSetupComplete === true ? false : true;
 
   const CurrentStepComponent = steps[currentStep].component;
 
@@ -121,14 +148,18 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
             <nav className="mt-4 hidden md:flex space-x-2 mg:flex-col md:space-x-0 md:space-y-1">
               <ul className="flex flex-col mr-12 w-[300px] space-y-4">
                 {steps.map((step, index) => (
-                  <li
-                    key={index}
-                    className={index === currentStep ? "font-bold" : ""}
-                  >
-                    <button onClick={() => setCurrentStep(index)}>
-                      {step.name}
-                    </button>
-                  </li>
+                  <>
+                    {index < steps.length - 1 && (
+                      <li
+                        key={index}
+                        className={index === currentStep ? "font-bold" : ""}
+                      >
+                        <button onClick={() => setCurrentStep(index)}>
+                          {step.name}
+                        </button>
+                      </li>
+                    )}
+                  </>
                 ))}
               </ul>
             </nav>
@@ -142,12 +173,16 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {steps.map((step, index) => (
-                  <DropdownMenuItem
-                    key={index}
-                    onSelect={() => setCurrentStep(index)}
-                  >
-                    {step.name}
-                  </DropdownMenuItem>
+                  <>
+                    {index < steps.length - 1 && (
+                      <DropdownMenuItem
+                        key={index}
+                        onSelect={() => setCurrentStep(index)}
+                      >
+                        {step.name}
+                      </DropdownMenuItem>
+                    )}
+                  </>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>

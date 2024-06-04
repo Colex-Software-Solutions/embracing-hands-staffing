@@ -11,12 +11,23 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "@/app/components/ui/dropdown-menu";
-import { ViewAndEditModal } from "./modals/view-and-edit-job-details";
-import { CloseJobModal } from "./modals/close-job-confirm-modal";
 import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { CompleteJobModal } from "./modals/complete-job-confirm-modal";
+import dynamic from "next/dynamic";
+
+const ViewAndEditModal = dynamic(
+  () => import("./modals/view-and-edit-job-details"),
+  { ssr: false }
+);
+const CloseJobModal = dynamic(
+  () => import("./modals/close-job-confirm-modal"),
+  { ssr: false }
+);
+const CompleteJobModal = dynamic(
+  () => import("./modals/complete-job-confirm-modal"),
+  { ssr: false }
+);
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

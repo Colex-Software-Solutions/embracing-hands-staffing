@@ -1,8 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { Toaster } from "@/app/components/ui/toaster";
+import dynamic from "next/dynamic";
 import { JobPost, JobStatus } from "@prisma/client";
-import JobDisplayTabs from "./jobs-display-tabs";
+import { Toaster } from "@/app/components/ui/toaster";
+
+// Dynamically import JobDisplayTabs and Toaster
+const JobDisplayTabs = dynamic(() => import("./jobs-display-tabs"), {
+  ssr: false,
+});
 
 interface IJobPostsManager {
   initialJobPosts: JobPost[];

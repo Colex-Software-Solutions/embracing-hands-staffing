@@ -18,7 +18,7 @@ interface CompleteJobModalProps {
   onUpdate: (id: string, newStatus: JobStatus) => void;
 }
 
-export function CompleteJobModal({ jobId, onUpdate }: CompleteJobModalProps) {
+function CompleteJobModal({ jobId, onUpdate }: CompleteJobModalProps) {
   const { toast } = useToast();
 
   const handleStatusChange = async (newStatus: JobStatus) => {
@@ -77,3 +77,5 @@ export function CompleteJobModal({ jobId, onUpdate }: CompleteJobModalProps) {
     </Dialog>
   );
 }
+
+export default CompleteJobModal;

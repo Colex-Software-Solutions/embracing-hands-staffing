@@ -14,7 +14,7 @@ import {
 import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ViewAndEditModal } from "../../jobs/components/modals/view-and-edit-job-details";
+import ViewAndEditModal from "../../jobs/components/modals/view-and-edit-job-details";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
