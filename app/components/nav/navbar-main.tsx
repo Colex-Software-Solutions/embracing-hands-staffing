@@ -170,9 +170,29 @@ const getNavLinks = (session: Session | null) => {
       label: "About Us",
     },
   ];
+  const facilityNavItems = [
+    {
+      href: "/",
+      label: "Home",
+    },
+    {
+      href: "/about-us",
+      label: "About Us",
+    },
+    {
+      href: `facility/${session?.user.id}/jobs`,
+      label: "Jobs",
+    },
+    {
+      href: `/fee-sheet`,
+      label: "Fee Sheet",
+    },
+  ];
 
   if (session?.user.role === "STAFF") {
     return staffNavItems;
+  } else if (session?.user.role === "FACILITY") {
+    return facilityNavItems;
   }
 
   return navItems;
