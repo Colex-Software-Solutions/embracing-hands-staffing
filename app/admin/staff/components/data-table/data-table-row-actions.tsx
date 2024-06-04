@@ -1,7 +1,6 @@
 "use client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,17 +12,19 @@ import {
 import dynamic from "next/dynamic";
 
 const ViewStaffUserDetailsModal = dynamic(
-  () => import("../../components/modals/view-staff-user-details-modal"),
+  () => import("@/app/admin/components/modals/view-staff-user-details-modal"),
   { ssr: false }
 );
 const ApproveStatusModal = dynamic(
-  () => import("../../components/modals/approve-status-modal"),
+  () => import("@/app/admin/components/modals/approve-status-modal"),
   { ssr: false }
 );
 const DeclineStatusModal = dynamic(
-  () => import("../../components/modals/decline-status-modal"),
+  () => import("@/app/admin/components/modals/decline-status-modal"),
   { ssr: false }
 );
+
+import { Button } from "../../../../components/ui/button";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

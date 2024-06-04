@@ -132,27 +132,43 @@ class UserProvider {
     });
   }
 
-  async getStaffUsers() {
-    return await prisma.user.findMany({
-      select: {
-        id: true,
-        staffProfile: {
+  async getStaffUsers(page: number, pageSize: number) {
+    const skip = (page - 1) * pageSize;
+
+    const [users, totalCount] = await prisma.$transaction([
+      prisma.user.findMany({
           select: {
-            firstname: true,
-            lastname: true,
-            title: true,
+              id: true,
+              staffProfile: {
+                  select: {
+                      firstname: true,
+                      lastname: true,
+                      title: true,
+                  },
+              },
+              email: true,
+              phone: true,
+              status: true,
+              createdAt: true,
+              updatedAt: true,
           },
-        },
-        email: true,
-        phone: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-      where: {
-        role: "STAFF",
-      },
-    });
+          where: {
+              role: "STAFF",
+          },
+          skip: skip,
+          take: pageSize,
+      }),
+      prisma.user.count({
+          where: {
+              role: "STAFF",
+          },
+      })
+  ]);
+
+  return {
+      users,
+      totalCount,
+  };
   }
 
   async getFacilityUsers() {
