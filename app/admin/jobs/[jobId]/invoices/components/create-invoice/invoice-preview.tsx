@@ -70,7 +70,10 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
       <div className="flex justify-end mt-3">
         <div className="flex flex-col gap-1">
           <CostText title="Subtotal" value={cost.subtotal} />
-          <CostText title="Admin Fee (3%):" value={cost.adminFee} />
+          <CostText
+            title={`Admin Fee (${adminFeeValue * 100}%):`}
+            value={cost.adminFee}
+          />
           <div className="border border-primary p-2">
             <p className="text-primary mr-5 text-3xl">
               Total: ${cost.totalCost}
