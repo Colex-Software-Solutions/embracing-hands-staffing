@@ -10,6 +10,8 @@ import { Toaster } from "@/app/components/ui/toaster";
 import { StaffUser } from "../../page";
 import { statuses } from "../../data/data";
 import axios from "axios";
+import { ColumnFilter } from "@tanstack/react-table";
+import { mapDataToStaffUsers } from "../../utils";
 
 const dataTableToolbarInputs: DataTableToolbarInput[] = [
   {
@@ -29,6 +31,16 @@ const dataTableToolbarOutputs: DataTableToolbarOption[] = [
   },
 ];
 
+const formatFilters = (filters: ColumnFilter[]): string => {
+  const formattedFilters = filters.map((filter) => {
+    return {
+      [filter.id]: filter.value,
+    };
+  });
+
+  return JSON.stringify(formattedFilters);
+};
+
 interface IStaffUserManager {
   initialStaffUsers: StaffUser[];
   totalCount: number;
@@ -42,19 +54,21 @@ const StaffUserManager = ({
   const fetchStaffUsers = async (
     pageSize: number,
     page: number,
-    increment: boolean = false
+    increment: boolean = false,
+    filters: ColumnFilter[]
   ) => {
     try {
       const params = {
         pageSize,
         page,
+        filters: formatFilters(filters),
       };
 
       const response = await axios.get("/api/admin/staff", {
         params,
       });
 
-      const newStaffUsers = response.data.staffUsers.users;
+      const newStaffUsers = mapDataToStaffUsers(response.data.staffUsers.users);
 
       if (increment) {
         setStaffUsers((prev) => [...prev, ...newStaffUsers]);
@@ -69,13 +83,14 @@ const StaffUserManager = ({
   const handlePagination = (
     pageSize: number,
     page: number,
-    increment: boolean = false
+    increment: boolean = false,
+    filters: ColumnFilter[] = []
   ) => {
     const maxEntries = pageSize * page;
     const hasMoreEntries = totalCount > staffUsers.length;
 
     if (staffUsers.length <= maxEntries && hasMoreEntries) {
-      fetchStaffUsers(pageSize, page, increment);
+      fetchStaffUsers(pageSize, page, increment, filters);
     }
   };
 
