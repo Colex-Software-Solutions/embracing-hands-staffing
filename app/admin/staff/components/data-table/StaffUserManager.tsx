@@ -88,10 +88,8 @@ const StaffUserManager = ({
   ) => {
     const maxEntries = pageSize * page;
     const hasMoreEntries = totalCount > staffUsers.length;
-    console.log("filters", maxEntries);
 
     if (staffUsers.length <= maxEntries && hasMoreEntries) {
-      console.log("filters", filters);
       fetchStaffUsers(pageSize, page, increment, filters);
     }
   };

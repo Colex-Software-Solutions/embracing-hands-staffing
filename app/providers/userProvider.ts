@@ -133,7 +133,7 @@ class UserProvider {
     });
   }
 
-  async getStaffUsers(page: number, pageSize: number, filters: StaffUserPaginationFilter[] = []) {
+  async getStaffUsersWithPagination(page: number, pageSize: number, filters: StaffUserPaginationFilter[] = []) {
     const skip = (page - 1) * pageSize;
 
     const filterConditions = filters.reduce((acc: any, filterObj: any) => {

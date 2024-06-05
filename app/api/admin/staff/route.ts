@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const staffUsers = await userProvider.getStaffUsers(Number(page), Number(pageSize), filters);
+    const staffUsers = await userProvider.getStaffUsersWithPagination(Number(page), Number(pageSize), filters);
 
     return new Response(JSON.stringify({ success: true, staffUsers }));
   } catch (error) {

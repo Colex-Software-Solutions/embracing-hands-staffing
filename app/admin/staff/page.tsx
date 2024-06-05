@@ -21,7 +21,7 @@ const initialPage: number = 1;
 const initialPageSize: number = 10;
 
 async function getStaffUsers() {
-  const { users, totalCount } = await userProvider.getStaffUsers(
+  const { users, totalCount } = await userProvider.getStaffUsersWithPagination(
     initialPage,
     initialPageSize
   );
