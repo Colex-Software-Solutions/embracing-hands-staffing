@@ -43,6 +43,7 @@ export const createInvoiceSchema = z.object({
   }),
   invoiceNumber: z.number(),
   shifts: z.array(shiftSchema),
+  cardPayment: z.boolean(), 
 });
 
 export type CreateInvoiceFormValues = z.infer<typeof createInvoiceSchema>;

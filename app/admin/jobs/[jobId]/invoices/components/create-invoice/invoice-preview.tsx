@@ -4,18 +4,21 @@ import BillTable from "../../bill-table";
 import InvoiceDetailsTable from "../../invoice-details-table";
 
 const adminFeeValue = 0.03; // 3%
+const cardPaymentFeeValue = 0.04; // 4%
 
 interface InvoicePreviewProps {
   facilityName: string;
   facilityAddress: string;
   invoiceNumber: number;
   shifts: any[];
+  isCardPayment: boolean;
 }
 
 interface GetCostResponse {
   adminFee: number;
   subtotal: number;
   totalCost: number;
+  cardPaymentFee: number;
 }
 
 const InvoicePreview: React.FC<InvoicePreviewProps> = ({
@@ -23,6 +26,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   facilityAddress,
   shifts,
   invoiceNumber,
+  isCardPayment,
 }) => {
   const getCost = (): GetCostResponse => {
     const subtotal: number = shifts.reduce((total, shift) => {
@@ -33,15 +37,19 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
     }, 0);
 
     const adminFee = subtotal * adminFeeValue;
+    const cardPaymentFee = isCardPayment ? subtotal * cardPaymentFeeValue : 0;
 
     return {
       adminFee,
       subtotal,
-      totalCost: subtotal + adminFee,
+      totalCost: subtotal + adminFee + cardPaymentFee,
+      cardPaymentFee,
     };
   };
 
   const cost = getCost();
+
+  console.log("Card Payment State:", isCardPayment);
 
   return (
     <div className="flex-col bg-white m-5 p-3">
@@ -70,13 +78,16 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
       <div className="flex justify-end mt-3">
         <div className="flex flex-col gap-1">
           <CostText title="Subtotal" value={cost.subtotal} />
+          {isCardPayment && (
+            <CostText title="Card Fee (4%):" value={cost.cardPaymentFee} />
+          )}
           <CostText
             title={`Admin Fee (${adminFeeValue * 100}%):`}
             value={cost.adminFee}
           />
           <div className="border border-primary p-2">
-            <p className="text-primary mr-5 text-3xl">
-              Total: ${cost.totalCost}
+            <p className="text-primary text-3xl">
+              Total: ${cost.totalCost.toFixed(2)}
             </p>
           </div>
         </div>
