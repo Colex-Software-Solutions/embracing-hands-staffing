@@ -1,63 +1,38 @@
 [
   {
     "value": "Certified Surgical First Assist/CFA",
-    "label": "Certified Surgical First Assist/CFA",
-    "charge": 45
+    "label": "Certified Surgical First Assist/CFA"
   },
-  { "value": "RN First Assist", "label": "RN First Assist", "charge": 50 },
-  { "value": "Pre-Op RN", "label": "Pre-Op RN", "charge": 40 },
-  { "value": "PACU RN", "label": "PACU RN", "charge": 42 },
-  { "value": "Pre-Op/PACU RN", "label": "Pre-Op/PACU RN", "charge": 41 },
-  { "value": "OR Circulator RN", "label": "OR Circulator RN", "charge": 45 },
-  {
-    "value": "OR Circulator/Scrub RN",
-    "label": "OR Circulator/Scrub RN",
-    "charge": 47
-  },
-  {
-    "value": "OR Circulator RN - CVOR",
-    "label": "OR Circulator RN - CVOR",
-    "charge": 50
-  },
-  {
-    "value": "Circulator RN - IR",
-    "label": "Circulator RN - IR",
-    "charge": 48
-  },
+  { "value": "RN First Assist", "label": "RN First Assist" },
+  { "value": "Pre-Op RN", "label": "Pre-Op RN" },
+  { "value": "PACU RN", "label": "PACU RN" },
+  { "value": "Pre-Op/PACU RN", "label": "Pre-Op/PACU RN" },
+  { "value": "OR Circulator RN", "label": "OR Circulator RN" },
+  { "value": "OR Circulator/Scrub RN", "label": "OR Circulator/Scrub RN" },
+  { "value": "OR Circulator RN - CVOR", "label": "OR Circulator RN - CVOR" },
+  { "value": "Circulator RN - IR", "label": "Circulator RN - IR" },
   {
     "value": "Circulator RN - Pediatric",
-    "label": "Circulator RN - Pediatric",
-    "charge": 46
+    "label": "Circulator RN - Pediatric"
   },
-  { "value": "RN - ER", "label": "RN - ER", "charge": 44 },
-  { "value": "RN - ICU", "label": "RN - ICU", "charge": 48 },
-  { "value": "RN – Med Surg", "label": "RN – Med Surg", "charge": 40 },
+  { "value": "RN - ER", "label": "RN - ER" },
+  { "value": "RN - ICU", "label": "RN - ICU" },
+  { "value": "RN – Med Surg", "label": "RN – Med Surg" },
   {
     "value": "Licensed Practical Nurse/LVN",
-    "label": "Licensed Practical Nurse/LVN",
-    "charge": 35
+    "label": "Licensed Practical Nurse/LVN"
   },
-  {
-    "value": "Certified Surgical Tech",
-    "label": "Certified Surgical Tech",
-    "charge": 38
-  },
-  {
-    "value": "Sterile Processing Tech",
-    "label": "Sterile Processing Tech",
-    "charge": 30
-  },
-  { "value": "X-ray Tech", "label": "X-ray Tech", "charge": 40 },
+  { "value": "Certified Surgical Tech", "label": "Certified Surgical Tech" },
+  { "value": "Sterile Processing Tech", "label": "Sterile Processing Tech" },
+  { "value": "X-ray Tech", "label": "X-ray Tech" },
   {
     "value": "Certified Medical Assistant",
-    "label": "Certified Medical Assistant",
-    "charge": 25
+    "label": "Certified Medical Assistant"
   },
   {
     "value": "Certified Nursing Assistant",
-    "label": "Certified Nursing Assistant",
-    "charge": 20
+    "label": "Certified Nursing Assistant"
   },
-  { "value": "Patient Care Tech", "label": "Patient Care Tech", "charge": 22 },
-  { "value": "Patient Sitter", "label": "Patient Sitter", "charge": 18 }
+  { "value": "Patient Care Tech", "label": "Patient Care Tech" },
+  { "value": "Patient Sitter", "label": "Patient Sitter" }
 ]
