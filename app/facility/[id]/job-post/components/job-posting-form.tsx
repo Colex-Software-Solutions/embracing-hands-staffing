@@ -112,8 +112,6 @@ const JobPostingForm = ({
       const latitude = results[0].geometry.location.lat();
       const longitude = results[0].geometry.location.lng();
 
-      console.log(latitude);
-
       if (!latitude || !longitude) {
         setLocationError(true);
         return;
@@ -130,7 +128,7 @@ const JobPostingForm = ({
   }, [location]);
 
   const handleAddSkill = (tag: string) => {
-    if (!tags.includes(tag)) {
+    if (!tags.includes(tag) && tags.length < 1) {
       setTags([...tags, tag]);
     }
   };
@@ -170,6 +168,9 @@ const JobPostingForm = ({
       form.setValue("location", location);
       form.setValue("latitude", latitude);
       form.setValue("longitude", longitude);
+      if (tags.length < 1) {
+        throw new Error("Please add the job tag");
+      }
 
       const requestBody = {
         ...data,
@@ -530,9 +531,9 @@ const JobPostingForm = ({
                 />
               </div>
               <div className="space-y-4 flex flex-col">
-                <Label htmlFor="tags">Tags</Label>
+                <Label htmlFor="tags">Job Tag</Label>
                 <SkillsCombobox handleAddSkill={handleAddSkill}>
-                  Select Tags
+                  Select Tag
                 </SkillsCombobox>
                 <div className="flex gap-3 flex-wrap justify-start">
                   {tags.map((tag, index) => (
