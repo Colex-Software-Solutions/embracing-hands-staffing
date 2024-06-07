@@ -168,6 +168,9 @@ const JobPostingForm = ({
       form.setValue("location", location);
       form.setValue("latitude", latitude);
       form.setValue("longitude", longitude);
+      if (tags.length < 1) {
+        throw new Error("Please add the job tag");
+      }
 
       const requestBody = {
         ...data,
