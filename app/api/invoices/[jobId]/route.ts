@@ -19,7 +19,8 @@ export async function POST(
         facilityAddress: data.facilityAddress,
         paid: false,
         invoiceNumber: newInvoiceNumber,
-        items: data.shifts
+        items: data.shifts,
+        cardPayment: data.cardPayment
       },
     });
 

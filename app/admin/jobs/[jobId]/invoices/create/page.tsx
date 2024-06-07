@@ -92,6 +92,7 @@ const CreateInvoicePage = async ({ params }: CreateInvoicePageProps) => {
     facilityAddress: createInvoiceData.facilityAddress,
     invoiceNumber: newInvoiceNumber,
     shifts: transformShifts(createInvoiceData.shifts || []),
+    cardPayment: false,
   };
 
   return (

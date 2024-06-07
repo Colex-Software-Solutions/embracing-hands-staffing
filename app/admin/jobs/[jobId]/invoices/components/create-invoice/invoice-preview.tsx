@@ -3,11 +3,22 @@ import InvoiceDateAndNumber from "./invoice-date-and-number";
 import BillTable from "../../bill-table";
 import InvoiceDetailsTable from "../../invoice-details-table";
 
+const adminFeeValue = 0.03; // 3%
+const cardPaymentFeeValue = 0.04; // 4%
+
 interface InvoicePreviewProps {
   facilityName: string;
   facilityAddress: string;
   invoiceNumber: number;
   shifts: any[];
+  isCardPayment: boolean;
+}
+
+interface GetCostResponse {
+  adminFee: number;
+  subtotal: number;
+  totalCost: number;
+  cardPaymentFee: number;
 }
 
 const InvoicePreview: React.FC<InvoicePreviewProps> = ({
@@ -15,17 +26,30 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   facilityAddress,
   shifts,
   invoiceNumber,
+  isCardPayment,
 }) => {
-  const getTotalCost = () => {
-    const totalCost: number = shifts.reduce((total, shift) => {
+  const getCost = (): GetCostResponse => {
+    const subtotal: number = shifts.reduce((total, shift) => {
       const hourlyRate = shift.hourlyRate >= 0 ? shift.hourlyRate : 0;
       const hoursWorked = shift.hoursWorked >= 0 ? shift.hoursWorked : 0;
 
       return total + hourlyRate * hoursWorked;
     }, 0);
 
-    return totalCost.toFixed(2);
+    const adminFee = subtotal * adminFeeValue;
+    const cardPaymentFee = isCardPayment ? subtotal * cardPaymentFeeValue : 0;
+
+    return {
+      adminFee,
+      subtotal,
+      totalCost: subtotal + adminFee + cardPaymentFee,
+      cardPaymentFee,
+    };
   };
+
+  const cost = getCost();
+
+  console.log("Card Payment State:", isCardPayment);
 
   return (
     <div className="flex-col bg-white m-5 p-3">
@@ -52,10 +76,36 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
         <InvoiceDetailsTable shifts={shifts} />
       </div>
       <div className="flex justify-end mt-3">
-        <div className="border border-primary p-2">
-          <p className="text-primary mr-5 text-3xl">Total: ${getTotalCost()}</p>
+        <div className="flex flex-col gap-1">
+          <CostText title="Subtotal" value={cost.subtotal} />
+          {isCardPayment && (
+            <CostText title="Card Fee (4%):" value={cost.cardPaymentFee} />
+          )}
+          <CostText
+            title={`Admin Fee (${adminFeeValue * 100}%):`}
+            value={cost.adminFee}
+          />
+          <div className="border border-primary p-2">
+            <p className="text-primary text-3xl">
+              Total: ${cost.totalCost.toFixed(2)}
+            </p>
+          </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+interface CostTextProps {
+  title: string;
+  value: number;
+}
+
+const CostText: React.FC<CostTextProps> = ({ title, value }) => {
+  return (
+    <div className="flex justify-between w-60">
+      <div>{title}:</div>
+      <div className="font-bold">${value.toFixed(2)}</div>
     </div>
   );
 };
