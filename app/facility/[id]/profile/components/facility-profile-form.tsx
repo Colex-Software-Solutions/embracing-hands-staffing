@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Label } from "@/app/components/ui/label";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -24,7 +24,10 @@ import { useToast } from "@/app/components/ui/use-toast";
 import GooglePlacesAutocomplete, {
   geocodeByAddress,
 } from "react-places-autocomplete";
-
+import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
+import SignatureCanvas from "react-signature-canvas";
+import { PDFDocument, rgb } from "pdf-lib";
+import { format } from "date-fns";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const profileSchema = z.object({
@@ -40,6 +43,7 @@ const profileSchema = z.object({
   city: z.string().min(3, "City is required"),
   latitude: z.number(),
   longitude: z.number(),
+  signature: z.any(),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -60,6 +64,7 @@ const FacilityProfileForm = ({
     city: profile?.city ?? "",
     latitude: profile?.latitude,
     longitude: profile?.longitude,
+    signature: "",
   };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -71,14 +76,40 @@ const FacilityProfileForm = ({
   const [locationError, setLocationError] = useState<boolean>(false);
   const { toast } = useToast();
 
+  const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
+  const [showContractModal, setShowContractModal] = useState(false);
+  const signaturePadRef = useRef<SignatureCanvas>(null);
+
+  const handleViewContract = () => {
+    setShowContractModal(true);
+  };
+
+  const handleClearSignature = () => {
+    signaturePadRef.current?.clear();
+    setSignatureDataUrl(null);
+  };
+
+  const handleSaveSignature = () => {
+    if (signaturePadRef.current) {
+      if (signaturePadRef.current.isEmpty()) {
+        toast({
+          title: "Error",
+          description: "Please provide a signature before saving.",
+          variant: "destructive",
+        });
+        return;
+      }
+      const dataUrl = signaturePadRef.current.toDataURL();
+      setSignatureDataUrl(dataUrl);
+    }
+  };
+
   const verifyAddress = async () => {
     try {
       const results = await geocodeByAddress(location);
 
       const latitude = results[0].geometry.location.lat();
       const longitude = results[0].geometry.location.lng();
-
-      console.log(latitude);
 
       if (!latitude || !longitude) {
         setLocationError(true);
@@ -104,6 +135,68 @@ const FacilityProfileForm = ({
       event.target.value = "";
     }
   };
+
+  const [generatedPdfUrl, setGeneratedPdfUrl] = useState<string | null>(null);
+
+  const generatePdfWithSignature = async (
+    signatureDataUrl: string,
+    facilityData: ProfileFormValues
+  ) => {
+    const existingPdfBytes = await fetch("/EH-contract-25.pdf").then((res) =>
+      res.arrayBuffer()
+    );
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+    const page = pdfDoc.getPages()[15];
+
+    const pngImage = await pdfDoc.embedPng(signatureDataUrl);
+    const pngDims = pngImage.scale(0.14);
+
+    // Add signature and facility details to the PDF
+    page.drawImage(pngImage, {
+      x: 120,
+      y: 355,
+      width: pngDims.width,
+      height: pngDims.height,
+    });
+
+    page.drawText(facilityData.name, {
+      x: 160,
+      y: 437,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+    page.drawText(facilityData.address, {
+      x: 145,
+      y: 412,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+    page.drawText(
+      `${facilityData.city}, ${facilityData.state}, ${facilityData.country}`,
+      {
+        x: 170,
+        y: 388,
+        size: 12,
+        color: rgb(0, 0, 0),
+      }
+    );
+    page.drawText(format(new Date(), "yyyy-MM-dd"), {
+      x: 130,
+      y: 280,
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+
+    const pdfBytes = await pdfDoc.save();
+
+    const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    setGeneratedPdfUrl(pdfUrl);
+
+    return pdfBlob;
+  };
+
   const onSubmit = async (data: ProfileFormValues) => {
     const results = await geocodeByAddress(location);
 
@@ -132,6 +225,19 @@ const FacilityProfileForm = ({
     formData.append("longitude", longitude.toString());
 
     if (profileImageFile) formData.append("profileImage", profileImageFile);
+    if (!profile?.signedContractUrl) {
+      if (!signatureDataUrl) {
+        toast({
+          title: "Error!",
+          description:
+            "Please review and sign the contract and save your signature",
+          variant: "destructive",
+        });
+        return;
+      }
+      const signedPdf = await generatePdfWithSignature(signatureDataUrl, data);
+      formData.append("signedContract", signedPdf);
+    }
 
     try {
       const res = await axios.post(`/api/facility/${userId}`, formData, {
@@ -156,6 +262,7 @@ const FacilityProfileForm = ({
   };
 
   const { errors, isSubmitting } = form.formState;
+
   return (
     <Form {...form}>
       <form
@@ -378,7 +485,79 @@ const FacilityProfileForm = ({
                 )}
               </div>
             </div>
+            {/* Contract review and signing section */}
+            {!profile?.signedContractUrl && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Review and Sign Contract</h2>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm">
+                    Review and sign the contract with Embracing Hands Staffing.
+                  </p>
+                  <Button variant="link" onClick={handleViewContract}>
+                    View Contract
+                  </Button>
+                </div>
+                {signatureDataUrl && (
+                  <div className="border border-gray-300 p-2">
+                    <img src={signatureDataUrl} alt="Signature" />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleClearSignature}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                )}
+                <FormField
+                  control={form.control}
+                  name="signature"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="border p-2">
+                          <Label>Sign here</Label>
+                          <SignatureCanvas
+                            penColor="black"
+                            canvasProps={{
+                              width: 500,
+                              height: 200,
+                              className: "sigCanvas",
+                            }}
+                            ref={signaturePadRef}
+                          />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <div>
+                  <Button type="button" onClick={handleSaveSignature}>
+                    Save Signature
+                  </Button>
+                </div>
+              </div>
+            )}
+            {/* Display generated PDF for validation (keep for now)
+            {generatedPdfUrl && (
+              <div className="mt-4">
+                <iframe
+                  src={generatedPdfUrl}
+                  width="100%"
+                  height="900px"
+                  title="Generated PDF"
+                ></iframe>
+              </div>
+            )} */}
+
+            {/* Contract modal */}
+            <PdfViewerModal
+              isOpen={showContractModal}
+              documentUrl="/EH-contract-25.pdf"
+              onClose={() => setShowContractModal(false)}
+            ></PdfViewerModal>
           </CardContent>
+
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
               {isSubmitting && <Loader />}Save

@@ -36,6 +36,7 @@ class UserProvider {
           select: {
             profileImage: true,
             id: true,
+            signedContractUrl: true,
           },
         },
       },
@@ -137,38 +138,38 @@ class UserProvider {
 
     const [users, totalCount] = await prisma.$transaction([
       prisma.user.findMany({
-          select: {
-              id: true,
-              staffProfile: {
-                  select: {
-                      firstname: true,
-                      lastname: true,
-                      title: true,
-                  },
-              },
-              email: true,
-              phone: true,
-              status: true,
-              createdAt: true,
-              updatedAt: true,
+        select: {
+          id: true,
+          staffProfile: {
+            select: {
+              firstname: true,
+              lastname: true,
+              title: true,
+            },
           },
-          where: {
-              role: "STAFF",
-          },
-          skip: skip,
-          take: pageSize,
+          email: true,
+          phone: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        where: {
+          role: "STAFF",
+        },
+        skip: skip,
+        take: pageSize,
       }),
       prisma.user.count({
-          where: {
-              role: "STAFF",
-          },
-      })
-  ]);
+        where: {
+          role: "STAFF",
+        },
+      }),
+    ]);
 
-  return {
+    return {
       users,
       totalCount,
-  };
+    };
   }
 
   async getFacilityUsers() {

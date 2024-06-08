@@ -12,7 +12,11 @@ declare module "next-auth" {
       status: UserStatus;
       accessToken: string;
       staffProfile: { profileImage: string; id: string }?;
-      facilityProfile: { profileImage: string; id: string }?;
+      facilityProfile: {
+        profileImage: string;
+        id: string;
+        signedContractUrl: string;
+      }?;
     };
   }
 }

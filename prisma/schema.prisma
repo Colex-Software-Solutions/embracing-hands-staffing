@@ -174,7 +174,8 @@ model FacilityProfile {
   country      String?
   latitude     Float
   longitude    Float
-  profileImage String?       
+  profileImage String?
+  signedContractUrl String?        
   jobPosts     JobPost[]
   user         User      @relation(fields: [userId], references: [id])
 }
