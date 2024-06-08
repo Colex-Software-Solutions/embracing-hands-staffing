@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
-import { Column } from "@tanstack/react-table";
+import { Column, ColumnFilter } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/app/components/ui/badge";
@@ -98,6 +98,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues);
+
                       column?.setFilterValue(
                         filterValues.length ? filterValues : undefined
                       );

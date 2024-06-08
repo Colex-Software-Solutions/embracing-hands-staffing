@@ -21,6 +21,7 @@ export function ViewInvoiceModal({ children, invoice }: ViewInvoiceModalProps) {
       <DialogContent className="w-auto max-w-none shadow-none">
         <div>
           <InvoicePreview
+            isCardPayment={invoice.cardPayment ?? false}
             facilityName={invoice.facillityName}
             facilityAddress={invoice.facilityAddress}
             shifts={invoice.items}

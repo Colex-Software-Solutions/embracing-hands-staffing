@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   ColumnDef,
+  ColumnFilter,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -56,7 +57,8 @@ interface DataTableProps<TData, TValue> {
   handlePagination: (
     pageSize: number,
     page: number,
-    increment?: boolean
+    increment?: boolean,
+    filters?: ColumnFilter[]
   ) => void;
 }
 
@@ -123,6 +125,7 @@ export function DataTable<TData, TValue>({
         table={table}
         dataTableToolbarInputs={dataTableToolbarInputs}
         dataTableToolbarOptions={dataTableToolbarOptions}
+        handlePagination={handlePagination}
       />
       <div className="rounded-md border">
         <Table>

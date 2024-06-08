@@ -1,6 +1,7 @@
 import "server-only";
 import { User } from "@prisma/client";
 import prisma from "@/db/prisma";
+import { StaffUserPaginationFilter } from "../api/admin/staff/route";
 
 class UserProvider {
   async createUser(data: Omit<User, "createdAt" | "updatedAt">) {
@@ -133,8 +134,30 @@ class UserProvider {
     });
   }
 
-  async getStaffUsers(page: number, pageSize: number) {
+  async getStaffUsersWithPagination(
+    page: number,
+    pageSize: number,
+    filters: StaffUserPaginationFilter[] = []
+  ) {
     const skip = (page - 1) * pageSize;
+
+    const filterConditions = filters.reduce(
+      (acc: any, filterObj: any) => {
+        Object.keys(filterObj).forEach((key) => {
+          // Use contains for partial matching of strings
+          acc[key] = {
+            contains: filterObj[key],
+            mode: "insensitive", // optional, for case-insensitive matching
+          };
+        });
+        return acc;
+      },
+      { role: "STAFF" }
+    );
+
+    const whereClause = {
+      ...filterConditions, // Spread the dynamically constructed filter conditions
+    };
 
     const [users, totalCount] = await prisma.$transaction([
       prisma.user.findMany({
@@ -153,9 +176,7 @@ class UserProvider {
           createdAt: true,
           updatedAt: true,
         },
-        where: {
-          role: "STAFF",
-        },
+        where: whereClause,
         skip: skip,
         take: pageSize,
       }),

@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/app/components/ui/form";
 import { Input } from "@/app/components/ui/input";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/app/components/ui/use-toast";
 import { Button } from "@/app/components/ui/button";
@@ -23,6 +23,7 @@ import {
 import { Dispatch, SetStateAction, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/app/components/ui/checkbox";
 
 interface CreateInvoiceFormProps {
   jobId: string;
@@ -67,7 +68,6 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
 
   const onSubmit = async (data: CreateInvoiceFormValues) => {
     try {
-      console.log(data);
       await axios.post(`/api/invoices/${jobId}`, data);
 
       router.push(`/admin/jobs/${jobId}/invoices`);
@@ -128,6 +128,27 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="cardPayment"
+              render={() => (
+                <FormItem className="flex items-center  gap-2">
+                  <div className="font-bold mt-2">Card Payment</div>
+                  <Controller
+                    name="cardPayment"
+                    control={form.control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox
+                        className="mb-5"
+                        checked={value}
+                        onCheckedChange={(checked) => onChange(checked)}
+                      />
+                    )}
+                  />
+                </FormItem>
+              )}
+            />
+
             <p className="font-bold text-xl mt-4">Shifts</p>
             <div className="overflow-scroll h-96 shadow-inner">
               {fields.map((field, index) => (
@@ -310,6 +331,7 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
           facilityName={form.watch("facilityName")}
           facilityAddress={form.watch("facilityAddress")}
           shifts={form.watch("shifts")}
+          isCardPayment={form.watch("cardPayment")}
           invoiceNumber={defaultValues.invoiceNumber || 0}
         />
       </div>

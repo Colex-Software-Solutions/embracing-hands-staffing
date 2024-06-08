@@ -4,7 +4,7 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
+import { ColumnFilter, Table } from "@tanstack/react-table";
 
 import { Button } from "@/app/components/ui/button";
 import {
@@ -21,7 +21,8 @@ interface DataTablePaginationProps<TData> {
   handlePagination: (
     pageSize: number,
     page: number,
-    increment?: boolean
+    increment?: boolean,
+    filters?: ColumnFilter[]
   ) => void;
   setPageIndex: React.Dispatch<React.SetStateAction<number>>;
 }

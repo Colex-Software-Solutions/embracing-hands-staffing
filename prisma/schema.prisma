@@ -146,6 +146,7 @@ model Invoice {
   facilityAddress   String
   jobPostId         String           @db.ObjectId
   invoiceNumber     Int
+  cardPayment       Boolean?
   paid              Boolean
   items             Json
   createdAt         DateTime         @default(now())
