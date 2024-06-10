@@ -2,6 +2,7 @@ import { GeoLocation } from "@/app/staff/[id]/profile/components/staff-profile-f
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import skills from "./data/skills.json";
+import { eachMinuteOfInterval, setHours, setMinutes, isWithinInterval, addDays, addMinutes, startOfDay } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -178,8 +179,43 @@ export function formatInvoiceNumber(number: number): string {
   return number.toString();
 }
 
-export const getSkillPayAmount = (label: string) => {
+export const getSkillPayAmount = (label: string, clockIn: any) => {
+  console.log({clockIn})
   const skill = skills.find(skill => skill.label === label);
 
   return skill ? skill.perDiemHourly/100 : 0;
 }
+
+export const getDifferentialHoursFromHoursWorked = (clockIn: Date, clockOut: Date): number => {
+  let currentTime = new Date(clockIn);
+  let totalDifferentialMinutes = 0;
+
+  while (currentTime <= clockOut) {
+     // Add one minute to the current time
+     currentTime = new Date(currentTime.getTime() + 60000); // 60000 milliseconds = 1 minute 
+
+    if (isWithinDifferentialHours(currentTime.getHours(), currentTime.getMinutes())) {
+      totalDifferentialMinutes++;  // Increment by one minute if within differential hours
+      console.log("Time:", currentTime.getHours(), currentTime.getMinutes(), totalDifferentialMinutes)
+
+    }
+  }
+
+  // Convert minutes to hours for the final result, but return minutes as the task requires
+  return parseFloat((totalDifferentialMinutes/60).toFixed(1));
+};
+
+export const isWithinDifferentialHours = (hour: number, minute: number): boolean => {
+  const SHIFT_DIFFERENTIAL_START = 15; // 3 PM in 24-hour format
+  const SHIFT_DIFFERENTIAL_END_HOUR = 6; // 6 AM next day
+  const SHIFT_DIFFERENTIAL_END_MINUTES = 30; // 6:30 AM
+
+  // Check if within 3 PM to Midnight
+  // OR if within Midnight to 6:30 AM
+  if (hour >= SHIFT_DIFFERENTIAL_START && hour <= 23 || hour < SHIFT_DIFFERENTIAL_END_HOUR || 
+    (hour === SHIFT_DIFFERENTIAL_END_HOUR && minute < SHIFT_DIFFERENTIAL_END_MINUTES)) {
+    return true;
+  }
+
+  return false; // Time does not fall within the differential hours
+};

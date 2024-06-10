@@ -64,7 +64,10 @@ const transformShifts = (shifts: CreateInvoiceShift[]) => {
     employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
     in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
     out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
-    hourlyRate: getSkillPayAmount(shift.staffProfile.skills[0]), // TODO to update when skills is updated to only 1 skill
+    hourlyRate: getSkillPayAmount(
+      shift.staffProfile.skills[0],
+      shift.clockInTime
+    ), // TODO to update when skills is updated to only 1 skill
     hoursWorked: parseFloat(
       (
         (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /
