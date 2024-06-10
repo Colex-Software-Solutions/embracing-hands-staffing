@@ -76,7 +76,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
 
   const { toast } = useToast();
   const { errors, isSubmitting } = form.formState;
-  console.log(profile);
+
   const addEducation = async (data: EducationFormValues) => {
     try {
       const res = await axios.post(`/api/education/${profile?.id}`, data, {

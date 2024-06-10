@@ -152,6 +152,7 @@ const navItems = [
 ];
 
 const getNavLinks = (session: Session | null) => {
+  console.log(session);
   const staffNavItems = [
     {
       href: "/",
@@ -186,6 +187,10 @@ const getNavLinks = (session: Session | null) => {
     {
       href: `/fee-sheet.pdf`,
       label: "Fee Sheet",
+    },
+    {
+      href: `${session?.user.facilityProfile?.signedContractUrl ?? "#"}`,
+      label: "Contract",
     },
   ];
 

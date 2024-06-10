@@ -10,8 +10,7 @@ export async function POST(
   try {
     const userId = params.id;
 
-    if (!userId)
-    {
+    if (!userId) {
       return NextResponse.json(
         { message: "This job post could not be found." },
         {
@@ -20,17 +19,17 @@ export async function POST(
         }
       );
     }
-      
+
     const facility = await facilityProvider.getFacilityProfile(userId);
 
     let profileImage, profileUrl;
+    let signedContract, signedContractUrl;
     const formData = await request.formData();
 
-    // profile url will only be required on first creation
-    // otherwise the previous files should be deleted from S3
+    // Handle profile image
     if (formData.has("profileImage")) {
       if (facility?.profileImage) {
-        deleteFile(facility.profileImage);
+        await deleteFile(facility.profileImage);
       }
       profileImage = formData.get("profileImage") as File;
 
@@ -42,10 +41,33 @@ export async function POST(
       );
     }
 
+    // Handle signed contract PDF
+    if (formData.has("signedContract")) {
+      signedContract = formData.get("signedContract") as File;
+
+      const signedContractBuffer = Buffer.from(
+        await signedContract.arrayBuffer()
+      );
+      signedContractUrl = await uploadFile(
+        signedContractBuffer,
+        signedContract.name,
+        signedContract.type
+      );
+    }
+
+    // Ensure profile image is present
     if (!facility?.profileImage && !profileImage) {
       return NextResponse.json(null, {
         status: 400,
-        statusText: "profile image is required",
+        statusText: "Profile image is required",
+      });
+    }
+
+    // Ensure signed contract is present on creation
+    if (!facility && !signedContractUrl) {
+      return NextResponse.json(null, {
+        status: 400,
+        statusText: "Signed contract is required",
       });
     }
 
@@ -71,6 +93,8 @@ export async function POST(
       latitude: Number(latitude),
       longitude: Number(longitude),
       profileImage: profileUrl || facility?.profileImage || null,
+      signedContractUrl:
+        signedContractUrl || facility?.signedContractUrl || null,
     };
 
     const updatedProfile = facility

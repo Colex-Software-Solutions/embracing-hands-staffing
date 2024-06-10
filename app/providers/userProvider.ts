@@ -37,6 +37,7 @@ class UserProvider {
           select: {
             profileImage: true,
             id: true,
+            signedContractUrl: true,
           },
         },
       },
@@ -133,56 +134,63 @@ class UserProvider {
     });
   }
 
-  async getStaffUsersWithPagination(page: number, pageSize: number, filters: StaffUserPaginationFilter[] = []) {
+  async getStaffUsersWithPagination(
+    page: number,
+    pageSize: number,
+    filters: StaffUserPaginationFilter[] = []
+  ) {
     const skip = (page - 1) * pageSize;
 
-    const filterConditions = filters.reduce((acc: any, filterObj: any) => {
-      Object.keys(filterObj).forEach(key => {
-        // Use contains for partial matching of strings
-        acc[key] = {
-          contains: filterObj[key],
-          mode: 'insensitive' // optional, for case-insensitive matching
-        };
-      });
-      return acc;
-    }, { role: 'STAFF' });
-  
+    const filterConditions = filters.reduce(
+      (acc: any, filterObj: any) => {
+        Object.keys(filterObj).forEach((key) => {
+          // Use contains for partial matching of strings
+          acc[key] = {
+            contains: filterObj[key],
+            mode: "insensitive", // optional, for case-insensitive matching
+          };
+        });
+        return acc;
+      },
+      { role: "STAFF" }
+    );
+
     const whereClause = {
       ...filterConditions, // Spread the dynamically constructed filter conditions
     };
 
     const [users, totalCount] = await prisma.$transaction([
       prisma.user.findMany({
-          select: {
-              id: true,
-              staffProfile: {
-                  select: {
-                      firstname: true,
-                      lastname: true,
-                      title: true,
-                  },
-              },
-              email: true,
-              phone: true,
-              status: true,
-              createdAt: true,
-              updatedAt: true,
+        select: {
+          id: true,
+          staffProfile: {
+            select: {
+              firstname: true,
+              lastname: true,
+              title: true,
+            },
           },
-          where: whereClause,
-          skip: skip,
-          take: pageSize,
+          email: true,
+          phone: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        where: whereClause,
+        skip: skip,
+        take: pageSize,
       }),
       prisma.user.count({
-          where: {
-              role: "STAFF",
-          },
-      })
-  ]);
+        where: {
+          role: "STAFF",
+        },
+      }),
+    ]);
 
-  return {
+    return {
       users,
       totalCount,
-  };
+    };
   }
 
   async getFacilityUsers() {
