@@ -34,15 +34,15 @@ const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
   facilityType: z.string().min(1, "Facility Type is required"),
   description: z.string().optional(),
-  address: z.string().min(10, "Address is required"),
+  address: z.string().optional(),
   country: z.string().min(3, "Country is required"),
   state: z
     .string()
     .min(1, "State/Province is required")
     .min(3, "Please enter full state/province name and not the shortcut"),
   city: z.string().min(3, "City is required"),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
   signature: z.any(),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -166,7 +166,7 @@ const FacilityProfileForm = ({
       size: 12,
       color: rgb(0, 0, 0),
     });
-    page.drawText(facilityData.address, {
+    page.drawText(location, {
       x: 145,
       y: 412,
       size: 12,
