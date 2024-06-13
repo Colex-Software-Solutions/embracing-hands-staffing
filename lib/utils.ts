@@ -196,7 +196,6 @@ export function formatInvoiceNumber(number: number): string {
 }
 
 export const getSkillPayAmount = (label: string, clockIn: any) => {
-  console.log({ clockIn });
   const skill = skills.find((skill) => skill.label === label);
 
   return skill ? skill.perDiemHourly / 100 : 0;

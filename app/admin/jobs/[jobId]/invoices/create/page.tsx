@@ -61,7 +61,6 @@ async function getCreateInvoiceData(id: string) {
 }
 
 const transformShifts = (shifts: CreateInvoiceShift[]) => {
-  console.log("shift s");
   return shifts.map((shift) => {
     return {
       startDate: shift.start,
@@ -73,14 +72,7 @@ const transformShifts = (shifts: CreateInvoiceShift[]) => {
       hourlyRate: getSkillPayAmount(
         shift.staffProfile.skills[0],
         shift.clockInTime
-      ), // TODO to update when skills is updated to only 1 skill
-      // hoursWorked: parseFloat(
-      //   (
-      //     (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /
-      //     (1000 * 60 * 60)
-      //   ).toFixed(2)
-      // ),
-      // shiftDifferentialHours,
+      ),
     };
   });
 };

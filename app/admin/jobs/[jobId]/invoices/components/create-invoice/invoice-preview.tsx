@@ -38,7 +38,6 @@ interface HoursWorkedInfo {
 interface ShiftDifferentialInfo extends HoursWorkedInfo {}
 
 const getShiftDifferentialInfo = (shifts: any[]): ShiftDifferentialInfo => {
-  console.log({ shifts });
   const shiftDifferentHours = shifts.reduce(
     (total, shift) =>
       total +
@@ -105,7 +104,6 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   };
 
   const cost = getCost();
-  console.log("cost is", cost);
 
   return (
     <div className="flex-col bg-white m-5 p-3">

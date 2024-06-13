@@ -173,7 +173,6 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                                 : ""
                             }
                             onChange={(e) => {
-                              console.log("value is now", e.target.valueAsDate);
                               field.onChange(e.target.valueAsDate);
                             }}
                           />
