@@ -3,7 +3,10 @@ import CreateForm from "../components/create-invoice/create-form";
 import { CreateInvoiceFormValues } from "../../../data/schema";
 import { createInvoiceSchema } from "../../../data/schema";
 import { invoiceProvider } from "@/app/providers/invoiceProvider";
-import { getSkillPayAmount } from "@/lib/utils";
+import {
+  getDifferentialHoursFromHoursWorked,
+  getSkillPayAmount,
+} from "@/lib/utils";
 
 interface CreateInvoicePageProps {
   params: {
@@ -58,23 +61,28 @@ async function getCreateInvoiceData(id: string) {
 }
 
 const transformShifts = (shifts: CreateInvoiceShift[]) => {
-  return shifts.map((shift) => ({
-    dateOfService: shift.start,
-    serviceDetails: "N/A",
-    employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
-    in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
-    out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
-    hourlyRate: getSkillPayAmount(
-      shift.staffProfile.skills[0],
-      shift.clockInTime
-    ), // TODO to update when skills is updated to only 1 skill
-    hoursWorked: parseFloat(
-      (
-        (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /
-        (1000 * 60 * 60)
-      ).toFixed(2)
-    ),
-  }));
+  console.log("shift s");
+  return shifts.map((shift) => {
+    return {
+      startDate: shift.start,
+      endDate: shift.end,
+      serviceDetails: "N/A",
+      employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
+      in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
+      out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
+      hourlyRate: getSkillPayAmount(
+        shift.staffProfile.skills[0],
+        shift.clockInTime
+      ), // TODO to update when skills is updated to only 1 skill
+      // hoursWorked: parseFloat(
+      //   (
+      //     (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /
+      //     (1000 * 60 * 60)
+      //   ).toFixed(2)
+      // ),
+      // shiftDifferentialHours,
+    };
+  });
 };
 
 const CreateInvoicePage = async ({ params }: CreateInvoicePageProps) => {

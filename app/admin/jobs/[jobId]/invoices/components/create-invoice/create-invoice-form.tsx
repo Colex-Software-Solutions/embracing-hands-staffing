@@ -156,15 +156,43 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                   <p>Shift #{index + 1}</p>
                   <FormField
                     control={form.control}
-                    name={`shifts.${index}.dateOfService`}
+                    name={`shifts.${index}.startDate`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Date of Service</FormLabel>
+                        <FormLabel>Start Date</FormLabel>
                         <FormControl>
                           <Input
                             type="date"
                             className="bg-white w-fit"
-                            placeholder="Date of Service"
+                            placeholder="Start Date"
+                            value={
+                              field.value
+                                ? new Date(field.value)
+                                    .toISOString()
+                                    .split("T")[0]
+                                : ""
+                            }
+                            onChange={(e) => {
+                              console.log("value is now", e.target.valueAsDate);
+                              field.onChange(e.target.valueAsDate);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`shifts.${index}.endDate`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>End Date</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            className="bg-white w-fit"
+                            placeholder="End Date"
                             value={
                               field.value
                                 ? new Date(field.value)
@@ -250,28 +278,6 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name={`shifts.${index}.hoursWorked`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Hours Worked</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              className="bg-white"
-                              placeholder="Hours Worked"
-                              value={field.value}
-                              onChange={(e) =>
-                                field.onChange(parseFloat(e.target.value))
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                   </div>
                   <FormField
                     control={form.control}
@@ -310,12 +316,12 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                 type="button"
                 onClick={() =>
                   append({
-                    dateOfService: new Date(),
+                    startDate: new Date(),
+                    endDate: new Date(),
                     serviceDetails: "",
                     employee: "",
                     in: "",
                     out: "",
-                    hoursWorked: 0,
                     hourlyRate: 0,
                   })
                 }
