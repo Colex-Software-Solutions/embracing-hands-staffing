@@ -1,38 +1,83 @@
 [
   {
     "value": "Certified Surgical First Assist/CFA",
-    "label": "Certified Surgical First Assist/CFA"
+    "label": "Certified Surgical First Assist/CFA",
+    "perDiemHourly": 6000
   },
-  { "value": "RN First Assist", "label": "RN First Assist" },
-  { "value": "Pre-Op RN", "label": "Pre-Op RN" },
-  { "value": "PACU RN", "label": "PACU RN" },
-  { "value": "Pre-Op/PACU RN", "label": "Pre-Op/PACU RN" },
-  { "value": "OR Circulator RN", "label": "OR Circulator RN" },
-  { "value": "OR Circulator/Scrub RN", "label": "OR Circulator/Scrub RN" },
-  { "value": "OR Circulator RN - CVOR", "label": "OR Circulator RN - CVOR" },
-  { "value": "Circulator RN - IR", "label": "Circulator RN - IR" },
+  {
+    "value": "RN First Assist",
+    "label": "RN First Assist",
+    "perDiemHourly": 7300
+  },
+  { "value": "Pre-Op RN", "label": "Pre-Op RN", "perDiemHourly": 5800 },
+  { "value": "PACU RN", "label": "PACU RN", "perDiemHourly": 5800 },
+  {
+    "value": "Pre-Op/PACU RN",
+    "label": "Pre-Op/PACU RN",
+    "perDiemHourly": 5800
+  },
+  {
+    "value": "OR Circulator RN",
+    "label": "OR Circulator RN",
+    "perDiemHourly": 6300
+  },
+  {
+    "value": "OR Circulator/Scrub RN",
+    "label": "OR Circulator/Scrub RN",
+    "perDiemHourly": 6900
+  },
+  {
+    "value": "OR Circulator RN - CVOR",
+    "label": "OR Circulator RN - CVOR",
+    "perDiemHourly": 7500
+  },
+  {
+    "value": "Circulator RN - IR",
+    "label": "Circulator RN - IR",
+    "perDiemHourly": 6900
+  },
   {
     "value": "Circulator RN - Pediatric",
-    "label": "Circulator RN - Pediatric"
+    "label": "Circulator RN - Pediatric",
+    "perDiemHourly": 6900
   },
-  { "value": "RN - ER", "label": "RN - ER" },
-  { "value": "RN - ICU", "label": "RN - ICU" },
-  { "value": "RN – Med Surg", "label": "RN – Med Surg" },
+  { "value": "RN - ER", "label": "RN - ER", "perDiemHourly": 7000 },
+  { "value": "RN - ICU", "label": "RN - ICU", "perDiemHourly": 7000 },
+  { "value": "RN – Med Surg", "label": "RN – Med Surg", "perDiemHourly": 6800 },
   {
     "value": "Licensed Practical Nurse/LVN",
-    "label": "Licensed Practical Nurse/LVN"
+    "label": "Licensed Practical Nurse/LVN",
+    "perDiemHourly": 4500
   },
-  { "value": "Certified Surgical Tech", "label": "Certified Surgical Tech" },
-  { "value": "Sterile Processing Tech", "label": "Sterile Processing Tech" },
-  { "value": "X-ray Tech", "label": "X-ray Tech" },
+  {
+    "value": "Certified Surgical Tech",
+    "label": "Certified Surgical Tech",
+    "perDiemHourly": 4500
+  },
+  {
+    "value": "Sterile Processing Tech",
+    "label": "Sterile Processing Tech",
+    "perDiemHourly": 4500
+  },
+  { "value": "X-ray Tech", "label": "X-ray Tech", "perDiemHourly": 4500 },
   {
     "value": "Certified Medical Assistant",
-    "label": "Certified Medical Assistant"
+    "label": "Certified Medical Assistant",
+    "perDiemHourly": 4200
   },
   {
     "value": "Certified Nursing Assistant",
-    "label": "Certified Nursing Assistant"
+    "label": "Certified Nursing Assistant",
+    "perDiemHourly": 4200
   },
-  { "value": "Patient Care Tech", "label": "Patient Care Tech" },
-  { "value": "Patient Sitter", "label": "Patient Sitter" }
+  {
+    "value": "Patient Care Tech",
+    "label": "Patient Care Tech",
+    "perDiemHourly": 4200
+  },
+  {
+    "value": "Patient Sitter",
+    "label": "Patient Sitter",
+    "perDiemHourly": 4200
+  }
 ]

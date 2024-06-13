@@ -3,6 +3,7 @@ import CreateForm from "../components/create-invoice/create-form";
 import { CreateInvoiceFormValues } from "../../../data/schema";
 import { createInvoiceSchema } from "../../../data/schema";
 import { invoiceProvider } from "@/app/providers/invoiceProvider";
+import { getSkillPayAmount } from "@/lib/utils";
 
 interface CreateInvoicePageProps {
   params: {
@@ -19,6 +20,7 @@ export interface CreateInvoiceData {
 interface CreateInvoiceShiftStaffProfile {
   firstname: string;
   lastname: string;
+  skills: string[];
 }
 
 export interface CreateInvoiceShift {
@@ -62,7 +64,7 @@ const transformShifts = (shifts: CreateInvoiceShift[]) => {
     employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
     in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
     out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
-    hourlyRate: 0,
+    hourlyRate: getSkillPayAmount(shift.staffProfile.skills[0]), // TODO to update when skills is updated to only 1 skill
     hoursWorked: parseFloat(
       (
         (shift.clockOutTime.getTime() - shift.clockInTime.getTime()) /

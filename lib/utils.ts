@@ -1,6 +1,7 @@
 import { GeoLocation } from "@/app/staff/[id]/profile/components/staff-profile-form";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import skills from "./data/skills.json";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -175,4 +176,10 @@ export function formatInvoiceNumber(number: number): string {
     return number.toString().padStart(4, '0');
   }
   return number.toString();
+}
+
+export const getSkillPayAmount = (label: string) => {
+  const skill = skills.find(skill => skill.label === label);
+
+  return skill ? skill.perDiemHourly/100 : 0;
 }

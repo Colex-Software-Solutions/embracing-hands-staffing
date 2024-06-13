@@ -84,6 +84,7 @@ class JobPostProvider {
               select: {
                 firstname: true,
                 lastname: true,
+                skills: true
               },
             },
           },
