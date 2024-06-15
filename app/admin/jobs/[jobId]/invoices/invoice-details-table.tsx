@@ -1,6 +1,7 @@
 import React from "react";
-import { differenceInMilliseconds, format } from "date-fns";
-import { formatDate } from "@/lib/utils";
+import { differenceInMilliseconds, format, parseISO } from "date-fns";
+import { calculateHoursBetweenTimes, formatDate } from "@/lib/utils";
+import moment, { utc } from "moment";
 
 interface InvoiceDetailsTableProps {
   shifts: any[];
@@ -11,23 +12,30 @@ const InvoiceDetailsTable: React.FC<InvoiceDetailsTableProps> = ({
 }) => {
   const columns = [
     "Shift",
-    "Date of Service",
+    "Start Date",
+    "End Date",
     "Service Details",
     "Employee",
-    "In",
-    "Out",
+    "Time In",
+    "Time Out",
     "Hours Worked",
     "Hourly Rate",
   ];
 
   const rows = shifts.map((shift, index) => ({
     index: index + 1,
-    date: formatDate(new Date(shift.dateOfService)),
+    startDate: moment(new Date(shift.startDate)).utc().format("MM/DD/YYYY"),
+    endDate: moment(new Date(shift.endDate)).utc().format("MM/DD/YYYY"),
     details: shift.serviceDetails,
     employee: shift.employee,
     in: shift.in,
     out: shift.out,
-    hoursWorked: shift.hoursWorked.toFixed(2),
+    hoursWorked: calculateHoursBetweenTimes({
+      startDate: formatDate(new Date(shift.startDate)),
+      endDate: formatDate(new Date(shift.endDate)),
+      startTime: shift.in,
+      endTime: shift.out,
+    }),
     hourlyRate: shift.hourlyRate >= 0 ? shift.hourlyRate : 0,
   }));
 

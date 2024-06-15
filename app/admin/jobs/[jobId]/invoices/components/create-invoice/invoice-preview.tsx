@@ -2,6 +2,13 @@ import React from "react";
 import InvoiceDateAndNumber from "./invoice-date-and-number";
 import BillTable from "../../bill-table";
 import InvoiceDetailsTable from "../../invoice-details-table";
+import {
+  calculateHoursBetweenTimes,
+  formatDate,
+  getDifferentialHoursFromHoursWorked,
+} from "@/lib/utils";
+
+const paymentPerShiftDifferentialHour = 5; // $5 per shift differential hour
 
 const adminFeeValue = 0.03; // 3%
 const cardPaymentFeeValue = 0.04; // 4%
@@ -16,10 +23,61 @@ interface InvoicePreviewProps {
 
 interface GetCostResponse {
   adminFee: number;
+  regularHours: HoursWorkedInfo;
   subtotal: number;
   totalCost: number;
   cardPaymentFee: number;
+  shiftDifferential: ShiftDifferentialInfo;
 }
+
+interface HoursWorkedInfo {
+  hours: number;
+  amount: number;
+}
+
+interface ShiftDifferentialInfo extends HoursWorkedInfo {}
+
+const getShiftDifferentialInfo = (shifts: any[]): ShiftDifferentialInfo => {
+  const shiftDifferentHours = shifts.reduce(
+    (total, shift) =>
+      total +
+      getDifferentialHoursFromHoursWorked({
+        startDate: formatDate(new Date(shift.startDate)),
+        endDate: formatDate(new Date(shift.endDate)),
+        startTime: shift.in,
+        endTime: shift.out,
+      }),
+    0
+  );
+
+  return {
+    hours: shiftDifferentHours,
+    amount: shiftDifferentHours * paymentPerShiftDifferentialHour,
+  };
+};
+
+const getRegularHoursInfo = (shifts: any[]): HoursWorkedInfo => {
+  const regularHours: HoursWorkedInfo = shifts.reduce(
+    (total, shift) => {
+      const hoursWorked = calculateHoursBetweenTimes({
+        startDate: formatDate(new Date(shift.startDate)),
+        endDate: formatDate(new Date(shift.endDate)),
+        startTime: shift.in,
+        endTime: shift.out,
+      });
+
+      const hourlyRate = shift.hourlyRate >= 0 ? shift.hourlyRate : 0;
+
+      return {
+        hours: total.hours + hoursWorked, // Accumulate total hours
+        amount: total.amount + hourlyRate * hoursWorked, // Accumulate total amount
+      };
+    },
+    { hours: 0, amount: 0 }
+  );
+
+  return regularHours;
+};
 
 const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   facilityName,
@@ -29,27 +87,23 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   isCardPayment,
 }) => {
   const getCost = (): GetCostResponse => {
-    const subtotal: number = shifts.reduce((total, shift) => {
-      const hourlyRate = shift.hourlyRate >= 0 ? shift.hourlyRate : 0;
-      const hoursWorked = shift.hoursWorked >= 0 ? shift.hoursWorked : 0;
-
-      return total + hourlyRate * hoursWorked;
-    }, 0);
-
+    const regularHours = getRegularHoursInfo(shifts);
+    const shiftDifferential = getShiftDifferentialInfo(shifts);
+    const subtotal = regularHours.amount + shiftDifferential.amount;
     const adminFee = subtotal * adminFeeValue;
     const cardPaymentFee = isCardPayment ? subtotal * cardPaymentFeeValue : 0;
 
     return {
       adminFee,
       subtotal,
+      regularHours,
       totalCost: subtotal + adminFee + cardPaymentFee,
       cardPaymentFee,
+      shiftDifferential,
     };
   };
 
   const cost = getCost();
-
-  console.log("Card Payment State:", isCardPayment);
 
   return (
     <div className="flex-col bg-white m-5 p-3">
@@ -77,13 +131,29 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
       </div>
       <div className="flex justify-end mt-3">
         <div className="flex flex-col gap-1">
-          <CostText title="Subtotal" value={cost.subtotal} />
+          <CostText
+            title="Regular Hours"
+            value={`${cost.regularHours.amount.toFixed(2)} (${
+              cost.regularHours.hours
+            } hrs)`}
+          />
+
+          {cost.shiftDifferential.amount > 0 && (
+            <CostText
+              title="Shift Differential"
+              value={`${cost.shiftDifferential.amount} (${cost.shiftDifferential.hours} hrs)`}
+            />
+          )}
+          <CostText title="Subtotal" value={cost.subtotal.toFixed(2)} />
           {isCardPayment && (
-            <CostText title="Card Fee (4%):" value={cost.cardPaymentFee} />
+            <CostText
+              title="Card Fee (4%):"
+              value={cost.cardPaymentFee.toFixed(2)}
+            />
           )}
           <CostText
             title={`Admin Fee (${adminFeeValue * 100}%):`}
-            value={cost.adminFee}
+            value={cost.adminFee.toFixed(2)}
           />
           <div className="border border-primary p-2">
             <p className="text-primary text-3xl">
@@ -98,14 +168,14 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
 
 interface CostTextProps {
   title: string;
-  value: number;
+  value: number | string;
 }
 
 const CostText: React.FC<CostTextProps> = ({ title, value }) => {
   return (
-    <div className="flex justify-between w-60">
+    <div className="flex justify-between w-72">
       <div>{title}:</div>
-      <div className="font-bold">${value.toFixed(2)}</div>
+      <div className="font-bold">${value}</div>
     </div>
   );
 };

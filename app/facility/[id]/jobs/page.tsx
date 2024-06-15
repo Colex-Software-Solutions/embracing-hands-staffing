@@ -26,7 +26,7 @@ async function getJobPosts(id: string) {
 
 export default async function JobsPage() {
   const session = await getServerSession();
-  const jobPosts = await getJobPosts(session?.user?.facilityProfile.id);
+  const jobPosts = await getJobPosts(session?.user?.facilityProfile?.id);
 
   return (
     <>

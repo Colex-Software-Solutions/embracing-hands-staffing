@@ -12,7 +12,11 @@ export const jobPostSchema = z.object({
 export type JobPostSchema = z.infer<typeof jobPostSchema>;
 
 const shiftSchema = z.object({
-  dateOfService: z.date({
+  startDate: z.date({
+    required_error: "Date of Service cannot be empty.",
+    invalid_type_error: "Invalid date format.",
+  }),
+  endDate: z.date({
     required_error: "Date of Service cannot be empty.",
     invalid_type_error: "Invalid date format.",
   }),
@@ -27,9 +31,6 @@ const shiftSchema = z.object({
   }),
   out: z.string().min(1, {
     message: "Out time cannot be empty.",
-  }),
-  hoursWorked: z.number().min(0, {
-    message: "Hours Worked cannot be negative.",
   }),
   hourlyRate: z.number(),
 });
