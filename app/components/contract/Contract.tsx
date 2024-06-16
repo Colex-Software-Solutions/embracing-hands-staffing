@@ -11,6 +11,7 @@ import {
 } from "@react-pdf/renderer";
 import { FacilityProfile } from "@prisma/client";
 import { format } from "date-fns";
+import ContractPage from "./ContractPage";
 
 const styles = StyleSheet.create({
   page: {
@@ -74,6 +75,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textDecoration: "underline",
   },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
 });
 
 const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
@@ -81,7 +87,7 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
   const location = `${profile?.city}, ${profile?.state}, ${profile?.country}`;
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <ContractPage>
         <Text style={styles.title}>
           ATTN: {facilityName ? facilityName : "Facility Customer"}
         </Text>
@@ -126,9 +132,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
         </Text>
         <Text style={[styles.footer, styles.bold]}>Warm regards,</Text>
         <Text style={styles.footer}>Embracing Hands Healthcare Staffing</Text>
-        <Text style={styles.footer}>(469)362-0818</Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.heading}>
           Why choose Embracing Hands Healthcare Staffing
         </Text>
@@ -198,8 +203,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           employment needs. Give us a call at (469)362-0818 to learn about all
           of our services and competitive pricing!
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.heading}>
           Letter of Understanding between Embracing Hands Healthcare Staffing
           and {facilityName ? facilityName : "Facility Customer"}
@@ -299,8 +304,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           York, 90 Church Street, New York, NY, 10007; 212-417-5888; in New
           Jersey at 877-222-3737; and in Maryland at 410-887-3740.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.heading}>Customer Complaint Resolution</Text>
         <Text style={styles.content}>
           It is the policy of Embracing Hands Healthcare Staffing to record all
@@ -358,8 +363,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             }. ${item}`}</Text>
           ))}
         </View>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.heading}>
           Supplemental Staffing Agreement for Healthcare Personnel by and
           Between Embracing Hands Healthcare Staffing and{" "}
@@ -415,8 +420,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           signed "Travel Nurse Booking Agreement" (See Exhibit C) between Agency
           and Facility.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>1.2 Background Information</Text>
         <Text style={styles.content}>
           Agency shall maintain on file, and upon request provide to Facility
@@ -493,8 +498,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           assignment, and any additional instruction or examinations as may be
           requested by {facilityName ? facilityName : "Facility Customer"}.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>
           1.7 Control of Payments to Agency Staff
         </Text>
@@ -560,8 +565,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           {facilityName ? facilityName : "Facility Customer"} employees as
           employees of Agency.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>1.11 Subcontractors</Text>
         <Text style={styles.content}>
           Agency provides all professional health care staffing services and
@@ -686,8 +691,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           in good faith in order to ensure an efficient and safe working
           environment for Agency Employees.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>Sentinel Event.</Text>
         <Text style={styles.contentWithSpace}>
           In event of an unexpected incident, error, or sentinel event,{" "}
@@ -779,8 +784,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             ))}
           </View>
         </View>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>3.5 Audit</Text>
         <Text style={styles.content}>
           A {facilityName ? facilityName : "Facility Customer"} shall notify
@@ -865,8 +870,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             }. ${item}`}</Text>
           ))}
         </View>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.content}>
           Dollars ($1,000,000) combined single limit, each occurrence; including
           personal injury and blanket contractual liability.
@@ -990,8 +995,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           costs. If Agency enters into a subcontract for services to be rendered
           hereunder with a related party, which
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>4.14 Entire Agreement</Text>
         <Text style={styles.content}>
           This Agreement (including Exhibits A, B, and C) supersedes all
@@ -1091,8 +1096,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           provisions of this Article will survive beyond the expiration or
           termination of this Agreement.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.content}>
           • Unless otherwise authorized, upon the earlier of termination of this
           Agreement or request of the Disclosing Party, the Receiving Party will
@@ -1124,8 +1129,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           Placements will be required to participate in certain education and
           training related to security and protection of PHI.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>4.16 Records:</Text>
         <Text style={styles.content}>
           Agency shall maintain complete and accurate records and documentation
@@ -1199,8 +1204,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             ? format(profile.createdAt, "yyyy-MM-dd")
             : "_________________________________"}
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>Exhibit B</Text>
         <Text style={styles.subHeading}>
           Related Experience and Additional Certifications
@@ -1263,8 +1268,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           </Text>
           <Text style={styles.listItem}>• Current BLS</Text>
         </View>
-      </Page>
-      <Page size="A4" style={styles.page}>
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>Pediatric RNs and LVNs:</Text>
         <View>
           <Text style={styles.listItem}>
@@ -1330,7 +1335,7 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           </Text>
           <Text style={styles.listItem}>• Current BLS and ACLS</Text>
         </View>
-      </Page>
+      </ContractPage>
     </Document>
   );
 };
