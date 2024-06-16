@@ -189,7 +189,7 @@ const getNavLinks = (session: Session | null) => {
     },
     {
       href: session?.user.facilityProfile
-        ? `/facility/${session?.user.id}/pdf`
+        ? `/facility/${session?.user.id}/contract`
         : "#",
       label: "Contract",
     },
