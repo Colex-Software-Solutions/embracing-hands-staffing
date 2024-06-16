@@ -104,6 +104,7 @@ const MyDocument = () => (
         <Text style={styles.listItem}>• Professional Liability Policy</Text>
       </View>
       <Text style={styles.title}>Quality</Text>
+      <Text>All of our clinical employees have:</Text>
       <View>
         <Text style={styles.listItem}>• Criminal background check</Text>
         <Text style={styles.listItem}>• Prior employment verification</Text>

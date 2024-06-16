@@ -11,6 +11,7 @@ import {
 } from "@react-pdf/renderer";
 import { FacilityProfile } from "@prisma/client";
 import { format } from "date-fns";
+
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    marginBottom: 10,
+    marginTop: 10,
   },
   content: {
     fontSize: 10,
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Create Document Component
 const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
   const facilityName = profile?.name;
   const location = `${profile?.city}, ${profile?.state}, ${profile?.country}`;
@@ -139,12 +139,17 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           ready to assist you in meeting your human resource needs.
         </Text>
         <Text style={styles.title}>Decreased Liability</Text>
+        <Text style={styles.content}>
+          All employees of Embracing Hands Healthcare Staffing operate under
+          our:
+        </Text>
         <View>
           <Text style={styles.listItem}>• Worker’s Compensation Policy</Text>
           <Text style={styles.listItem}>• General Liability Policy</Text>
           <Text style={styles.listItem}>• Professional Liability Policy</Text>
         </View>
         <Text style={styles.title}>Quality</Text>
+        <Text style={styles.content}>All of our clinical employees have:</Text>
         <View>
           <Text style={styles.listItem}>• Criminal background check</Text>
           <Text style={styles.listItem}>• Prior employment verification</Text>
@@ -681,10 +686,12 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           in good faith in order to ensure an efficient and safe working
           environment for Agency Employees.
         </Text>
-
+      </Page>
+      <Page size="A4" style={styles.page}>
+        <Text style={styles.subHeading}>Sentinel Event.</Text>
         <Text style={styles.contentWithSpace}>
-          Sentinel Event. In event of an unexpected incident, error, or sentinel
-          event, {facilityName ? facilityName : "Facility Customer"} shall take
+          In event of an unexpected incident, error, or sentinel event,{" "}
+          {facilityName ? facilityName : "Facility Customer"} shall take
           immediate action and then notify Agency at (469)362-0818. A written
           report of the event shall then be made to Agency by{" "}
           {facilityName ? facilityName : "Facility Customer"}. Agency and{" "}
@@ -692,12 +699,9 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           agree to cooperate in good faith in order to understand, document,
           resolve, and properly report the unexpected incident.
         </Text>
-      </Page>
-      <Page size="A4" style={styles.page}>
         <Text style={styles.subHeading}>
           Section 3 – Service Charges and Billing
         </Text>
-
         <Text style={styles.subHeading}>3.1 Billing Schedule</Text>
         <Text style={styles.content}>
           Agency shall invoice{" "}
@@ -1205,71 +1209,71 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
         <Text style={styles.subHeading}>Critical Care RNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year of acute Critical Care Experience
+            • Minimum of one year of acute Critical Care Experience
           </Text>
           <Text style={styles.listItem}>
-            ● Passing Score on Critical Care Examination
+            • Passing Score on Critical Care Examination
           </Text>
-          <Text style={styles.listItem}>● Current ACLS</Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current ACLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>Telemetry RNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year of acute care experience in Telemetry/Cardiac
+            • Minimum of one year of acute care experience in Telemetry/Cardiac
             monitored areas
           </Text>
           <Text style={styles.listItem}>
-            ● Passing Score on Telemetry/Cardiac Care Examination
+            • Passing Score on Telemetry/Cardiac Care Examination
           </Text>
-          <Text style={styles.listItem}>● Current ACLS</Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current ACLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>Medical-Surgical RNs and LVNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year of acute care experience in Medical-Surgical
+            • Minimum of one year of acute care experience in Medical-Surgical
             nursing
           </Text>
           <Text style={styles.listItem}>
-            ● Passing Score on Medical-Surgical Examination
+            • Passing Score on Medical-Surgical Examination
           </Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>Operating Room technician:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year of surgical scrub experience in an acute care
+            • Minimum of one year of surgical scrub experience in an acute care
             hospital or outpatient surgery center setting
           </Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>
           Certified Nursing Assistant (CNA):
         </Text>
         <View>
-          <Text style={styles.listItem}>● Current certification</Text>
+          <Text style={styles.listItem}>• Current certification</Text>
           <Text style={styles.listItem}>
-            ● Minimum of 6 months of experience in acute care setting or 1 year
+            • Minimum of 6 months of experience in acute care setting or 1 year
             experience in long term care setting
           </Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
       </Page>
       <Page size="A4" style={styles.page}>
         <Text style={styles.subHeading}>Pediatric RNs and LVNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year acute care pediatric experience
+            • Minimum of one year acute care pediatric experience
           </Text>
           <Text style={styles.listItem}>
-            ● Passing score on Pediatric examination
+            • Passing score on Pediatric examination
           </Text>
-          <Text style={styles.listItem}>● Current PALS and BLS</Text>
+          <Text style={styles.listItem}>• Current PALS and BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>
@@ -1277,54 +1281,54 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
         </Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year post-partum / normal newborn experience
+            • Minimum of one year post-partum / normal newborn experience
           </Text>
           <Text style={styles.listItem}>
-            ● Passing score on post-partum / normal newborn examination
+            • Passing score on post-partum / normal newborn examination
           </Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>Labor and Delivery RNs and LVNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year Labor and delivery experience
+            • Minimum of one year Labor and delivery experience
           </Text>
           <Text style={styles.listItem}>
-            ● Passing score on Labor and Delivery examination
+            • Passing score on Labor and Delivery examination
           </Text>
           <Text style={styles.listItem}>
-            ● Current BLS, ACLS and NALS or NRP
+            • Current BLS, ACLS and NALS or NRP
           </Text>
         </View>
 
         <Text style={styles.subHeading}>Neonatal Intensive Care Unit RNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year neonatal intensive care unit experience
+            • Minimum of one year neonatal intensive care unit experience
           </Text>
           <Text style={styles.listItem}>
-            ● Passing score on NICU examination
+            • Passing score on NICU examination
           </Text>
-          <Text style={styles.listItem}>● Current BLS and NALS or NRP</Text>
+          <Text style={styles.listItem}>• Current BLS and NALS or NRP</Text>
         </View>
 
         <Text style={styles.subHeading}>Operating Room RNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year scrub (and circulating for RNs) experience in
+            • Minimum of one year scrub (and circulating for RNs) experience in
             an acute care or outpatient surgery setting
           </Text>
-          <Text style={styles.listItem}>● Current BLS</Text>
+          <Text style={styles.listItem}>• Current BLS</Text>
         </View>
 
         <Text style={styles.subHeading}>Emergency Services RNs and LVNs:</Text>
         <View>
           <Text style={styles.listItem}>
-            ● Minimum of one year of acute hospital emergency department
+            • Minimum of one year of acute hospital emergency department
             experience
           </Text>
-          <Text style={styles.listItem}>● Current BLS and ACLS</Text>
+          <Text style={styles.listItem}>• Current BLS and ACLS</Text>
         </View>
       </Page>
     </Document>
