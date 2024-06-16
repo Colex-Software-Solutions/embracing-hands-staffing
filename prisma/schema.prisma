@@ -176,7 +176,9 @@ model FacilityProfile {
   latitude     Float
   longitude    Float
   profileImage String?
-  signedContractUrl String?        
+  signedContractUrl String?    
+  contractSignatureUrl String?
+  createdAt    DateTime? @default(now())    
   jobPosts     JobPost[]
   user         User      @relation(fields: [userId], references: [id])
 }

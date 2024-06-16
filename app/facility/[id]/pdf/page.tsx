@@ -1,12 +1,9 @@
-"use client";
 import React from "react";
-import { PDFViewer } from "@react-pdf/renderer";
-import Contract from "../../../components/Contract";
+import PdfDisplay from "./components/PdfDisplay";
+import { facilityProvider } from "@/app/providers/facilityProvider";
+import { FacilityProfile } from "@prisma/client";
 
-const PdfPage: React.FC = () => (
-  <PDFViewer style={{ width: "100%", height: "100vh" }}>
-    <Contract />
-  </PDFViewer>
-);
-
-export default PdfPage;
+export default async function PdfPage({ params }: { params: { id: string } }) {
+  const profile = await facilityProvider.getFacilityProfile(params.id);
+  return <PdfDisplay profile={profile as FacilityProfile} />;
+}
