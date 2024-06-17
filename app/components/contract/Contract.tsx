@@ -14,11 +14,6 @@ import { format } from "date-fns";
 import ContractPage from "./ContractPage";
 
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    backgroundColor: "#FFF",
-    padding: 30,
-  },
   signatureContainer: {
     display: "flex",
     flexDirection: "row",
@@ -74,11 +69,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     textDecoration: "underline",
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
   },
 });
 
