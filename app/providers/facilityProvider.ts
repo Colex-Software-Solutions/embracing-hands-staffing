@@ -14,7 +14,7 @@ class FacilityProvider {
     });
   }
 
-  async createfacilityProfile(data: Omit<FacilityProfile, "id">) {
+  async createfacilityProfile(data: Omit<FacilityProfile, "id" | "createdAt">) {
     return await prisma.facilityProfile.create({
       data,
     });
@@ -22,7 +22,7 @@ class FacilityProvider {
 
   async updatefacilityProfile(
     userId: string,
-    data: Omit<FacilityProfile, "id">
+    data: Omit<FacilityProfile, "id" | "createdAt">
   ) {
     return await prisma.facilityProfile.update({
       where: { userId },

@@ -23,7 +23,7 @@ export async function POST(
     const facility = await facilityProvider.getFacilityProfile(userId);
 
     let profileImage, profileUrl;
-    let signedContract, signedContractUrl;
+    let contractSignatureUrl: string | null = null;
     const formData = await request.formData();
 
     // Handle profile image
@@ -42,17 +42,8 @@ export async function POST(
     }
 
     // Handle signed contract PDF
-    if (formData.has("signedContract")) {
-      signedContract = formData.get("signedContract") as File;
-
-      const signedContractBuffer = Buffer.from(
-        await signedContract.arrayBuffer()
-      );
-      signedContractUrl = await uploadFile(
-        signedContractBuffer,
-        signedContract.name,
-        signedContract.type
-      );
+    if (formData.has("contractSignatureUrl")) {
+      contractSignatureUrl = formData.get("contractSignatureUrl") as string;
     }
 
     // Ensure profile image is present
@@ -64,10 +55,10 @@ export async function POST(
     }
 
     // Ensure signed contract is present on creation
-    if (!facility && !signedContractUrl) {
+    if (!facility && !contractSignatureUrl) {
       return NextResponse.json(null, {
         status: 400,
-        statusText: "Signed contract is required",
+        statusText: "Contract Signature is required",
       });
     }
 
@@ -81,7 +72,7 @@ export async function POST(
     const latitude = formData.get("latitude") as string;
     const longitude = formData.get("longitude") as string;
 
-    const profileData: Omit<FacilityProfile, "id"> = {
+    const profileData: Omit<FacilityProfile, "id" | "createdAt"> = {
       userId,
       name,
       facilityType,
@@ -93,8 +84,9 @@ export async function POST(
       latitude: Number(latitude),
       longitude: Number(longitude),
       profileImage: profileUrl || facility?.profileImage || null,
-      signedContractUrl:
-        signedContractUrl || facility?.signedContractUrl || null,
+      contractSignatureUrl:
+        contractSignatureUrl || facility?.contractSignatureUrl || null,
+      signedContractUrl: null,
     };
 
     const updatedProfile = facility
