@@ -78,13 +78,13 @@ class JobPostProvider {
         title: true,
         location: true,
         createdAt: true,
+        tags: true,
         shifts: {
           include: {
             staffProfile: {
               select: {
                 firstname: true,
                 lastname: true,
-                skills: true
               },
             },
           },
