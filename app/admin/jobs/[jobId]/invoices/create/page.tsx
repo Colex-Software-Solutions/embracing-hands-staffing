@@ -18,12 +18,12 @@ export interface CreateInvoiceData {
   facilityName: string;
   facilityAddress: string;
   shifts: CreateInvoiceShift[];
+  tag: string;
 }
 
 interface CreateInvoiceShiftStaffProfile {
   firstname: string;
   lastname: string;
-  skills: string[];
 }
 
 export interface CreateInvoiceShift {
@@ -45,6 +45,7 @@ const mapFetchedDataToCreateInvoiceData = (input: any): CreateInvoiceData => {
     facilityName: input.facilityProfile.name,
     facilityAddress: input.facilityProfile.address,
     shifts: input.shifts,
+    tag: input.tags[0],
   };
 };
 
@@ -60,7 +61,7 @@ async function getCreateInvoiceData(id: string) {
   }
 }
 
-const transformShifts = (shifts: CreateInvoiceShift[]) => {
+const transformShifts = (shifts: CreateInvoiceShift[], tag: string) => {
   return shifts.map((shift) => {
     return {
       startDate: shift.start,
@@ -69,10 +70,7 @@ const transformShifts = (shifts: CreateInvoiceShift[]) => {
       employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
       in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
       out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
-      hourlyRate: getSkillPayAmount(
-        shift.staffProfile.skills[0],
-        shift.clockInTime
-      ),
+      hourlyRate: getSkillPayAmount(tag, shift.clockInTime),
     };
   });
 };
@@ -96,7 +94,10 @@ const CreateInvoicePage = async ({ params }: CreateInvoicePageProps) => {
     facilityName: createInvoiceData.facilityName,
     facilityAddress: createInvoiceData.facilityAddress,
     invoiceNumber: newInvoiceNumber,
-    shifts: transformShifts(createInvoiceData.shifts || []),
+    shifts: transformShifts(
+      createInvoiceData.shifts || [],
+      createInvoiceData.tag
+    ),
     cardPayment: false,
   };
 
