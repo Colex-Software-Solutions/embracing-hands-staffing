@@ -9,6 +9,7 @@ import {
 } from "@/app/components/ui/dialog";
 import { JobPost } from "@prisma/client";
 import JobPostingForm from "@/app/facility/[id]/job-post/components/job-posting-form";
+import LoadGoogleMapsScript from "@/app/components/Scripts/LoadGoogleMapsScript";
 
 interface ViewAndEditModalProps {
   row: any;
@@ -22,24 +23,27 @@ export function ViewAndEditModal({
   handleJobPostUpdate,
 }: ViewAndEditModalProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          className="w-full border-0 justify-start flex pl-2 font-normal"
-          variant="outline"
-        >
-          View / Edit Job
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[1200px] max-h-full overflow-scroll my-2">
-        <DialogHeader>
-          <DialogTitle>Job Details</DialogTitle>
-        </DialogHeader>
-        <JobPostingForm
-          currentJob={row.original as JobPost}
-          handleJobPostUpdate={handleJobPostUpdate}
-        />
-      </DialogContent>
-    </Dialog>
+    <>
+      <LoadGoogleMapsScript />
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            className="w-full border-0 justify-start flex pl-2 font-normal"
+            variant="outline"
+          >
+            View / Edit Job
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[1200px] max-h-full overflow-scroll my-2">
+          <DialogHeader>
+            <DialogTitle>Job Details</DialogTitle>
+          </DialogHeader>
+          <JobPostingForm
+            currentJob={row.original as JobPost}
+            handleJobPostUpdate={handleJobPostUpdate}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

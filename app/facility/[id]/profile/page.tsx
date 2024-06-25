@@ -1,6 +1,7 @@
 import { facilityProvider } from "@/app/providers/facilityProvider";
 import FacilityProfileForm from "./components/facility-profile-form";
 import Script from "next/script";
+import LoadGoogleMapsScript from "@/app/components/Scripts/LoadGoogleMapsScript";
 
 export default async function FacilityProfile({
   params,
@@ -10,10 +11,7 @@ export default async function FacilityProfile({
   const profile = await facilityProvider.getFacilityProfile(params.id);
   return (
     <>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-        strategy="beforeInteractive"
-      />
+      <LoadGoogleMapsScript />
       <div className="flex flex-col items-center justify-center my-8">
         <FacilityProfileForm userId={params.id} profile={profile} />
       </div>
