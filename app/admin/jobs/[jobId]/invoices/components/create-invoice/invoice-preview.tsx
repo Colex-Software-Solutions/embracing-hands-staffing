@@ -87,7 +87,6 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   isCardPayment,
 }) => {
   const getCost = (): GetCostResponse => {
-    console.log(shifts);
     const regularHours = getRegularHoursInfo(shifts);
     const shiftDifferential = getShiftDifferentialInfo(shifts);
     const subtotal = regularHours.amount + shiftDifferential.amount;
