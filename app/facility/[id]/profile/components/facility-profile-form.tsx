@@ -500,7 +500,7 @@ const FacilityProfileForm = ({
             {/* Contract modal */}
             <PdfViewerModal
               isOpen={showContractModal}
-              documentUrl={`/facility/${userId}/pdf`}
+              documentUrl={`/facility/${userId}/contract`}
               onClose={() => setShowContractModal(false)}
             ></PdfViewerModal>
           </CardContent>

@@ -19,8 +19,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatDate = (date: Date): string => {
-  return format((date), "MM/dd/yyyy")
-}
+  return format(date, "MM/dd/yyyy");
+};
 
 export function formatDateTime(input: Date): string {
   const date = new Date(input);
@@ -208,14 +208,12 @@ interface GetDifferentialHoursFromHoursWorked {
   endTime: string;
 }
 
-export const getDifferentialHoursFromHoursWorked = (
-  {
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-  }: GetDifferentialHoursFromHoursWorked
-): number => {
+export const getDifferentialHoursFromHoursWorked = ({
+  startDate,
+  endDate,
+  startTime,
+  endTime,
+}: GetDifferentialHoursFromHoursWorked): number => {
   const startDateTime = parse(
     `${startDate} ${startTime}`,
     "MM/dd/yyyy HH:mm",
