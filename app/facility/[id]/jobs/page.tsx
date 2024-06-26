@@ -30,10 +30,6 @@ export default async function JobsPage() {
 
   return (
     <>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-        strategy="beforeInteractive"
-      />
       <div className="h-full flex-1 flex-col space-y-8 p-8 flex">
         <div className="flex items-center justify-between space-y-2">
           <div>

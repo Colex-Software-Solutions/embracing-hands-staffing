@@ -67,6 +67,7 @@ const FacilityProfileForm = ({
     resolver: zodResolver(profileSchema),
     defaultValues,
   });
+  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
   const [location, setLocation] = useState<string>(defaultValues.address || "");
@@ -118,6 +119,19 @@ const FacilityProfileForm = ({
       setLocationError(true);
     }
   };
+
+  useEffect(() => {
+    if (window.google) {
+      setScriptLoaded(true);
+    } else {
+      const interval = setInterval(() => {
+        if (window.google) {
+          setScriptLoaded(true);
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  }, []);
 
   useEffect(() => {
     verifyAddress();
@@ -199,6 +213,10 @@ const FacilityProfileForm = ({
   };
 
   const { errors, isSubmitting } = form.formState;
+
+  if (!scriptLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Form {...form}>

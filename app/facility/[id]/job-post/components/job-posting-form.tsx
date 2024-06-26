@@ -103,6 +103,7 @@ const JobPostingForm = ({
   const [location, setLocation] = useState<string>(
     defaultValues.location || ""
   );
+  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [locationError, setLocationError] = useState<boolean>(false);
 
   const verifyAddress = async () => {
@@ -122,6 +123,19 @@ const JobPostingForm = ({
       setLocationError(true);
     }
   };
+
+  useEffect(() => {
+    if (window.google) {
+      setScriptLoaded(true);
+    } else {
+      const interval = setInterval(() => {
+        if (window.google) {
+          setScriptLoaded(true);
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+  }, []);
 
   useEffect(() => {
     verifyAddress();
