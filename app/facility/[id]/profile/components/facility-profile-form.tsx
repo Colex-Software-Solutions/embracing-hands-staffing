@@ -9,6 +9,7 @@ import { Alert } from "@/app/components/ui/alert";
 import { FacilityProfile } from "@prisma/client";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -26,6 +27,7 @@ import GooglePlacesAutocomplete, {
 } from "react-places-autocomplete";
 import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 import SignatureCanvas from "react-signature-canvas";
+import Link from "next/link";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -73,7 +75,7 @@ const FacilityProfileForm = ({
   const [location, setLocation] = useState<string>(defaultValues.address || "");
   const [locationError, setLocationError] = useState<boolean>(false);
   const { toast } = useToast();
-
+  const { data: session } = useSession();
   const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
   const [showContractModal, setShowContractModal] = useState(false);
   const signaturePadRef = useRef<SignatureCanvas>(null);
@@ -444,17 +446,32 @@ const FacilityProfileForm = ({
             {!profile?.contractSignatureUrl && (
               <div className="space-y-4">
                 <h2 className="text-lg font-bold">Review and Sign Contract</h2>
-                <div className="flex justify-between items-center">
-                  <p className="text-sm">
-                    Review and sign the contract with Embracing Hands Staffing.
-                  </p>
-                  <Button
-                    type="button"
-                    variant="link"
-                    onClick={handleViewContract}
-                  >
-                    View Contract
-                  </Button>
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm">
+                      Review and sign the contract with Embracing Hands
+                      Staffing.
+                    </p>
+                    <Button
+                      type="button"
+                      variant="link"
+                      onClick={handleViewContract}
+                    >
+                      View Contract
+                    </Button>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm">
+                      By signing, you acknowledge and agree to the Fee Sheet.
+                    </p>
+                    <Link
+                      target="_blank"
+                      href={`/facility/${session?.user.id}/fee-sheet`}
+                      className="text-primary underline-offset-4 hover:underline text-sm mr-4"
+                    >
+                      View Fee Sheet
+                    </Link>
+                  </div>
                 </div>
                 {signatureDataUrl && (
                   <div className="border border-gray-300 p-2">
@@ -500,7 +517,7 @@ const FacilityProfileForm = ({
             {/* Contract modal */}
             <PdfViewerModal
               isOpen={showContractModal}
-              documentUrl={`/facility/${userId}/pdf`}
+              documentUrl={`/facility/${userId}/contract`}
               onClose={() => setShowContractModal(false)}
             ></PdfViewerModal>
           </CardContent>
