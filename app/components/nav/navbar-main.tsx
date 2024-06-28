@@ -188,9 +188,7 @@ const getNavLinks = (session: Session | null) => {
       label: "Fee Sheet",
     },
     {
-      href: session?.user.facilityProfile
-        ? `/facility/${session?.user.id}/contract`
-        : "#",
+      href: `/facility/${session?.user.id}/contract`,
       label: "Contract",
     },
   ];
