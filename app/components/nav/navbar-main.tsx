@@ -191,6 +191,10 @@ const getNavLinks = (session: Session | null) => {
       href: `/facility/${session?.user.id}/contract`,
       label: "Contract",
     },
+    {
+      href: "/about-us",
+      label: "About Us",
+    },
   ];
 
   if (session?.user.role === "STAFF") {
