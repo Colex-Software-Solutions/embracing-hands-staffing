@@ -320,7 +320,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
               </Label>
               <Input
                 type="file"
-                accept="application/pdf"
                 onChange={(e) =>
                   setSocialSecurityCardFile(e.target.files?.[0] || null)
                 }
@@ -332,7 +331,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
               <Label htmlFor="driversLicense">Upload Driver's License</Label>
               <Input
                 type="file"
-                accept="application/pdf"
                 onChange={(e) =>
                   setDriversLicenseFile(e.target.files?.[0] || null)
                 }
