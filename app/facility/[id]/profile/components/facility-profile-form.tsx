@@ -79,8 +79,10 @@ const FacilityProfileForm = ({
   const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
   const [showContractModal, setShowContractModal] = useState(false);
   const signaturePadRef = useRef<SignatureCanvas>(null);
+  const [isContractViewed, setIsContractViewed] = useState<boolean>(false);
 
   const handleViewContract = () => {
+    setIsContractViewed(true);
     setShowContractModal(true);
   };
 
@@ -180,11 +182,11 @@ const FacilityProfileForm = ({
 
     if (profileImageFile) formData.append("profileImage", profileImageFile);
     if (!profile?.contractSignatureUrl) {
-      if (!signatureDataUrl) {
+      if (!signatureDataUrl || !isContractViewed) {
         toast({
           title: "Error!",
           description:
-            "Please review and sign the contract and save your signature",
+            "Please view and sign the contract and save your signature",
           variant: "destructive",
         });
         return;

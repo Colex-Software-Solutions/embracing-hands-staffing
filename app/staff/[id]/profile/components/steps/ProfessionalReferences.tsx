@@ -167,7 +167,8 @@ const ProfessionalReferences: React.FC<StepComponentProps> = ({
           </CardContent>
           <CardFooter>
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
-              {isSubmitting && <Loader />}Save and Next Step
+              {isSubmitting && <Loader />}{" "}
+              {isInitialSetup ? "Save and Next Step" : "Save"}
             </Button>
           </CardFooter>
         </Card>

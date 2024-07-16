@@ -20,7 +20,7 @@ export default async function Home() {
       return redirect(`/facility/${session?.user.id}/jobs`);
     case "STAFF":
       // this will be changed to the find jobs url later
-      return session.user.redirect(`/find-jobs/${session?.user.id}`);
+      return redirect(`/find-jobs/${session?.user.id}`);
   }
 
   return (

@@ -129,11 +129,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
 
   const onSubmit = async () => {
     try {
-      if (isInitialSetup) {
-        if (!validateFiles()) return;
-        await uploadFiles();
-      }
-
       if (educations.length === 0) {
         toast({
           title: "Validation Error",
@@ -141,6 +136,10 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
           variant: "destructive",
         });
         return;
+      }
+      if (isInitialSetup) {
+        if (!validateFiles()) return;
+        await uploadFiles();
       }
 
       toast({
@@ -172,187 +171,185 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
   };
 
   return (
-    <Form {...form}>
-      <form
-        className="w-full max-w-4xl py-4"
-        onSubmit={form.handleSubmit(addEducation)}
-      >
-        <Card className="py-2">
-          <CardContent className="space-y-4">
-            <h1 className="text-2xl text-secondary-foreground lg:text-3xl font-bold">
-              Educational Background
-            </h1>
-            <div className="grid grid-cols-1  gap-4 w-full">
-              {educations.map((education, index) => (
-                <Card
-                  key={index}
-                  className="relative p-4 flex flex-col space-y-2"
+    <>
+      <Card className="py-2">
+        <CardContent className="space-y-4">
+          <h1 className="text-2xl text-secondary-foreground lg:text-3xl font-bold">
+            Educational Background
+          </h1>
+          <div className="grid grid-cols-1  gap-4 w-full">
+            {educations.map((education, index) => (
+              <Card
+                key={index}
+                className="relative p-4 flex flex-col space-y-2"
+              >
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 text-red-600"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveEducation(education.id);
+                  }}
                 >
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2 text-red-600"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveEducation(education.id);
-                    }}
-                  >
-                    <TrashIcon className="h-5 w-5" />
-                  </button>
-                  <p className="font-bold text-lg">{education.schoolName}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {education.schoolAddress}
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+                <p className="font-bold text-lg">{education.schoolName}</p>
+                <p className="text-sm text-muted-foreground">
+                  {education.schoolAddress}
+                </p>
+                <div className="text-sm">
+                  <p>
+                    Start Date:{" "}
+                    {new Date(education.startDate).toLocaleDateString()}
                   </p>
-                  <div className="text-sm">
-                    <p>
-                      Start Date:{" "}
-                      {new Date(education.startDate).toLocaleDateString()}
-                    </p>
-                    <p>
-                      End Date:{" "}
-                      {new Date(education.endDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <p className="font-medium">{education.degreeReceived}</p>
-                </Card>
-              ))}
-            </div>
-
-            <FormField
-              control={form.control}
-              name="schoolName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>School Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your school name" {...field} />
-                  </FormControl>
-                  {errors.schoolName && (
-                    <FormMessage>{errors.schoolName.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="schoolAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>School Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your school address" {...field} />
-                  </FormControl>
-                  {errors.schoolAddress && (
-                    <FormMessage>{errors.schoolAddress.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <Controller
-              name="startDate"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Start Date</FormLabel>
-                  <CustomDatePicker
-                    selectedDate={field.value}
-                    onDateChange={field.onChange}
-                    disabled={(date) => date > new Date()}
-                  />
-                  {errors.startDate && (
-                    <FormMessage>{errors.startDate.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <Controller
-              name="endDate"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>End Date</FormLabel>
-                  <CustomDatePicker
-                    selectedDate={field.value}
-                    onDateChange={field.onChange}
-                    disabled={(date) => date < form.getValues("startDate")}
-                  />
-                  {errors.endDate && (
-                    <FormMessage>{errors.endDate.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="degreeReceived"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Degree Received</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your degree received"
-                      {...field}
-                    />
-                  </FormControl>
-                  {errors.degreeReceived && (
-                    <FormMessage>{errors.degreeReceived.message}</FormMessage>
-                  )}
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="ml-auto">
-              Add Education
-            </Button>
-          </CardContent>
-          {isInitialSetup && (
-            <div className="w-full px-6">
-              <Label htmlFor="resume">Upload Resume</Label>
-              <Input
-                type="file"
-                accept="application/pdf"
-                onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
-              />
-              {fileErrors.resume && (
-                <FormMessage>{fileErrors.resume}</FormMessage>
-              )}
-
-              <Label htmlFor="socialSecurityCard">
-                Upload Social Security Card
-              </Label>
-              <Input
-                type="file"
-                onChange={(e) =>
-                  setSocialSecurityCardFile(e.target.files?.[0] || null)
-                }
-              />
-              {fileErrors.socialSecurityCard && (
-                <FormMessage>{fileErrors.socialSecurityCard}</FormMessage>
-              )}
-
-              <Label htmlFor="driversLicense">Upload Driver's License</Label>
-              <Input
-                type="file"
-                onChange={(e) =>
-                  setDriversLicenseFile(e.target.files?.[0] || null)
-                }
-              />
-              {fileErrors.driversLicense && (
-                <FormMessage>{fileErrors.driversLicense}</FormMessage>
-              )}
-            </div>
-          )}
-          <CardFooter>
-            <Button
-              disabled={isSubmitting}
-              type="button"
-              className="ml-auto mt-4"
-              onClick={onSubmit}
+                  <p>
+                    End Date: {new Date(education.endDate).toLocaleDateString()}
+                  </p>
+                </div>
+                <p className="font-medium">{education.degreeReceived}</p>
+              </Card>
+            ))}
+          </div>
+          <Form {...form}>
+            <form
+              className="w-full max-w-4xl py-4"
+              onSubmit={form.handleSubmit(addEducation)}
             >
-              {isSubmitting && <Loader />} Save and Next Step
-            </Button>
-          </CardFooter>
-        </Card>
-      </form>
-    </Form>
+              <FormField
+                control={form.control}
+                name="schoolName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>School Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your school name" {...field} />
+                    </FormControl>
+                    {errors.schoolName && (
+                      <FormMessage>{errors.schoolName.message}</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="schoolAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>School Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your school address"
+                        {...field}
+                      />
+                    </FormControl>
+                    {errors.schoolAddress && (
+                      <FormMessage>{errors.schoolAddress.message}</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <Controller
+                name="startDate"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Start Date</FormLabel>
+                    <CustomDatePicker
+                      selectedDate={field.value}
+                      onDateChange={field.onChange}
+                      disabled={(date) => date > new Date()}
+                    />
+                    {errors.startDate && (
+                      <FormMessage>{errors.startDate.message}</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <Controller
+                name="endDate"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>End Date</FormLabel>
+                    <CustomDatePicker
+                      selectedDate={field.value}
+                      onDateChange={field.onChange}
+                      disabled={(date) => date < form.getValues("startDate")}
+                    />
+                    {errors.endDate && (
+                      <FormMessage>{errors.endDate.message}</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="degreeReceived"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Degree Received</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your degree received"
+                        {...field}
+                      />
+                    </FormControl>
+                    {errors.degreeReceived && (
+                      <FormMessage>{errors.degreeReceived.message}</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="ml-auto mt-10">
+                Add Education
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+        {isInitialSetup && (
+          <div className="w-full px-6">
+            <Label htmlFor="resume">Upload Resume</Label>
+            <Input
+              type="file"
+              accept="application/pdf"
+              onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
+            />
+            {fileErrors.resume && (
+              <FormMessage>{fileErrors.resume}</FormMessage>
+            )}
+
+            <Label htmlFor="socialSecurityCard">
+              Upload Social Security Card
+            </Label>
+            <Input
+              type="file"
+              onChange={(e) =>
+                setSocialSecurityCardFile(e.target.files?.[0] || null)
+              }
+            />
+            {fileErrors.socialSecurityCard && (
+              <FormMessage>{fileErrors.socialSecurityCard}</FormMessage>
+            )}
+
+            <Label htmlFor="driversLicense">Upload Driver's License</Label>
+            <Input
+              type="file"
+              onChange={(e) =>
+                setDriversLicenseFile(e.target.files?.[0] || null)
+              }
+            />
+            {fileErrors.driversLicense && (
+              <FormMessage>{fileErrors.driversLicense}</FormMessage>
+            )}
+          </div>
+        )}
+        <CardFooter>
+          <Button type="button" className="ml-auto mt-4" onClick={onSubmit}>
+            {isInitialSetup ? "Save and Next Step" : "Save"}
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 };
 
