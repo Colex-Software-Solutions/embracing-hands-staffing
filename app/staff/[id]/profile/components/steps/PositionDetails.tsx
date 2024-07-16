@@ -173,7 +173,8 @@ const PositionDetails: React.FC<StepComponentProps> = ({
               Back
             </Button> */}
             <Button disabled={isSubmitting} type="submit" className="ml-auto">
-              {isSubmitting && <Loader />}Save and Next Step
+              {isSubmitting && <Loader />}{" "}
+              {isInitialSetup ? "Save and Next Step" : "Save"}
             </Button>
           </CardFooter>
         </Card>
