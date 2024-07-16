@@ -269,9 +269,9 @@ const EmploymentHistory: React.FC<StepComponentProps> = ({
                   <FormLabel>Pay Rate (optional)</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
                       placeholder="Enter pay rate"
                       {...field}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
                     />
                   </FormControl>
                   {errors.payRate && (
