@@ -28,11 +28,12 @@ const AboutUsPage = () => {
         </p>
         <br />
         <p>
-          Medely empowers healthcare professionals with flexible scheduling and
-          a fresh new way to earn more money through our app. For the healthcare
-          facilities, we help save valuable time, resources, and money. As a
-          result, the facilities can see more patients while having optimal
-          staffing ratios. When you make staffing reliable, everyone is happy!
+          <b>Embracing Hands Staffing </b> empowers healthcare professionals
+          with flexible scheduling and a fresh new way to earn more money
+          through our app. For the healthcare facilities, we help save valuable
+          time, resources, and money. As a result, the facilities can see more
+          patients while having optimal staffing ratios. When you make staffing
+          reliable, everyone is happy!
         </p>
         <div className="flex gap-5 mt-20">
           <div>
@@ -51,9 +52,10 @@ const AboutUsPage = () => {
               Action. Community. Quality.
             </p>
             <p className="font-light mt-5">
-              At Medely, it’s our mission to grow and cultivate the world’s
-              largest healthcare marketplace, a place where professionals can
-              find meaningful work.
+              At <span className="font-bold">Embracing Hands Staffing</span>,
+              it’s our mission to grow and cultivate the world’s largest
+              healthcare marketplace, a place where professionals can find
+              meaningful work.
             </p>
             <Button variant="link" className="mt-5">
               {`Job Openings >`}
