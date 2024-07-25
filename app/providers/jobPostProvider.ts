@@ -43,7 +43,6 @@ class JobPostProvider {
         title: true,
         description: true,
         scrubsProvided: true,
-        experience: true,
         location: true,
         shifts: true,
         startDate: true,

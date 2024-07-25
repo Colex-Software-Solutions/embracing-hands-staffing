@@ -189,7 +189,6 @@ model JobPost {
   title            String
   description      String
   scrubsProvided   Boolean
-  experience       String
   location         String
   latitude         Float
   longitude        Float

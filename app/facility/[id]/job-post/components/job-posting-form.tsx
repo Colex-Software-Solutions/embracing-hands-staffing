@@ -32,13 +32,14 @@ import GooglePlacesAutocomplete, {
   geocodeByAddress,
 } from "react-places-autocomplete";
 import { format } from "date-fns";
+import useLoadGoogleMapsScript from "@/lib/hooks/useGoogleMapsHook";
+import { useRouter } from "next/navigation";
 
 const jobPostingSchema = z
   .object({
     title: z.string().min(1, "Title is required"),
     description: z.string().min(1, "Description is required"),
     scrubsProvided: z.boolean(),
-    experience: z.string().min(5, "Experience description is required"),
     location: z.string().optional(),
     latitude: z.coerce.number().optional(),
     longitude: z.coerce.number().optional(),
@@ -48,15 +49,11 @@ const jobPostingSchema = z
     housing: z.string().optional(),
     patientPopulation: z.string().optional(),
   })
-  .refine((data) => new Date(data.startDate).getTime() > new Date().getTime(), {
-    message: "Start date must be after today",
-    path: ["startDate"],
-  })
   .refine(
     (data) =>
-      new Date(data.startDate).getTime() < new Date(data.endDate).getTime(),
+      new Date(data.startDate).getTime() <= new Date(data.endDate).getTime(),
     {
-      message: "End date must be after start date",
+      message: "End date cannot be before start date",
       path: ["endDate"],
     }
   );
@@ -75,7 +72,6 @@ const JobPostingForm = ({
     title: currentJob?.title || "",
     description: currentJob?.description || "",
     scrubsProvided: currentJob?.scrubsProvided || false,
-    experience: currentJob?.experience || "",
     location: currentJob?.location || "",
     shiftsTime: currentJob?.shiftsTime || "",
     startDate: currentJob
@@ -103,10 +99,15 @@ const JobPostingForm = ({
   const [location, setLocation] = useState<string>(
     defaultValues.location || ""
   );
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [locationError, setLocationError] = useState<boolean>(false);
+  const googleScriptLoaded = useLoadGoogleMapsScript();
+  const router = useRouter();
 
   const verifyAddress = async () => {
+    if (!googleScriptLoaded) {
+      return;
+    }
+
     try {
       const results = await geocodeByAddress(location);
 
@@ -123,19 +124,6 @@ const JobPostingForm = ({
       setLocationError(true);
     }
   };
-
-  useEffect(() => {
-    if (window.google) {
-      setScriptLoaded(true);
-    } else {
-      const interval = setInterval(() => {
-        if (window.google) {
-          setScriptLoaded(true);
-          clearInterval(interval);
-        }
-      }, 100);
-    }
-  }, []);
 
   useEffect(() => {
     verifyAddress();
@@ -155,6 +143,10 @@ const JobPostingForm = ({
   };
 
   const onSubmit = async (data: JobPostingFormValues) => {
+    if (!googleScriptLoaded) {
+      return;
+    }
+
     try {
       if (!session?.user.facilityProfile) {
         throw new Error("Please complete your profile before posting a job");
@@ -183,7 +175,11 @@ const JobPostingForm = ({
       form.setValue("latitude", latitude);
       form.setValue("longitude", longitude);
       if (tags.length < 1) {
-        throw new Error("Please add the job tag");
+        toast({
+          title: "Missing Job Tag",
+          variant: "destructive",
+        });
+        return;
       }
 
       const requestBody = {
@@ -221,6 +217,7 @@ const JobPostingForm = ({
         description: "The new job add has been posted successfully",
         variant: "default",
       });
+      router.push(`/facility/${session.user.facilityProfile.id}/jobs`);
     } catch (error: any) {
       toast({
         title: "Error!",
@@ -233,6 +230,10 @@ const JobPostingForm = ({
 
   const { errors, isSubmitting } = form.formState;
 
+  if (!googleScriptLoaded) {
+    return <div>Loading Google Maps...</div>;
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -244,6 +245,29 @@ const JobPostingForm = ({
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div className="space-y-4 flex flex-col">
+                <Label htmlFor="tags">Job Tag</Label>
+                <SkillsCombobox handleAddSkill={handleAddSkill}>
+                  Select Tag
+                </SkillsCombobox>
+                <div className="flex gap-3 flex-wrap justify-start">
+                  {tags.map((tag, index) => (
+                    <div
+                      className="flex border rounded-lg items-center justify-center bg-secondary"
+                      key={index}
+                    >
+                      <div className="px-2">{tag}</div>
+                      <Button
+                        type="button"
+                        variant={"ghost"}
+                        onClick={() => setTags(tags.filter((s) => s !== tag))}
+                      >
+                        <XIcon width={15} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -267,7 +291,7 @@ const JobPostingForm = ({
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Additional Notes</FormLabel>
                       <FormControl>
                         <Textarea
                           id="description"
@@ -310,27 +334,6 @@ const JobPostingForm = ({
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="experience"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Experience</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="experience"
-                          placeholder="Enter required experience"
-                          {...field}
-                        />
-                      </FormControl>
-                      {errors.experience && (
-                        <FormMessage>{errors.experience.message}</FormMessage>
-                      )}
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
                   name="location"
                   render={({ field }) => (
                     <FormItem>
@@ -352,7 +355,9 @@ const JobPostingForm = ({
                             debounce={300}
                             searchOptions={{
                               types: ["address"],
-                              componentRestrictions: { country: ["us", "ca"] },
+                              componentRestrictions: {
+                                country: ["us", "ca"],
+                              },
                             }}
                           >
                             {({
@@ -420,24 +425,6 @@ const JobPostingForm = ({
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="housing"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Housing</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="housing"
-                          placeholder="Enter housing details"
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
                   name="startDate"
                   render={({ field }) => (
                     <FormItem>
@@ -457,6 +444,25 @@ const JobPostingForm = ({
                   )}
                 />
               </div>
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="housing"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Housing</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="housing"
+                          placeholder="Enter housing details"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <div className="space-y-4">
                 <FormField
                   control={form.control}
@@ -543,29 +549,6 @@ const JobPostingForm = ({
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="space-y-4 flex flex-col">
-                <Label htmlFor="tags">Job Tag</Label>
-                <SkillsCombobox handleAddSkill={handleAddSkill}>
-                  Select Tag
-                </SkillsCombobox>
-                <div className="flex gap-3 flex-wrap justify-start">
-                  {tags.map((tag, index) => (
-                    <div
-                      className="flex border rounded-lg items-center justify-center bg-secondary"
-                      key={index}
-                    >
-                      <div className="px-2">{tag}</div>
-                      <Button
-                        type="button"
-                        variant={"ghost"}
-                        onClick={() => setTags(tags.filter((s) => s !== tag))}
-                      >
-                        <XIcon width={15} />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
             <CardFooter>

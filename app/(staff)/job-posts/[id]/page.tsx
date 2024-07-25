@@ -29,7 +29,6 @@ export interface FetchedJobPost {
   title: string;
   description: string;
   scrubsProvided: boolean;
-  experience: string;
   location: string;
   shiftsTime: string;
   startDate: string;
