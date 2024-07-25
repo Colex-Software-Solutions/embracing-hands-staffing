@@ -12,7 +12,6 @@ const useLoadGoogleMapsScript = () => {
       script.id = "googleMaps";
       script.async = true;
       script.defer = true;
-      window.initMap = () => setScriptLoaded(true);
       document.body.appendChild(script);
 
       script.onload = () => {
