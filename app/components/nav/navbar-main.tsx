@@ -172,16 +172,8 @@ const getNavLinks = (session: Session | null) => {
   ];
   const facilityNavItems = [
     {
-      href: "/",
-      label: "Home",
-    },
-    {
-      href: "/about-us",
-      label: "About Us",
-    },
-    {
       href: `/facility/${session?.user.id}/jobs`,
-      label: "Jobs",
+      label: "Find jobs",
     },
     {
       href: `/facility/${session?.user.id}/fee-sheet`,
@@ -190,10 +182,6 @@ const getNavLinks = (session: Session | null) => {
     {
       href: `/facility/${session?.user.id}/contract`,
       label: "Contract",
-    },
-    {
-      href: "/about-us",
-      label: "About Us",
     },
   ];
 

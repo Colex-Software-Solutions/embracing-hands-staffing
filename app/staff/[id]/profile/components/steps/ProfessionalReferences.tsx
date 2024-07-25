@@ -32,7 +32,7 @@ const referenceSchema = z.object({
           }),
       })
     )
-    .length(3, "You must provide exactly 3 references"),
+    .length(2, "You must provide exactly 2 references"),
 });
 
 type ReferenceFormValues = z.infer<typeof referenceSchema>;
@@ -46,7 +46,7 @@ const ProfessionalReferences: React.FC<StepComponentProps> = ({
   const form = useForm<ReferenceFormValues>({
     resolver: zodResolver(referenceSchema),
     defaultValues: {
-      references: [{}, {}, {}].map((_, index) => ({
+      references: [{}, {}].map((_, index) => ({
         firstname: profile?.references?.[index]?.firstname || "",
         lastname: profile?.references?.[index]?.lastname || "",
         address: profile?.references?.[index]?.address || "",

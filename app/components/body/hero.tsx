@@ -26,7 +26,7 @@ const Hero = () => {
         <div className="flex py-5 gap-5">
           <SignUpButton />
           <Link href="/auth/register?role=facility">
-            <Button variant="secondary">I'm Looking for Staff</Button>
+            <Button variant="default">Sign up as a Facility</Button>
           </Link>
         </div>
       </motion.div>

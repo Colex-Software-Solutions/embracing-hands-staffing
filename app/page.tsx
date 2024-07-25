@@ -5,7 +5,6 @@ import {
   AdditionalWorkInfoSection,
   Hero,
   HowItWorks,
-  UserReviewBanner,
   WorkInfoBanner,
 } from "./components/body";
 import Footer from "./components/footer/footer";
@@ -30,7 +29,6 @@ export default async function Home() {
         <HowItWorks />
         <WorkInfoBanner />
         <AdditionalWorkInfoSection />
-        <UserReviewBanner />
       </main>
       <Footer />
     </>

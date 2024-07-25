@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "@/app/components/ui/label";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -102,6 +102,12 @@ const PersonalInformationForm = ({
       event.target.value = "";
     }
   };
+
+  useEffect(() => {
+    if (!location) {
+      handleLocationChange(true);
+    }
+  }, []);
 
   const handleLocationChange = (checked: boolean) => {
     if (!checked) {
@@ -442,7 +448,7 @@ const PersonalInformationForm = ({
                 />
               )}
 
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">Enable location</Label>
             </div>
           </CardContent>
 

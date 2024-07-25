@@ -9,7 +9,7 @@ const SignUpButton: React.FC<SignUpButtonProps> = ({ className }) => {
   return (
     <Link href="/auth/register">
       <Button variant="default" className={className}>
-        Sign up for Work
+        Sign up as a healthcare professional
       </Button>
     </Link>
   );
