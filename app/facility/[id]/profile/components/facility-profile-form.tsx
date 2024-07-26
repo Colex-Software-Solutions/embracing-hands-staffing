@@ -28,6 +28,7 @@ import GooglePlacesAutocomplete, {
 import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 import SignatureCanvas from "react-signature-canvas";
 import Link from "next/link";
+import useLoadGoogleMapsScript from "@/lib/hooks/useGoogleMapsHook";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -69,7 +70,6 @@ const FacilityProfileForm = ({
     resolver: zodResolver(profileSchema),
     defaultValues,
   });
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState<null | File>();
   const [profileImageUrl, setProfileImageUrl] = useState(profile?.profileImage);
   const [location, setLocation] = useState<string>(defaultValues.address || "");
@@ -80,6 +80,7 @@ const FacilityProfileForm = ({
   const [showContractModal, setShowContractModal] = useState(false);
   const signaturePadRef = useRef<SignatureCanvas>(null);
   const [isContractViewed, setIsContractViewed] = useState<boolean>(false);
+  const googleScriptLoaded = useLoadGoogleMapsScript();
 
   const handleViewContract = () => {
     setIsContractViewed(true);
@@ -107,6 +108,10 @@ const FacilityProfileForm = ({
   };
 
   const verifyAddress = async () => {
+    if (!googleScriptLoaded) {
+      return;
+    }
+
     try {
       const results = await geocodeByAddress(location);
 
@@ -125,19 +130,6 @@ const FacilityProfileForm = ({
   };
 
   useEffect(() => {
-    if (window.google) {
-      setScriptLoaded(true);
-    } else {
-      const interval = setInterval(() => {
-        if (window.google) {
-          setScriptLoaded(true);
-          clearInterval(interval);
-        }
-      }, 100);
-    }
-  }, []);
-
-  useEffect(() => {
     verifyAddress();
   }, [location]);
 
@@ -154,6 +146,10 @@ const FacilityProfileForm = ({
   const [generatedPdfUrl, setGeneratedPdfUrl] = useState<string | null>(null);
 
   const onSubmit = async (data: ProfileFormValues) => {
+    if (!googleScriptLoaded) {
+      return;
+    }
+
     const results = await geocodeByAddress(location);
 
     const latitude = results[0].geometry.location.lat();
@@ -218,8 +214,8 @@ const FacilityProfileForm = ({
 
   const { errors, isSubmitting } = form.formState;
 
-  if (!scriptLoaded) {
-    return <div>Loading...</div>;
+  if (!googleScriptLoaded) {
+    return <div>Loading Google Maps...</div>;
   }
 
   return (

@@ -23,25 +23,25 @@ export default async function facilityLayout({
           isCollapsed={false}
           links={[
             {
+              title: "Profile Settings",
+              icon: <Settings className="md:mr-2 h-4 w-4" />,
+              href: `${baseUrl}/profile`,
+            },
+            {
               title: "Post a job",
               icon: <NotebookPen className="md:mr-2 h-4 w-4" />,
               href: `${baseUrl}/job-post`,
             },
             {
-              title: "Jobs",
+              title: "Calendar",
               icon: <Briefcase className="md:mr-2 h-4 w-4" />,
               href: `${baseUrl}/jobs`,
             },
 
             {
-              title: "Applications",
+              title: "Applicants",
               icon: <ClipboardList className="md:mr-2 h-4 w-4" />,
               href: `${baseUrl}/applications`,
-            },
-            {
-              title: "Profile Settings",
-              icon: <Settings className="md:mr-2 h-4 w-4" />,
-              href: `${baseUrl}/profile`,
             },
           ]}
         />

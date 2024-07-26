@@ -7,7 +7,7 @@ interface FullJobPostAdditionalDetailsProps extends FetchedJobPost {}
 const FullJobPostAdditionalDetails: React.FC<
   FullJobPostAdditionalDetailsProps
 > = (props) => {
-  const { description, experience, scrubsProvided, tags } = props;
+  const { description, scrubsProvided, tags } = props;
 
   return (
     <div className="flex flex-col">
@@ -20,9 +20,6 @@ const FullJobPostAdditionalDetails: React.FC<
       </div>
       <p>Description: {description}</p>
       <div className="flex flex-col gap-2 mt-2">
-        <div className="flex gap-5">
-          <Briefcase /> {experience}
-        </div>
         <div className="flex gap-5">
           <Shirt />{" "}
           {scrubsProvided ? "Srubs are provided" : "Shrubs are NOT provided"}
