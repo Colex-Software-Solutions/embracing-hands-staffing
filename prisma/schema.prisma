@@ -168,6 +168,8 @@ model FacilityProfile {
   userId       String   @unique @db.ObjectId
   name         String
   facilityType String
+  facilityRepName String?
+  facilityRepPhone String?
   description  String?
   address      String
   city         String?
