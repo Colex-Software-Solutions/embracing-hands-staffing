@@ -11,29 +11,16 @@ const AboutUsPage = () => {
         healthcare works together
       </p>
       <div className="text-left max-w-4xl mt-20 p-4">
-        <p className="font-bold text-3xl">Our Story</p>
         <br />
         <p>
-          As the Director of Nursing at an outpatient surgical center, Angie was
-          always frustrated trying to staff the surgical suite. Since agencies
-          were too costly, Angie spent countless hours daily just trying to find
-          qualified per diem nurses.
-        </p>
-        <br />
-        <p>
-          In 2015, we came up with a simple idea to close this staffing gap with
-          technology making the process transparent and more cost-effective.
-          What started as an idea to simplify how surgical centers filled jobs
-          has become part of so many administrator’s daily routines.
-        </p>
-        <br />
-        <p>
-          <b>Embracing Hands Staffing </b> empowers healthcare professionals
-          with flexible scheduling and a fresh new way to earn more money
-          through our app. For the healthcare facilities, we help save valuable
-          time, resources, and money. As a result, the facilities can see more
-          patients while having optimal staffing ratios. When you make staffing
-          reliable, everyone is happy!
+          <span className="font-bold">Embracing Hands Healthcare Staffing</span>{" "}
+          is a nurse owned and operated staffing agency that provide stellar
+          healthcare staff to physician offices, hospitals, surgery centers,
+          long-term care facilities and private duty services. Our qualified
+          healthcare staff covers a variety of specialty services throughout the
+          healthcare profession. We treat those we serve with kindness and
+          compassion while exceeding their expectations and providing excellent
+          customer service.
         </p>
         <div className="flex gap-5 mt-20">
           <div>
