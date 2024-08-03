@@ -169,6 +169,7 @@ const getNavLinks = (session: Session | null) => {
       href: "/about-us",
       label: "About Us",
     },
+    { href: "/handbook.pdf", label: "Handbook" },
   ];
   const facilityNavItems = [
     {

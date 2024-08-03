@@ -21,7 +21,7 @@ export async function POST(
     }
 
     const facility = await facilityProvider.getFacilityProfile(userId);
-    console.log(facility);
+
     let profileImage, profileUrl;
     let contractSignatureUrl: string | null = null;
     const formData = await request.formData();
