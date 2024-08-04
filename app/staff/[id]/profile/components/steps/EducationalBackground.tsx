@@ -109,9 +109,9 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
   };
   const uploadFiles = async () => {
     const fileUploadPromises = [
-      "resume",
-      "socialSecurityCard",
-      "driversLicense",
+      "Resume",
+      "Social Security Card",
+      "Drivers License",
     ].map((fileType, index) => {
       const formData = new FormData();
       const file = [resumeFile, socialSecurityCardFile, driversLicenseFile][

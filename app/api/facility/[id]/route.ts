@@ -64,23 +64,22 @@ export async function POST(
 
     const name = formData.get("name") as string;
     const facilityType = formData.get("facilityType") as string;
-    const description = formData.get("description") as string;
     const address = formData.get("address") as string;
-    const country = formData.get("country") as string;
-    const state = formData.get("state") as string;
-    const city = formData.get("city") as string;
+    const facilityRepName = formData.get("facilityRepName") as string;
+    const facilityRepPhone = formData.get("facilityRepPhone") as string;
     const latitude = formData.get("latitude") as string;
     const longitude = formData.get("longitude") as string;
 
-    const profileData: Omit<FacilityProfile, "id" | "createdAt"> = {
-      userId,
+    const profileData: Omit<FacilityProfile, "id" | "createdAt" | "userId"> = {
       name,
       facilityType,
-      description,
       address,
-      state,
-      country,
-      city,
+      facilityRepName,
+      facilityRepPhone,
+      description: "",
+      city: "",
+      state: "",
+      country: "",
       latitude: Number(latitude),
       longitude: Number(longitude),
       profileImage: profileUrl || facility?.profileImage || null,
@@ -91,7 +90,10 @@ export async function POST(
 
     const updatedProfile = facility
       ? await facilityProvider.updatefacilityProfile(userId, profileData)
-      : await facilityProvider.createfacilityProfile(profileData);
+      : await facilityProvider.createfacilityProfile({
+          ...profileData,
+          userId,
+        });
 
     return NextResponse.json({ success: true, profile: updatedProfile });
   } catch (error: any) {

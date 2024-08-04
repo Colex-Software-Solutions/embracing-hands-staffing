@@ -31,20 +31,22 @@ import Link from "next/link";
 import useLoadGoogleMapsScript from "@/lib/hooks/useGoogleMapsHook";
 
 const profileSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, "Facility Name is required"),
   facilityType: z.string().min(1, "Facility Type is required"),
-  description: z.string().optional(),
-  address: z.string().optional(),
-  country: z.string().min(3, "Country is required"),
-  state: z
+  facilityRepName: z
     .string()
-    .min(1, "State/Province is required")
-    .min(3, "Please enter full state/province name and not the shortcut"),
-  city: z.string().min(3, "City is required"),
+    .min(1, "Facility Representative Name is required"),
+  facilityRepPhone: z
+    .string()
+    .regex(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, {
+      message: "Invalid phone number",
+    }),
+  address: z.string().optional(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   signature: z.any(),
 });
+
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const FacilityProfileForm = ({
@@ -57,15 +59,14 @@ const FacilityProfileForm = ({
   const defaultValues: Partial<ProfileFormValues> = {
     name: profile?.name ?? "",
     facilityType: profile?.facilityType ?? "",
-    description: profile?.description ?? "",
+    facilityRepName: profile?.facilityRepName ?? "",
+    facilityRepPhone: profile?.facilityRepPhone ?? "",
     address: profile?.address ?? "",
-    country: profile?.country ?? "",
-    state: profile?.state ?? "",
-    city: profile?.city ?? "",
     latitude: profile?.latitude,
     longitude: profile?.longitude,
     signature: "",
   };
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues,
@@ -78,6 +79,7 @@ const FacilityProfileForm = ({
   const { data: session } = useSession();
   const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
   const [showContractModal, setShowContractModal] = useState(false);
+  const [showFeeSheetModal, setShowFeeSheetModal] = useState(false);
   const signaturePadRef = useRef<SignatureCanvas>(null);
   const [isContractViewed, setIsContractViewed] = useState<boolean>(false);
   const googleScriptLoaded = useLoadGoogleMapsScript();
@@ -167,12 +169,11 @@ const FacilityProfileForm = ({
 
     const formData = new FormData();
     formData.append("name", data.name);
-    formData.append("address", location);
-    formData.append("description", data.description ?? "");
     formData.append("facilityType", data.facilityType);
-    formData.append("country", data.country);
-    formData.append("state", data.state);
-    formData.append("city", data.city);
+    formData.append("facilityRepName", data.facilityRepName);
+    formData.append("facilityRepPhone", data.facilityRepPhone);
+    formData.append("phone", data.facilityRepPhone);
+    formData.append("address", location);
     formData.append("latitude", latitude.toString());
     formData.append("longitude", longitude.toString());
 
@@ -242,9 +243,9 @@ const FacilityProfileForm = ({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Facility Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your name" {...field} />
+                        <Input placeholder="Enter Facility name" {...field} />
                       </FormControl>
                       {errors.name && (
                         <FormMessage>{errors.name.message}</FormMessage>
@@ -273,6 +274,49 @@ const FacilityProfileForm = ({
               <div className="space-y-2">
                 <FormField
                   control={form.control}
+                  name="facilityRepName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Facility Representative Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter representative name"
+                          {...field}
+                        />
+                      </FormControl>
+                      {errors.facilityRepName && (
+                        <FormMessage>
+                          {errors.facilityRepName.message}
+                        </FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="facilityRepPhone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Facility Representative Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter phone number" {...field} />
+                      </FormControl>
+                      {errors.facilityRepPhone && (
+                        <FormMessage>
+                          {errors.facilityRepPhone.message}
+                        </FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* <div className="space-y-2">
+                <FormField
+                  control={form.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
@@ -290,7 +334,7 @@ const FacilityProfileForm = ({
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
               <div className="space-y-2">
                 <FormField
                   control={form.control}
@@ -356,7 +400,7 @@ const FacilityProfileForm = ({
                   )}
                 />
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <FormField
                   control={form.control}
                   name="city"
@@ -405,7 +449,7 @@ const FacilityProfileForm = ({
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
               <div className="space-y-2">
                 <Label htmlFor="profileImage">Profile Image</Label>
                 <Input
@@ -462,13 +506,13 @@ const FacilityProfileForm = ({
                     <p className="text-sm">
                       By signing, you acknowledge and agree to the Fee Sheet.
                     </p>
-                    <Link
-                      target="_blank"
-                      href={`/facility/${session?.user.id}/fee-sheet`}
-                      className="text-primary underline-offset-4 hover:underline text-sm mr-4"
+                    <Button
+                      type="button"
+                      variant="link"
+                      onClick={() => setShowFeeSheetModal(true)}
                     >
                       View Fee Sheet
-                    </Link>
+                    </Button>
                   </div>
                 </div>
                 {signatureDataUrl && (
@@ -517,6 +561,11 @@ const FacilityProfileForm = ({
               isOpen={showContractModal}
               documentUrl={`/facility/${userId}/contract`}
               onClose={() => setShowContractModal(false)}
+            ></PdfViewerModal>
+            <PdfViewerModal
+              isOpen={showFeeSheetModal}
+              documentUrl={`/facility/${userId}/fee-sheet`}
+              onClose={() => setShowFeeSheetModal(false)}
             ></PdfViewerModal>
           </CardContent>
 

@@ -294,8 +294,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           York, 90 Church Street, New York, NY, 10007; 212-417-5888; in New
           Jersey at 877-222-3737; and in Maryland at 410-887-3740.
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.heading}>Customer Complaint Resolution</Text>
         <Text style={styles.content}>
           It is the policy of Embracing Hands Healthcare Staffing to record all
@@ -410,8 +408,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           signed "Travel Nurse Booking Agreement" (See Exhibit C) between Agency
           and Facility.
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.subHeading}>1.2 Background Information</Text>
         <Text style={styles.content}>
           Agency shall maintain on file, and upon request provide to Facility
@@ -429,7 +425,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             <Text key={index} style={styles.listItem}>{`• ${item}`}</Text>
           ))}
         </View>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>
           1.3 Qualifications and Requirements
         </Text>
@@ -488,8 +485,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           assignment, and any additional instruction or examinations as may be
           requested by {facilityName ? facilityName : "Facility Customer"}.
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.subHeading}>
           1.7 Control of Payments to Agency Staff
         </Text>
@@ -505,7 +500,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           compensation coverage obligations and any other employment law
           requirements for Placements provided under this Agreement.
         </Text>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>
           1.8 Regulatory, Policy and Licensing Compliance
         </Text>
@@ -555,8 +551,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           {facilityName ? facilityName : "Facility Customer"} employees as
           employees of Agency.
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.subHeading}>1.11 Subcontractors</Text>
         <Text style={styles.content}>
           Agency provides all professional health care staffing services and
@@ -681,8 +675,7 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           in good faith in order to ensure an efficient and safe working
           environment for Agency Employees.
         </Text>
-      </ContractPage>
-      <ContractPage>
+        <View style={{ marginTop: 4 }}></View>
         <Text style={styles.subHeading}>Sentinel Event.</Text>
         <Text style={styles.contentWithSpace}>
           In event of an unexpected incident, error, or sentinel event,{" "}
@@ -724,7 +717,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           billed, number of approved overtime hours worked and rate billed, and
           total amount due to Agency.
         </Text>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>3.3 Hourly Rate</Text>
         <Text style={styles.content}>
           {facilityName ? facilityName : "Facility Customer"} shall pay Agency
@@ -774,9 +768,9 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             ))}
           </View>
         </View>
-      </ContractPage>
-      <ContractPage>
-        <Text style={styles.subHeading}>3.5 Audit</Text>
+        <View style={{ marginTop: "6px" }}>
+          <Text style={styles.subHeading}>3.5 Audit</Text>
+        </View>
         <Text style={styles.content}>
           A {facilityName ? facilityName : "Facility Customer"} shall notify
           Agency in writing of the Facility Customer’s request to audit the
@@ -832,7 +826,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             <Text key={index} style={styles.listItem}>{`• ${item}`}</Text>
           ))}
         </View>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>4.3 Indemnification</Text>
         <View style={{ marginTop: 5 }}>
           {[
@@ -860,8 +855,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             }. ${item}`}</Text>
           ))}
         </View>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.content}>
           Dollars ($1,000,000) combined single limit, each occurrence; including
           personal injury and blanket contractual liability.
@@ -916,7 +909,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           status, national origin, age, physical handicap or medical condition
           in the provision of Services hereunder.
         </Text>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>4.8 Dispute Resolution</Text>
         <Text style={styles.content}>
           Any dispute arising out of or relating to this Agreement, including
@@ -985,8 +979,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           costs. If Agency enters into a subcontract for services to be rendered
           hereunder with a related party, which
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.subHeading}>4.14 Entire Agreement</Text>
         <Text style={styles.content}>
           This Agreement (including Exhibits A, B, and C) supersedes all
@@ -1004,7 +996,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           additions to this Agreement shall be recognized unless and until made
           in writing and signed by all parties hereto.
         </Text>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>4.15 Confidentiality</Text>
         <Text style={styles.content}>
           Each party acknowledges that, as a result of this Agreement, it will
@@ -1086,8 +1079,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           provisions of this Article will survive beyond the expiration or
           termination of this Agreement.
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.content}>
           • Unless otherwise authorized, upon the earlier of termination of this
           Agreement or request of the Disclosing Party, the Receiving Party will
@@ -1119,8 +1110,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           Placements will be required to participate in certain education and
           training related to security and protection of PHI.
         </Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.subHeading}>4.16 Records:</Text>
         <Text style={styles.content}>
           Agency shall maintain complete and accurate records and documentation
@@ -1151,7 +1140,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           and year first written above (Contract, Customer Complaint and Letter
           of Understanding).
         </Text>
-
+      </ContractPage>
+      <ContractPage>
         <Text style={styles.subHeading}>If to Agency:</Text>
         <Text style={styles.content}>
           Embracing Hands Healthcare Staffing{"\n"}
@@ -1174,9 +1164,9 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
             ? profile.address
             : "_____________________________________________________"}
           {"\n"}
-          City, State, Zip Code:
-          {profile ? location : "__________________________________________"}
-          {"\n"}
+          {/* City, State, Zip Code:
+          {profile ? location : "__________________________________________"} */}
+          {/* {"\n"} */}
           <Text style={styles.signatureLabel}>Signature: {"\n"}</Text>
           {profile?.contractSignatureUrl ? (
             <Image

@@ -60,6 +60,10 @@ const accessRules: Record<string, AccessRule> = {
     roles: [Role.ADMIN],
     methods: ["GET", "PUT", "DELETE", "POST"],
   },
+  "/handbook.pdf": {
+    roles: [Role.STAFF],
+    methods: ["GET"],
+  },
 };
 
 export default accessRules;

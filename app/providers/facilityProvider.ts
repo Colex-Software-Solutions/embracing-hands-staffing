@@ -22,7 +22,7 @@ class FacilityProvider {
 
   async updatefacilityProfile(
     userId: string,
-    data: Omit<FacilityProfile, "id" | "createdAt">
+    data: Omit<FacilityProfile, "id" | "createdAt" | "userId">
   ) {
     return await prisma.facilityProfile.update({
       where: { userId },

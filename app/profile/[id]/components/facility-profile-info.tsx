@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar } from "@/app/components/ui/avatar";
 import { Label } from "@/app/components/ui/label";
-import { FacilityProfile, StaffProfile, User } from "@prisma/client";
+import { FacilityProfile, User } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
 
@@ -13,8 +13,16 @@ const FacilityProfileInfo = ({
   facilityProfile: FacilityProfile;
 }) => {
   const { email, phone } = user;
-  const { name, profileImage, description, address, facilityType } =
-    facilityProfile;
+  const {
+    name,
+    profileImage,
+    description,
+    address,
+    facilityType,
+    facilityRepName,
+    facilityRepPhone,
+  } = facilityProfile;
+
   return (
     <div className="grid gap-6 lg:grid-cols-3 m-12">
       <div className="space-y-6 lg:col-span-2">
@@ -46,6 +54,19 @@ const FacilityProfileInfo = ({
             <div className="space-y-2">
               <h2 className="text-2xl font-bold">About Us</h2>
               <p className="text-gray-500 dark:text-gray-400">{description}</p>
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-1">
+          <div className="border p-6 rounded-lg shadow-sm">
+            <h2 className="text-xl font-bold">Facility Representative</h2>
+            <div className="mt-4">
+              <div className="text-md font-semibold">
+                Name: {facilityRepName}
+              </div>
+              <div className="text-md font-semibold">
+                Phone: {facilityRepPhone}
+              </div>
             </div>
           </div>
         </div>

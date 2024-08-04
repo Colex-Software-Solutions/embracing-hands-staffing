@@ -481,7 +481,10 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
               automatically added.
             </Text>
             <Text style={styles.content}>
-              <Text style={styles.bold}>Bank Info:</Text> Zelle
+              <Text style={styles.bold}>Bank Info:</Text>
+              {`\n`}
+              <Text style={styles.bold}>Routing:</Text> 256074974{`\n`}
+              <Text style={styles.bold}>Account:</Text>3195407923{`\n`}
             </Text>
           </View>
           <View>
