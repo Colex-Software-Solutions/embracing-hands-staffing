@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
+
 const useLoadGoogleMapsScript = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
