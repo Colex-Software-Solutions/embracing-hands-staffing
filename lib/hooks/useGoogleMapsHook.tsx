@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
+
 const useLoadGoogleMapsScript = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
@@ -11,19 +17,31 @@ const useLoadGoogleMapsScript = () => {
       script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initMap`;
       script.id = "googleMaps";
       script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
+
+      window.initMap = () => {
+        setScriptLoaded(true);
+      };
 
       script.onload = () => {
-        console.log("Google Maps script loaded");
+        if (!window.initMap) {
+          setScriptLoaded(true);
+        }
       };
 
       script.onerror = () => {
         console.error("Google Maps script failed to load");
       };
+
+      document.body.appendChild(script);
     } else {
       setScriptLoaded(true);
     }
+
+    return () => {
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
   }, []);
 
   return scriptLoaded;
