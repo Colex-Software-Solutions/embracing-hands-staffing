@@ -88,7 +88,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   staffSchoolInfo,
   employmentHistory,
 }) => {
-  const [currentStep, setCurrentStep] = useState<number>(7);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [formData, setFormData] = useState<StaffProfile | null>(profile);
   const router = useRouter();
   const isInitialSetup = profile?.profileSetupComplete === true ? false : true;

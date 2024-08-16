@@ -111,7 +111,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
     return Object.values(newFileErrors).every((error) => error === null);
   };
   const uploadFiles = async () => {
-    console.log("uploading");
     const fileUploadPromises = [
       "Resume",
       "Social Security Card",
@@ -133,7 +132,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
 
   const onSubmit = async () => {
     setLoading(true);
-    console.log("helreees");
     try {
       if (educations.length === 0) {
         toast({
@@ -146,7 +144,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
       }
       if (isInitialSetup) {
         if (!validateFiles()) {
-          console.log("jere");
           setLoading(false);
           return;
         }
