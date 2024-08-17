@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,9 @@ import { StepComponentProps } from "../MultiStepForm";
 import { format } from "date-fns";
 import { useToast } from "@/app/components/ui/use-toast";
 import axios from "axios";
+import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
+import { Switch } from "@/app/components/ui/switch";
+import { Checkbox } from "@/app/components/ui/checkbox";
 
 const electronicSignatureSchema = z.object({
   electronicSignatureDisclaimer: z.string().nonempty("Signature is required"),
@@ -32,6 +35,11 @@ const ElectronicSignature: React.FC<StepComponentProps> = ({
   onNext,
 }) => {
   const { toast } = useToast();
+  const [isConsentFormViewed, setIsConsentFormViewed] =
+    useState<boolean>(false);
+  const [consentFormToggle, setConsentFormToggle] = useState<boolean>(false);
+  const [showEmployeeConsent, setShowEmployeeConsent] =
+    useState<boolean>(false);
   const form = useForm<ElectronicSignatureFormValues>({
     resolver: zodResolver(electronicSignatureSchema),
     defaultValues: {
@@ -52,6 +60,13 @@ const ElectronicSignature: React.FC<StepComponentProps> = ({
   };
 
   const handleSave = async (data: ElectronicSignatureFormValues) => {
+    if (!isConsentFormViewed || !consentFormToggle) {
+      toast({
+        title: "Please review and check the consent form.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (signaturePadRef.current?.isEmpty()) {
       form.setError("electronicSignatureDisclaimer", {
         type: "manual",
@@ -96,6 +111,28 @@ const ElectronicSignature: React.FC<StepComponentProps> = ({
             <h1 className="text-2xl text-secondary-foreground lg:text-3xl font-bold">
               Electronic Signature
             </h1>
+            <div className="flex justify-between items-center">
+              <p className="text-sm">
+                <Checkbox
+                  checked={consentFormToggle}
+                  onCheckedChange={() =>
+                    setConsentFormToggle(!consentFormToggle)
+                  }
+                />{" "}
+                I unknowledge that I have read and agreed to the consent form
+                <Button
+                  className="mx-0 px-2"
+                  type="button"
+                  variant="link"
+                  onClick={() => {
+                    setShowEmployeeConsent(true);
+                    setIsConsentFormViewed(true);
+                  }}
+                >
+                  Here
+                </Button>
+              </p>
+            </div>
             <FormField
               control={control}
               name="signatureDate"
@@ -148,6 +185,11 @@ const ElectronicSignature: React.FC<StepComponentProps> = ({
               )}
             />
           </CardContent>
+          <PdfViewerModal
+            isOpen={showEmployeeConsent}
+            documentUrl={`/employee_consent.pdf`}
+            onClose={() => setShowEmployeeConsent(false)}
+          ></PdfViewerModal>
           <CardFooter>
             <Button
               disabled={form.formState.isSubmitting}

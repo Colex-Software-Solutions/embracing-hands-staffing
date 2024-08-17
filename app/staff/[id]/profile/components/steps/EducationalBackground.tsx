@@ -28,6 +28,7 @@ import { Loader, TrashIcon } from "lucide-react";
 
 import CustomDatePicker from "../DatePicker";
 import { StepComponentProps } from "../MultiStepForm";
+import { Alert } from "@/app/components/ui/alert";
 
 const educationSchema = z.object({
   schoolName: z.string().min(1, "School Name is required"),
@@ -63,6 +64,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
   const [fileErrors, setFileErrors] = useState<{
     [key: string]: string | null;
   }>({});
+  const [loading, setLoading] = useState(false);
   const form = useForm<EducationFormValues>({
     resolver: zodResolver(educationSchema),
     defaultValues: {
@@ -105,6 +107,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
     if (!driversLicenseFile)
       newFileErrors.driversLicense = "Driver's License is required";
     setFileErrors(newFileErrors);
+
     return Object.values(newFileErrors).every((error) => error === null);
   };
   const uploadFiles = async () => {
@@ -128,6 +131,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
   };
 
   const onSubmit = async () => {
+    setLoading(true);
     try {
       if (educations.length === 0) {
         toast({
@@ -135,10 +139,14 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
           description: "At least one education entry is required.",
           variant: "destructive",
         });
+        setLoading(false);
         return;
       }
       if (isInitialSetup) {
-        if (!validateFiles()) return;
+        if (!validateFiles()) {
+          setLoading(false);
+          return;
+        }
         await uploadFiles();
       }
 
@@ -154,6 +162,8 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
         description: error?.response?.statusText,
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -315,7 +325,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
               onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
             />
             {fileErrors.resume && (
-              <FormMessage>{fileErrors.resume}</FormMessage>
+              <p className="text-red-500">{fileErrors.resume}</p>
             )}
 
             <Label htmlFor="socialSecurityCard">
@@ -328,7 +338,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
               }
             />
             {fileErrors.socialSecurityCard && (
-              <FormMessage>{fileErrors.socialSecurityCard}</FormMessage>
+              <p className="text-red-500">{fileErrors.socialSecurityCard}</p>
             )}
 
             <Label htmlFor="driversLicense">Upload Driver's License</Label>
@@ -339,12 +349,20 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
               }
             />
             {fileErrors.driversLicense && (
-              <FormMessage>{fileErrors.driversLicense}</FormMessage>
+              <p className="text-red-500">{fileErrors.driversLicense}</p>
             )}
           </div>
         )}
         <CardFooter>
-          <Button type="button" className="ml-auto mt-4" onClick={onSubmit}>
+          <Button
+            type="button"
+            className="ml-auto mt-4"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSubmit();
+            }}
+          >
+            {loading && <Loader />}{" "}
             {isInitialSetup ? "Save and Next Step" : "Save"}
           </Button>
         </CardFooter>
