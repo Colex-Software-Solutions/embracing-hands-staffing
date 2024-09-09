@@ -20,6 +20,7 @@ const getStaffUserInfoFromRow = (row: any): FacilityUser => {
   const email = row.getValue("email");
   const phone = row.getValue("phone");
   const status = row.getValue("status");
+  const facilityId = row.getValue("facilityId");
 
   return {
     id,
@@ -30,6 +31,7 @@ const getStaffUserInfoFromRow = (row: any): FacilityUser => {
     email,
     phone,
     status,
+    facilityId,
   };
 };
 
