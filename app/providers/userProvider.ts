@@ -217,6 +217,29 @@ class UserProvider {
       },
     });
   }
+  async getStaffUsers() {
+    return await prisma.user.findMany({
+      select: {
+        id: true,
+        staffProfile: {
+          select: {
+            id: true,
+            firstname: true,
+            lastname: true,
+          },
+        },
+        email: true,
+        phone: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: {
+        role: "STAFF",
+        status: "APPROVED",
+      },
+    });
+  }
 
   async updateUser(id: string, data: User) {
     return await prisma.user.update({

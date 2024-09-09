@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/app/components/ui/button";
 import {
   Dialog,
@@ -18,40 +18,91 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { X } from "lucide-react";
+import axios from "axios";
 
-// Mock data for nurses and blocked nurses
-const allNurses = [
-  { id: "1", name: "Jane Doe" },
-  { id: "2", name: "John Smith" },
-  { id: "3", name: "Emily Johnson" },
-  { id: "4", name: "Michael Brown" },
-];
+interface Nurse {
+  id: string;
+  firstname: string;
+  lastname: string;
+}
+
+interface BlockedNurse {
+  id: string;
+  staff: Nurse;
+}
 
 export default function BlockNurseModal({
+  facilityId,
   facilityName,
 }: {
+  facilityId: string;
   facilityName: string;
 }) {
-  const [blockedNurses, setBlockedNurses] = useState([
-    { id: "5", name: "Sarah Wilson" },
-  ]);
+  const [blockedNurses, setBlockedNurses] = useState<BlockedNurse[]>([]);
+  const [allNurses, setAllNurses] = useState<Nurse[]>([]);
   const [selectedNurse, setSelectedNurse] = useState("");
 
-  const handleAddNurse = () => {
+  useEffect(() => {
+    fetchBlockedNurses();
+    fetchAllNurses();
+  }, []);
+
+  const fetchBlockedNurses = async () => {
+    try {
+      const response = await fetch(`/api/block-nurse/${facilityId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setBlockedNurses(data);
+      }
+    } catch (error) {
+      console.error("Error fetching blocked nurses:", error);
+    }
+  };
+
+  const fetchAllNurses = async () => {
+    try {
+      const response = await fetch("/api/staff");
+
+      if (response.ok) {
+        const data = await response.json();
+        const nurses = data
+          .filter((nurse: any) => nurse.staffProfile)
+          .map((nurse: any) => nurse.staffProfile);
+        setAllNurses(nurses);
+      }
+    } catch (error) {
+      console.error("Error fetching all nurses:", error);
+    }
+  };
+
+  const handleAddNurse = async () => {
     if (selectedNurse) {
-      const nurseToAdd = allNurses.find((nurse) => nurse.id === selectedNurse);
-      if (
-        nurseToAdd &&
-        !blockedNurses.some((nurse) => nurse.id === selectedNurse)
-      ) {
-        setBlockedNurses([...blockedNurses, nurseToAdd]);
+      try {
+        const response = await axios.post(`/api/block-nurse/${facilityId}`, {
+          staffId: selectedNurse,
+        });
+        await fetchBlockedNurses();
         setSelectedNurse("");
+      } catch (error) {
+        console.error("Error blocking nurse:", error);
       }
     }
   };
 
-  const handleRemoveNurse = (nurseId: string) => {
-    setBlockedNurses(blockedNurses.filter((nurse) => nurse.id !== nurseId));
+  const handleRemoveNurse = async (nurseId: string) => {
+    try {
+      const response = await fetch(`/api/block-nurse/${facilityId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ staffId: nurseId }),
+      });
+
+      if (response.ok) {
+        await fetchBlockedNurses();
+      }
+    } catch (error) {
+      console.error("Error unblocking nurse:", error);
+    }
   };
 
   return (
@@ -80,11 +131,13 @@ export default function BlockNurseModal({
               {allNurses
                 .filter(
                   (nurse) =>
-                    !blockedNurses.some((blocked) => blocked.id === nurse.id)
+                    !blockedNurses.some(
+                      (blocked) => blocked.staff.id === nurse.id
+                    )
                 )
                 .map((nurse) => (
                   <SelectItem key={nurse.id} value={nurse.id}>
-                    {nurse.name}
+                    {nurse.firstname} {nurse.lastname}
                   </SelectItem>
                 ))}
             </SelectContent>
@@ -95,20 +148,21 @@ export default function BlockNurseModal({
           <div className="mt-4">
             <h4 className="mb-2 font-medium">Blocked Nurses:</h4>
             <ul className="space-y-2">
-              {blockedNurses.map((nurse) => (
+              {blockedNurses.map((blockedNurse) => (
                 <li
-                  key={nurse.id}
+                  key={blockedNurse.id}
                   className="flex items-center justify-between p-2 bg-gray-100 rounded"
                 >
-                  {nurse.name}
+                  {blockedNurse.staff.firstname} {blockedNurse.staff.lastname}
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleRemoveNurse(nurse.id)}
+                    onClick={() => handleRemoveNurse(blockedNurse.staff.id)}
                   >
                     <X className="h-4 w-4" />
                     <span className="sr-only">
-                      Remove {nurse.name} from blocked list
+                      Remove {blockedNurse.staff.firstname}{" "}
+                      {blockedNurse.staff.lastname} from blocked list
                     </span>
                   </Button>
                 </li>

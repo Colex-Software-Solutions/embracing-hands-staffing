@@ -9,18 +9,18 @@ export interface UpdateStaffProfile {
 class StaffProvider {
   async getApprovedStaffProfiles() {
     return await prisma.staffProfile.findMany({
-      include:{
-        user:{
+      include: {
+        user: {
           select: {
-            phone: true
-          }
-        }
+            phone: true,
+          },
+        },
       },
-      where:{
-        user:{
-          status: "APPROVED"
-        }
-      }
+      where: {
+        user: {
+          status: "APPROVED",
+        },
+      },
     });
   }
 

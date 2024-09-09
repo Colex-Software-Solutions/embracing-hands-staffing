@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import dynamic from "next/dynamic";
-import BlockNurseModal from "../../components/modals/block-nurse-modal";
 const ApproveStatusModal = dynamic(
   () => import("../../components/modals/approve-status-modal"),
   { ssr: false }
@@ -22,6 +21,11 @@ const DeclineStatusModal = dynamic(
 
 const ViewFacilityUserDetailsModal = dynamic(
   () => import("../../components/modals/view-facility-user-details-modal"),
+  { ssr: false }
+);
+
+const BlockNurseModal = dynamic(
+  () => import("../../components/modals/block-nurse-modal"),
   { ssr: false }
 );
 
@@ -40,7 +44,6 @@ export function DataTableRowActions<TData>({
   handleFacilityUsersUpdate,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -54,7 +57,10 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
-        <BlockNurseModal facilityName={row.getValue("name")} />
+        <BlockNurseModal
+          facilityId={row.getValue("facilityId")}
+          facilityName={row.getValue("name")}
+        />
         {isPending && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>

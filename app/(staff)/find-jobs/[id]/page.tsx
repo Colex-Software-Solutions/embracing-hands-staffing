@@ -1,8 +1,9 @@
 import JobsDisplayContainer from "@/app/components/jobs";
+import { blockNurseProvider } from "@/app/providers/blockNurseProvider";
 import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { staffProvider } from "@/app/providers/staffProvider";
 import { weeksBetween } from "@/lib/utils";
-import { StaffProfile } from "@prisma/client";
+import { BlockedNurse, StaffProfile } from "@prisma/client";
 
 export interface Job {
   id: string;
@@ -54,9 +55,10 @@ const mapFetchedJobPostToJobPost = (
 };
 
 const FindJobsPage = async ({ params }: { params: { id: string } }) => {
-  const fetchedJobPosts =
-    (await jobPostProvider.getAllValidJobPosts()) as FetchedJobPost[];
   const staffProfile = await staffProvider.getStaffProfile(params.id);
+  const fetchedJobPosts = (await jobPostProvider.getAllValidJobPosts(
+    staffProfile?.id
+  )) as FetchedJobPost[];
   const jobs = mapFetchedJobPostToJobPost(fetchedJobPosts, staffProfile);
 
   if (!staffProfile) {

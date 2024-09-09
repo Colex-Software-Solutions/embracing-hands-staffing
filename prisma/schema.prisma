@@ -85,7 +85,7 @@ model StaffProfile {
   favoriteJobPostIds             String[]
   user                           User      @relation(fields: [userId], references: [id])
   jobApplication                 JobApplication[]
-  blockedFromFacilities BlockedNurse[]
+  blockedFromFacilities          BlockedNurse[]
 }
 
 model StaffSchoolInfo {
@@ -265,7 +265,6 @@ model BlockedNurse {
   updatedAt    DateTime @updatedAt
   facility     FacilityProfile @relation(fields: [facilityId], references: [id])
   staff        StaffProfile    @relation(fields: [staffId], references: [id])
-
   @@unique([facilityId, staffId])
 }
 
