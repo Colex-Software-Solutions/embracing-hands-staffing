@@ -29,8 +29,8 @@ const accessRules: Record<string, AccessRule> = {
     methods: ["POST", "PUT"],
   },
   "/api/staff": {
-    roles: [Role.STAFF],
-    methods: ["POST", "PUT"],
+    roles: [Role.STAFF, Role.ADMIN],
+    methods: ["POST", "PUT", "GET"],
   },
   "/api/job-application": {
     roles: [Role.ADMIN, Role.FACILITY, Role.STAFF],

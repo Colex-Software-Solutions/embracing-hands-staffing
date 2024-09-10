@@ -1,5 +1,6 @@
 // utils/jobPostProvider.ts
 import { JobPost, PrismaClient } from "@prisma/client";
+import { blockNurseProvider } from "./blockNurseProvider";
 const prisma = new PrismaClient();
 
 class JobPostProvider {
@@ -128,8 +129,15 @@ class JobPostProvider {
     });
   }
 
-  async getAllValidJobPosts() {
-    return await prisma.jobPost.findMany({
+  async getAllValidJobPosts(staffId: string | undefined) {
+    const blockedFacilities = staffId
+      ? await blockNurseProvider.getBlockedFacilitiesForNurse(staffId)
+      : [];
+
+    const blockedFacilityIds = blockedFacilities.map(
+      (facility) => facility.facilityId
+    );
+    const jobs = await prisma.jobPost.findMany({
       select: {
         id: true,
         title: true,
@@ -139,11 +147,18 @@ class JobPostProvider {
         endDate: true,
         createdAt: true,
         tags: true,
+        facilityId: true,
       },
       where: {
         status: "OPEN",
+        NOT: {
+          facilityId: {
+            in: blockedFacilityIds,
+          },
+        },
       },
     });
+    return jobs;
   }
 
   async getJobSummaryByJobId(jobId: string) {

@@ -13,6 +13,7 @@ export interface FacilityUser {
   facilityType: string;
   description: string;
   address: string;
+  facilityId: string;
   email: string;
   status: string;
   phone: string;
@@ -23,6 +24,7 @@ const mapDataToFacilityUsers = (data: any): FacilityUser[] => {
     return {
       id: facilityUser.id,
       name: facilityUser.facilityProfile?.name || "N/A",
+      facilityId: facilityUser?.facilityProfile?.id || "",
       facilityType: facilityUser.facilityProfile?.facilityType || "N/A",
       description: facilityUser.facilityProfile?.description || "N/A",
       address: facilityUser.facilityProfile?.address || "N/A",

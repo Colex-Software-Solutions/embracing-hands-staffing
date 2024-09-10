@@ -85,6 +85,7 @@ model StaffProfile {
   favoriteJobPostIds             String[]
   user                           User      @relation(fields: [userId], references: [id])
   jobApplication                 JobApplication[]
+  blockedFromFacilities          BlockedNurse[]
 }
 
 model StaffSchoolInfo {
@@ -183,6 +184,7 @@ model FacilityProfile {
   createdAt    DateTime? @default(now())    
   jobPosts     JobPost[]
   user         User      @relation(fields: [userId], references: [id])
+  blockedNurses BlockedNurse[]
 }
 
 model JobPost {
@@ -254,3 +256,15 @@ model Break {
   shiftId         String      @db.ObjectId
   shift           Shift       @relation(fields: [shiftId], references: [id])
 }
+
+model BlockedNurse {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  facilityId   String   @db.ObjectId
+  staffId      String   @db.ObjectId
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  facility     FacilityProfile @relation(fields: [facilityId], references: [id])
+  staff        StaffProfile    @relation(fields: [staffId], references: [id])
+  @@unique([facilityId, staffId])
+}
+

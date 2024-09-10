@@ -18,6 +18,23 @@ export const columns = (
     cell: ({ row }) => <div>{row.getValue("id")}</div>,
   },
   {
+    accessorKey: "facilityId",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="hidden"
+        column={column}
+        title="Facility ID"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="hidden">{row.getValue("facilityId")}</div>
+    ),
+    enableHiding: true,
+    meta: {
+      hidden: true,
+    },
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />

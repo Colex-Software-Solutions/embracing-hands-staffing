@@ -24,6 +24,11 @@ const ViewFacilityUserDetailsModal = dynamic(
   { ssr: false }
 );
 
+const BlockNurseModal = dynamic(
+  () => import("../../components/modals/block-nurse-modal"),
+  { ssr: false }
+);
+
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
   isPending: boolean;
@@ -39,7 +44,6 @@ export function DataTableRowActions<TData>({
   handleFacilityUsersUpdate,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -53,6 +57,10 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
+        <BlockNurseModal
+          facilityId={row.getValue("facilityId")}
+          facilityName={row.getValue("name")}
+        />
         {isPending && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
