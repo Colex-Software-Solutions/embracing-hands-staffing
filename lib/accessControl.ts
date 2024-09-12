@@ -53,7 +53,7 @@ const accessRules: Record<string, AccessRule> = {
     methods: ["GET", "PUT", "DELETE", "POST"],
   },
   "/api/document": {
-    roles: [Role.STAFF],
+    roles: [Role.STAFF, Role.ADMIN],
     methods: ["GET", "PUT", "DELETE", "POST"],
   },
   "/api/users": {

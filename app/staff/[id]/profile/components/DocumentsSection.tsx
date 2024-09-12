@@ -7,6 +7,7 @@ import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 import { Document } from "@prisma/client";
 import { useToast } from "@/app/components/ui/use-toast";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const DocumentsSection = ({
   documents = [],
@@ -17,11 +18,16 @@ const DocumentsSection = ({
   userId: string;
   edit?: boolean;
 }) => {
+  const { data: session } = useSession();
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
   );
-  const [documentsList, setDocumentsList] = useState<Document[]>(documents);
+  const [documentsList, setDocumentsList] = useState<Document[]>(
+    session?.user.role === "ADMIN"
+      ? documents
+      : documents.filter((doc) => !doc.isAdminUploaded)
+  );
   const { toast } = useToast();
   const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
   const [selectedDocumentUrl, setSelectedDocumentUrl] = useState<string | null>(
