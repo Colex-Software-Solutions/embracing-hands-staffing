@@ -17,7 +17,7 @@ interface DocumentModalProps {
   userId: string;
   onClose: () => void;
   selectedDocument: Document | null;
-  setDocumentsList: React.Dispatch<React.SetStateAction<Document[]>>;
+  setDocumentsList?: React.Dispatch<React.SetStateAction<Document[]>>;
 }
 
 const DocumentModal: React.FC<DocumentModalProps> = ({
@@ -68,12 +68,8 @@ const DocumentModal: React.FC<DocumentModalProps> = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
-    if (file && file.type === "application/pdf") {
-      setDocumentFile(file);
-    } else {
-      alert("Only PDF files are allowed.");
-      e.target.value = "";
-    }
+
+    setDocumentFile(file);
   };
 
   const onSubmit = async () => {
@@ -99,15 +95,17 @@ const DocumentModal: React.FC<DocumentModalProps> = ({
         res = await axios.post(`/api/document`, formData);
       }
 
-      setDocumentsList((docs) => {
-        if (selectedDocument) {
-          return docs.map((doc) =>
-            doc.id === res.data.document.id ? res.data.document : doc
-          );
-        } else {
-          return [...docs, res.data.document];
-        }
-      });
+      if (setDocumentsList) {
+        setDocumentsList((docs) => {
+          if (selectedDocument) {
+            return docs.map((doc) =>
+              doc.id === res.data.document.id ? res.data.document : doc
+            );
+          } else {
+            return [...docs, res.data.document];
+          }
+        });
+      }
 
       toast({
         variant: "default",

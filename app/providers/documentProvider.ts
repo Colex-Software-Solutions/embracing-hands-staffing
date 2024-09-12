@@ -11,6 +11,7 @@ class DocumentProvider {
     userId: string,
     file: File,
     name: string,
+    isAdminUploaded: boolean,
     expiryDate?: Date
   ) {
     const documentBuffer = Buffer.from(await file.arrayBuffer());
@@ -22,6 +23,7 @@ class DocumentProvider {
         name,
         documentUrl,
         expiryDate: expiryDate ?? null,
+        isAdminUploaded,
       },
     });
 

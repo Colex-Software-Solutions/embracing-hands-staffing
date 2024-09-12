@@ -3,6 +3,7 @@ import { Row } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -24,6 +25,8 @@ const DeclineStatusModal = dynamic(
 );
 
 import { Button } from "../../../../components/ui/button";
+import DocumentModal from "@/app/staff/[id]/profile/components/DocumentModal";
+import { useState } from "react";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -37,6 +40,7 @@ export function DataTableRowActions<TData>({
   handleStaffUsersUpdate,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
+  const [openDocumentModal, setOpenDocumentModal] = useState(false);
 
   return (
     <DropdownMenu>
@@ -51,6 +55,9 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <ViewStaffUserDetailsModal row={row} />
+        <DropdownMenuItem onClick={() => setOpenDocumentModal(true)}>
+          Add Document
+        </DropdownMenuItem>
         {isPending && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
@@ -70,6 +77,12 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSub>
         )}
       </DropdownMenuContent>
+      <DocumentModal
+        isOpen={openDocumentModal}
+        onClose={() => setOpenDocumentModal(false)}
+        userId={id}
+        selectedDocument={null}
+      />
     </DropdownMenu>
   );
 }
