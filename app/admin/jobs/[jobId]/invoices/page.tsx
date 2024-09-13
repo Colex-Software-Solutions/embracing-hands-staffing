@@ -20,6 +20,7 @@ export interface Invoice {
   facilityAddress: string;
   invoiceNumber: number;
   cardPayment?: boolean;
+  latePaymentMonths?: number;
   paid: boolean;
   createdAt: string;
   items: any;

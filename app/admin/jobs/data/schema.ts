@@ -44,7 +44,13 @@ export const createInvoiceSchema = z.object({
   }),
   invoiceNumber: z.number(),
   shifts: z.array(shiftSchema),
-  cardPayment: z.boolean(), 
+  cardPayment: z.boolean(),
+  latePayment: z.boolean(),
+  latePaymentMonths: z
+    .number()
+    .min(1, "Must select at least 1 month")
+    .max(6, "Cannot exceed 6 months")
+    .optional(),
 });
 
 export type CreateInvoiceFormValues = z.infer<typeof createInvoiceSchema>;

@@ -19,6 +19,7 @@ interface InvoicePreviewProps {
   invoiceNumber: number;
   shifts: any[];
   isCardPayment: boolean;
+  latePaymentMonths?: number;
 }
 
 interface GetCostResponse {
@@ -85,6 +86,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
   shifts,
   invoiceNumber,
   isCardPayment,
+  latePaymentMonths,
 }) => {
   const getCost = (): GetCostResponse => {
     const regularHours = getRegularHoursInfo(shifts);
@@ -93,11 +95,16 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
     const adminFee = subtotal * adminFeeValue;
     const cardPaymentFee = isCardPayment ? subtotal * cardPaymentFeeValue : 0;
 
+    const latePaymentFee =
+      latePaymentMonths && latePaymentMonths > 0
+        ? subtotal * 0.05 * latePaymentMonths
+        : 0;
+
     return {
       adminFee,
       subtotal,
       regularHours,
-      totalCost: subtotal + adminFee + cardPaymentFee,
+      totalCost: subtotal + adminFee + cardPaymentFee + latePaymentFee,
       cardPaymentFee,
       shiftDifferential,
     };
@@ -151,6 +158,14 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({
               value={cost.cardPaymentFee.toFixed(2)}
             />
           )}
+          {latePaymentMonths && latePaymentMonths > 0 ? (
+            <CostText
+              title={`Late Payment Fee (5% x ${latePaymentMonths} ${
+                latePaymentMonths === 1 ? "month" : "months"
+              }):`}
+              value={(cost.subtotal * 0.05 * latePaymentMonths).toFixed(2)}
+            />
+          ) : null}
           <CostText
             title={`Admin Fee (${adminFeeValue * 100}%):`}
             value={cost.adminFee.toFixed(2)}
