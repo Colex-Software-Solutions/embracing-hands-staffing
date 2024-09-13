@@ -10,8 +10,9 @@ export async function POST(
 ) {
   try {
     const data = await req.json();
-    const newInvoiceNumber = await invoiceProvider.getNewInvoiceNumberByJobPostId(params.jobId)
-    
+    const newInvoiceNumber =
+      await invoiceProvider.getNewInvoiceNumberByJobPostId(params.jobId);
+
     const newInvoice = await prisma.invoice.create({
       data: {
         jobPostId: params.jobId,
@@ -20,7 +21,8 @@ export async function POST(
         paid: false,
         invoiceNumber: newInvoiceNumber,
         items: data.shifts,
-        cardPayment: data.cardPayment
+        cardPayment: data.cardPayment,
+        latePaymentMonths: data.latePaymentMonths,
       },
     });
 

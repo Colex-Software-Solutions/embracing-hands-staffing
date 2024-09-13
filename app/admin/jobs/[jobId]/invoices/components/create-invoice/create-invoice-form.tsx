@@ -24,6 +24,13 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/app/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
 
 interface CreateInvoiceFormProps {
   jobId: string;
@@ -128,6 +135,7 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="cardPayment"
@@ -148,6 +156,63 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="latePayment"
+              render={() => (
+                <FormItem className="flex items-center  gap-2">
+                  <div className="font-bold mt-2">Apply Late Payment Fee</div>
+                  <Controller
+                    name="latePayment"
+                    control={form.control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox
+                        className="mb-5"
+                        checked={value}
+                        onCheckedChange={(checked) => onChange(checked)}
+                      />
+                    )}
+                  />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("latePayment") && ( // Only show if latePayment is checked
+              <FormField
+                control={form.control}
+                name="latePaymentMonths"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Late Payment Duration</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))} // Convert value to number
+                        value={field.value ? String(field.value) : ""} // Convert the value back to a string for Select
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select months" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {[...Array(6)].map((_, i) => {
+                            const monthCount = i + 1;
+                            return (
+                              <SelectItem
+                                key={monthCount}
+                                value={String(monthCount)}
+                              >
+                                {monthCount}{" "}
+                                {monthCount === 1 ? "month" : "months"}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <p className="font-bold text-xl mt-4">Shifts</p>
             <div className="overflow-scroll h-96 shadow-inner">
@@ -337,6 +402,9 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
           facilityAddress={form.watch("facilityAddress")}
           shifts={form.watch("shifts")}
           isCardPayment={form.watch("cardPayment")}
+          latePaymentMonths={
+            form.watch("latePayment") ? form.watch("latePaymentMonths") : 0
+          }
           invoiceNumber={defaultValues.invoiceNumber || 0}
         />
       </div>

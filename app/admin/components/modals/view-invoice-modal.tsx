@@ -22,6 +22,7 @@ export function ViewInvoiceModal({ children, invoice }: ViewInvoiceModalProps) {
         <div>
           <InvoicePreview
             isCardPayment={invoice.cardPayment ?? false}
+            latePaymentMonths={invoice.latePaymentMonths}
             facilityName={invoice.facillityName}
             facilityAddress={invoice.facilityAddress}
             shifts={invoice.items}
