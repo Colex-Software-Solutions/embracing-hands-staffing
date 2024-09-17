@@ -67,6 +67,9 @@ class JobPostProvider {
           where: {
             status: "ACCEPTED",
           },
+          orderBy: {
+            createdAt: "desc",
+          },
           select: {
             staffProfile: {
               select: {
@@ -217,9 +220,15 @@ class JobPostProvider {
       });
 
       if (existingApplication) {
-        throw new Error(
-          "An application for this job and staff already exists."
-        );
+        const updatedApplication = await prisma.jobApplication.update({
+          where: {
+            id: existingApplication.id,
+          },
+          data: {
+            status: "ACCEPTED",
+          },
+        });
+        return updatedApplication;
       }
 
       const newApplication = await prisma.jobApplication.create({
@@ -232,8 +241,10 @@ class JobPostProvider {
 
       return newApplication;
     } catch (error: any) {
-      console.error("Error creating job application:", error.message);
-
+      console.error(
+        "Error creating or updating job application:",
+        error.message
+      );
       throw new Error(
         error.message || "Failed to assign staff to the job. Please try again."
       );

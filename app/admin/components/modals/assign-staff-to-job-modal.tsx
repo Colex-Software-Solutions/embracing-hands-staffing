@@ -57,6 +57,7 @@ const getCurrentlyAssignedStaff = (jobPost?: Job) =>
 function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
   const [jobPost, setJobPost] = useState<Job>();
   const [staff, setStaff] = React.useState<StaffProfile[]>([]);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const { toast } = useToast();
 
@@ -122,6 +123,9 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
           title: "Success!",
           description: "Staff has been successfully assigned.",
         });
+
+        form.reset();
+        setIsOpen(false);
       } else {
         toast({
           variant: "destructive",
@@ -144,7 +148,7 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
   const { errors, isSubmitting } = form.formState;
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           className="w-full border-0 justify-start flex pl-2 font-normal hover:bg-green-600 hover:text-white"
