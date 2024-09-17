@@ -32,13 +32,13 @@ const StaffCombobox: React.FC<StaffComboboxProps> = ({
   staffProfiles,
 }) => {
   const [open, setOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
 
-  const filteredStaff = staffProfiles.filter(
-    (staff) =>
-      staff.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      staff.lastname.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const staffs = staffProfiles.map((staffProfile) => {
+    return {
+      value: `${staffProfile.firstname} ${staffProfile.lastname}`.toLowerCase(),
+      label: `${staffProfile.firstname} ${staffProfile.lastname}`,
+    };
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,53 +50,37 @@ const StaffCombobox: React.FC<StaffComboboxProps> = ({
           className="w-[200px] justify-between"
         >
           {value
-            ? (() => {
-                const staff = staffProfiles.find(
-                  (staffValue) => staffValue.id === value
-                );
-                return staff
-                  ? `${staff.firstname} ${staff.lastname}`
-                  : "Pick staff";
-              })()
-            : "Pick staff"}
+            ? staffs.find((staff) => staff.value === value)?.label
+            : "Select staff..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput
-            placeholder="Filter staff..."
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-          />
+          <CommandInput placeholder="Search staff..." />
           <CommandList>
-            {filteredStaff.length > 0 ? (
-              <CommandGroup>
-                {filteredStaff.map((staffProfileWrapper) => (
-                  <CommandItem
-                    key={staffProfileWrapper.id}
-                    value={staffProfileWrapper.id}
-                    onSelect={(currentValue) => {
-                      onChange(currentValue === value ? "" : currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        value === staffProfileWrapper.id
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {`${staffProfileWrapper.firstname} ${staffProfileWrapper.lastname}`}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            ) : (
-              <CommandEmpty>No staff found.</CommandEmpty>
-            )}
-          </CommandList>{" "}
+            <CommandEmpty>No staff found.</CommandEmpty>
+            <CommandGroup>
+              {staffs.map((staff) => (
+                <CommandItem
+                  key={staff.value}
+                  value={staff.value}
+                  onSelect={(currentValue) => {
+                    onChange(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === staff.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {staff.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>

@@ -108,11 +108,27 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
     e.preventDefault();
 
     const formValues = form.getValues();
+    const staffProfile = staff.find(
+      (staffProfile) =>
+        `${staffProfile.firstname} ${staffProfile.lastname}`.toLowerCase() ===
+        formValues.staff
+    );
+
+    if (!staffProfile) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: "Staff could not be assigned at this time.",
+      });
+
+      return;
+    }
+
     try {
       const response = await axios.post(
         `/api/job-post/${jobId}/assign-staff-to-job`,
         {
-          staffProfileId: formValues.staff,
+          staffProfileId: staffProfile.id,
         }
       );
 
