@@ -109,7 +109,6 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
 
     const formValues = form.getValues();
     try {
-      console.log("job id", jobId);
       const response = await axios.post(
         `/api/job-post/${jobId}/assign-staff-to-job`,
         {
