@@ -9,17 +9,10 @@ export async function POST(
   const { staffProfileId } = await req.json();
 
   try {
-    const updatedApplication = (await jobPostProvider.assignStaffToJob(
+    const updatedApplication = await jobPostProvider.assignStaffToJob(
       jobId,
       staffProfileId
-    )) as any;
-
-    if (updatedApplication.count === 0) {
-      return NextResponse.json(
-        { error: "No matching application found" },
-        { status: 404 }
-      );
-    }
+    );
 
     return NextResponse.json({
       success: true,
