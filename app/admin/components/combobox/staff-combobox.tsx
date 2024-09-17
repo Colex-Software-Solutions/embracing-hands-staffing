@@ -23,7 +23,7 @@ import { StaffProfile } from "@prisma/client";
 interface StaffComboboxProps {
   value: string;
   onChange: (value: string) => void;
-  staffProfiles: any[];
+  staffProfiles: StaffProfile[];
 }
 
 const StaffCombobox: React.FC<StaffComboboxProps> = ({

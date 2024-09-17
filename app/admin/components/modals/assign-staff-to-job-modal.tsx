@@ -21,7 +21,7 @@ import {
 } from "../../../components/ui/dialog";
 import { useToast } from "../../../components/ui/use-toast";
 import axios from "axios";
-import { JobPost, User } from "@prisma/client";
+import { JobApplication, JobPost, StaffProfile, User } from "@prisma/client";
 import { z } from "zod";
 import StaffCombobox from "../combobox/staff-combobox";
 
@@ -34,17 +34,29 @@ interface AssignStaffToJobModalProps {
   jobId: string;
 }
 
-const mapUsersToStaff = (users: any[]): any[] =>
+interface StaffUser extends User {
+  staffProfile: StaffProfile;
+}
+
+interface JobPostApplication extends JobApplication {
+  staffProfile: StaffProfile;
+}
+
+interface Job extends JobPost {
+  applications: JobPostApplication[];
+}
+
+const mapUsersToStaff = (users: StaffUser[]): StaffProfile[] =>
   users.map((user) => user.staffProfile).filter((user) => user !== null);
 
-const getCurrentlyAssignedStaff = (jobPost?: any) =>
+const getCurrentlyAssignedStaff = (jobPost?: Job) =>
   jobPost && jobPost.applications && jobPost.applications.length > 0
     ? `This job is currenlty assigned to ${jobPost.applications[0].staffProfile.firstname} ${jobPost.applications[0].staffProfile.lastname}`
     : "This job is currently NOT assigned to any staff";
 
 function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
-  const [jobPost, setJobPost] = useState<Partial<JobPost>>();
-  const [staff, setStaff] = React.useState([]);
+  const [jobPost, setJobPost] = useState<Job>();
+  const [staff, setStaff] = React.useState<StaffProfile[]>([]);
 
   const { toast } = useToast();
 
@@ -66,10 +78,9 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
   const fetchStaffUsers = async () => {
     try {
       const response = await axios.get("/api/staff");
-      const staffUsers = response.data;
-      console.log("staffUsers", mapUsersToStaff(staffUsers), staffUsers);
+      const staffUsers = response.data as StaffUser[];
 
-      setStaff(mapUsersToStaff(staffUsers) as any);
+      setStaff(mapUsersToStaff(staffUsers));
     } catch (error) {
       console.log(error);
       toast({
@@ -150,7 +161,7 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
                 Assign staff{jobPost && `: ${jobPost.title}`}
               </DialogTitle>
               <DialogDescription>
-                {getCurrentlyAssignedStaff(jobPost)}
+                {jobPost && getCurrentlyAssignedStaff(jobPost)}
               </DialogDescription>
             </DialogHeader>
             <br />
