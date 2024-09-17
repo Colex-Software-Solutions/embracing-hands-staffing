@@ -63,6 +63,20 @@ class JobPostProvider {
             },
           },
         },
+        applications: {
+          where: {
+            status: "ACCEPTED",
+          },
+          select: {
+            staffProfile: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+          },
+          take: 1,
+        },
       },
       where: {
         id,
@@ -191,6 +205,39 @@ class JobPostProvider {
         },
       },
     });
+  }
+
+  async assignStaffToJob(jobId: string, staffId: string) {
+    try {
+      const existingApplication = await prisma.jobApplication.findFirst({
+        where: {
+          jobId,
+          staffId,
+        },
+      });
+
+      if (existingApplication) {
+        throw new Error(
+          "An application for this job and staff already exists."
+        );
+      }
+
+      const newApplication = await prisma.jobApplication.create({
+        data: {
+          jobId,
+          staffId,
+          status: "ACCEPTED",
+        },
+      });
+
+      return newApplication;
+    } catch (error: any) {
+      console.error("Error creating job application:", error.message);
+
+      throw new Error(
+        error.message || "Failed to assign staff to the job. Please try again."
+      );
+    }
   }
 }
 

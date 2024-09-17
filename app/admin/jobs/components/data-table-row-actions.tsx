@@ -51,7 +51,7 @@ export function DataTableRowActions<TData>({
           </Button>
         </Link>
         <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
-        <AssignStaffToJobModal jobId="" />
+        <AssignStaffToJobModal jobId="65e3b9ca85aeb0f6381a9a9c" />
       </DropdownMenuContent>
     </DropdownMenu>
   );
