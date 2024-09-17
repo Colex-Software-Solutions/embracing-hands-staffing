@@ -69,7 +69,7 @@ function AssignStaffToJobModal({ jobId }: AssignStaffToJobModalProps) {
       const staffUsers = response.data;
       console.log("staffUsers", mapUsersToStaff(staffUsers), staffUsers);
 
-      setStaff(mapUsersToStaff(staffUsers));
+      setStaff(mapUsersToStaff(staffUsers) as any);
     } catch (error) {
       console.log(error);
       toast({

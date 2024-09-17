@@ -7,15 +7,12 @@ export async function POST(
 ) {
   const jobId = params.id;
   const { staffProfileId } = await req.json();
-  console.log("jobId:");
-  console.log("jobId:", jobId);
-  console.log("staffProfileId:", staffProfileId);
 
   try {
-    const updatedApplication = await jobPostProvider.assignStaffToJob(
+    const updatedApplication = (await jobPostProvider.assignStaffToJob(
       jobId,
       staffProfileId
-    );
+    )) as any;
 
     if (updatedApplication.count === 0) {
       return NextResponse.json(
