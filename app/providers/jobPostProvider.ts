@@ -63,6 +63,23 @@ class JobPostProvider {
             },
           },
         },
+        applications: {
+          where: {
+            status: "ACCEPTED",
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          select: {
+            staffProfile: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+          },
+          take: 1,
+        },
       },
       where: {
         id,
@@ -191,6 +208,47 @@ class JobPostProvider {
         },
       },
     });
+  }
+
+  async assignStaffToJob(jobId: string, staffId: string) {
+    try {
+      const existingApplication = await prisma.jobApplication.findFirst({
+        where: {
+          jobId,
+          staffId,
+        },
+      });
+
+      if (existingApplication) {
+        const updatedApplication = await prisma.jobApplication.update({
+          where: {
+            id: existingApplication.id,
+          },
+          data: {
+            status: "ACCEPTED",
+          },
+        });
+        return updatedApplication;
+      }
+
+      const newApplication = await prisma.jobApplication.create({
+        data: {
+          jobId,
+          staffId,
+          status: "ACCEPTED",
+        },
+      });
+
+      return newApplication;
+    } catch (error: any) {
+      console.error(
+        "Error creating or updating job application:",
+        error.message
+      );
+      throw new Error(
+        error.message || "Failed to assign staff to the job. Please try again."
+      );
+    }
   }
 }
 

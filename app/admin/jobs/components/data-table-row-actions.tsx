@@ -11,6 +11,7 @@ import {
 import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import ViewFacilityUserDetailsModal from "../../components/modals/view-facility-user-details-modal";
+import AssignStaffToJobModal from "../../components/modals/assign-staff-to-job-modal";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -50,6 +51,7 @@ export function DataTableRowActions<TData>({
           </Button>
         </Link>
         <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
+        <AssignStaffToJobModal jobId={id} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
