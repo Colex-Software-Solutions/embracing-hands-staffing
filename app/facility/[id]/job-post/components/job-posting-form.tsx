@@ -407,7 +407,7 @@ const JobPostingForm = ({
                   name="shiftsTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Shifts</FormLabel>
+                      <FormLabel>Shifts Start and End Time</FormLabel>
                       <FormControl>
                         <Input
                           id="shiftsTime"

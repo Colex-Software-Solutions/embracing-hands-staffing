@@ -9,7 +9,7 @@ import { Alert } from "@/app/components/ui/alert";
 import { FacilityProfile } from "@prisma/client";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -29,6 +29,7 @@ import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 import SignatureCanvas from "react-signature-canvas";
 import Link from "next/link";
 import useLoadGoogleMapsScript from "@/lib/hooks/useGoogleMapsHook";
+import { useRouter } from "next/navigation";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Facility Name is required"),
@@ -76,6 +77,7 @@ const FacilityProfileForm = ({
   const [location, setLocation] = useState<string>(defaultValues.address || "");
   const [locationError, setLocationError] = useState<boolean>(false);
   const { toast } = useToast();
+  const router = useRouter();
   const { data: session } = useSession();
   const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
   const [showContractModal, setShowContractModal] = useState(false);
@@ -200,9 +202,21 @@ const FacilityProfileForm = ({
       setProfileImageUrl(res.data.profile.profileImage);
       setProfileImageFile(null);
       toast({
-        title: "Profile Updated Successfully",
+        title:
+          "Profile Updated Successfully, You will be redirected to log in again",
         variant: "default",
       });
+      // Check if this is the initial setup
+      if (!profile) {
+        await signOut({ redirect: false });
+
+        // Redirect to login page
+        setTimeout(() => {
+          router.push(
+            "/login?message=Registration%20complete.%20Please%20log%20in%20again."
+          );
+        }, 3000);
+      }
     } catch (error: any) {
       console.error(error);
       toast({
