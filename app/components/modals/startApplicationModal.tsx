@@ -113,14 +113,14 @@ function StartApplicationModal({
             variant="outline"
             onClick={() => setOpenModal(true)}
           >
-            Start Application
+            Accept job
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form>
           <DialogHeader>
-            <DialogTitle>Do you wish to submit this application?</DialogTitle>
+            <DialogTitle>Do you wish to accept this job?</DialogTitle>
           </DialogHeader>
           <div className="flex justify-center gap-5 my-5">
             <Button

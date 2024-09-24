@@ -60,7 +60,7 @@ export function DataTableRowActions<TData>({
           id={id}
           handleJobPostUpdate={handleJobPostUpdate}
         />
-        <Link href={`facility/${facilityId}/applications?jobId=${id}`}>
+        <Link href={`/facility/${facilityId}/applications?jobId=${id}`}>
           {" "}
           <DropdownMenuItem>View Applicants</DropdownMenuItem>
         </Link>
@@ -69,11 +69,11 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem>Invoices</DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <Link href={`facility/${facilityId}/applications/jobPost/${id}`}>
+        <Link href={`/facility/${facilityId}/applications/jobPost/${id}`}>
           {" "}
           <DropdownMenuItem>View Shifts</DropdownMenuItem>
         </Link>
-        <Link href={`facility/${facilityId}/jobs/${id}`}>
+        <Link href={`/facility/${facilityId}/jobs/${id}`}>
           {" "}
           <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
         </Link>
