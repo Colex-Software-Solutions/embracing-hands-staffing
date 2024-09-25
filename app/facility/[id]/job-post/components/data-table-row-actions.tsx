@@ -45,12 +45,12 @@ export function DataTableRowActions<TData>({
           id={id}
           handleJobPostUpdate={handleJobPostUpdate}
         />
-        <Link href={`facility/${facilityId}/applications?jobId=${id}`}>
+        <Link href={`/facility/${facilityId}/applications?jobId=${id}`}>
           {" "}
           <DropdownMenuItem>View Applicants</DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <Link href={`facility/${facilityId}/applications/jobPost/${id}`}>
+        <Link href={`/facility/${facilityId}/applications/jobPost/${id}`}>
           {" "}
           <DropdownMenuItem>View Shifts</DropdownMenuItem>
         </Link>
