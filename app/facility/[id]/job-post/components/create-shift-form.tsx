@@ -43,13 +43,6 @@ const CreateShiftSchema = z
     endHour: z.string().min(1, "Please select a valid time"),
   })
   .refine(
-    (data) => new Date(data.startDate).getTime() >= new Date().getTime(),
-    {
-      message: "Please select a valid start date",
-      path: ["startDate"],
-    }
-  )
-  .refine(
     (data) =>
       new Date(data.startDate).getTime() <= new Date(data.endDate).getTime(),
     {
@@ -213,12 +206,7 @@ const CreateShiftForm = ({
                       <FormItem>
                         <FormLabel>Start Date</FormLabel>
                         <FormControl>
-                          <Input
-                            min={format(new Date(), "yyyy-MM-dd")}
-                            id="startDate"
-                            type="date"
-                            {...field}
-                          />
+                          <Input id="startDate" type="date" {...field} />
                         </FormControl>
                         {errors.startDate && (
                           <FormMessage>{errors.startDate.message}</FormMessage>
@@ -271,12 +259,7 @@ const CreateShiftForm = ({
                       <FormItem>
                         <FormLabel>End Date</FormLabel>
                         <FormControl>
-                          <Input
-                            min={format(new Date(), "yyyy-MM-dd")}
-                            id="endDate"
-                            type="date"
-                            {...field}
-                          />
+                          <Input id="endDate" type="date" {...field} />
                         </FormControl>
                         {errors.endDate && (
                           <FormMessage>{errors.endDate.message}</FormMessage>

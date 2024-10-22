@@ -337,10 +337,7 @@ const JobPostingForm = ({
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Location{" "}
-                        <span className="text-sm font-thin">(optional)</span>
-                      </FormLabel>
+                      <FormLabel>Location</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <GooglePlacesAutocomplete
