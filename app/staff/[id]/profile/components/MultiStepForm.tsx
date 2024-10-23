@@ -110,9 +110,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     }
     if (currentStep === steps.length - 1 && isInitialSetup) {
       setTimeout(() => {
-        router.push(
-          "/login?message=Registration%20complete.%20Please%20log%20in%20again."
-        );
+        router.push("/auth/login");
       }, 3000);
     }
   };

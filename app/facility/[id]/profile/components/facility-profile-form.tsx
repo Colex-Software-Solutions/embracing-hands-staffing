@@ -212,9 +212,7 @@ const FacilityProfileForm = ({
 
         // Redirect to login page
         setTimeout(() => {
-          router.push(
-            "/login?message=Registration%20complete.%20Please%20log%20in%20again."
-          );
+          router.push("/auth/login");
         }, 3000);
       }
     } catch (error: any) {
