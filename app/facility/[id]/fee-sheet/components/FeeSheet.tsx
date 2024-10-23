@@ -156,10 +156,10 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>Pre-Op RN</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$58.00</Text>
+                <Text style={styles.tableCell}>$63.00</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$65.00</Text>
+                <Text style={styles.tableCell}>$70.00</Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>$80.00</Text>
@@ -170,13 +170,13 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>PACU RN</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$58.00</Text>
+                <Text style={styles.tableCell}>$63.00</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$65.00</Text>
+                <Text style={styles.tableCell}>$70.00</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$80.00</Text>
+                <Text style={styles.tableCell}>$95.00</Text>
               </View>
             </View>
             <View style={styles.tableRow}>
@@ -268,10 +268,10 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>RN - ICU</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$70.00</Text>
+                <Text style={styles.tableCell}>$80.00</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$77.00</Text>
+                <Text style={styles.tableCell}>$87.00</Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>$102.00</Text>
@@ -312,10 +312,10 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>Certified Surgical Tech</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$45.00</Text>
+                <Text style={styles.tableCell}>$50.00</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$52.00</Text>
+                <Text style={styles.tableCell}>$57.00</Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>$77.00</Text>
@@ -416,7 +416,7 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 </Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$5.00</Text>
+                <Text style={styles.tableCell}>$8.00</Text>
               </View>
               <View style={styles.tableCol}></View>
               <View style={styles.tableCol}></View>
@@ -426,7 +426,7 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>Weekend Differential</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$5.00</Text>
+                <Text style={styles.tableCell}>$8.00</Text>
               </View>
               <View style={styles.tableCol}></View>
               <View style={styles.tableCol}></View>
@@ -436,7 +436,7 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>Charge Position</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$5.00</Text>
+                <Text style={styles.tableCell}>$8.00</Text>
               </View>
               <View style={styles.tableCol}></View>
               <View style={styles.tableCol}></View>
@@ -458,7 +458,7 @@ const FeeSheet = ({ profile }: { profile: FacilityProfile | null }) => {
                 <Text style={styles.tableCell}>Call Pay</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>$6.00</Text>
+                <Text style={styles.tableCell}>$8.00</Text>
               </View>
               <View style={styles.tableCol}></View>
               <View style={styles.tableCol}></View>

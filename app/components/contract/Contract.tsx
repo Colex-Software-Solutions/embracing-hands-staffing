@@ -78,52 +78,6 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
   return (
     <Document>
       <ContractPage>
-        <Text style={styles.title}>
-          ATTN: {facilityName ? facilityName : "Facility Customer"}
-        </Text>
-        <Text style={styles.content}>
-          In an effort to assist your facility in meeting its staffing needs, I
-          wanted to take a brief moment of your time to introduce myself and our
-          company, Embracing Hands Healthcare Staffing. When faced with so many
-          choices in terms of temporary staffing alternatives, we believe that
-          it's important to choose wisely. Embracing Hands Healthcare Staffing
-          offers per diem and travel staff to meet the needs of even the most
-          exacting facilities. Our company operates in a 100% TJC compliant way
-          to lessen your facility's risk and to provide unparalleled quality
-          assurance and customer service. Here are just a few reasons why you
-          might consider working with us:
-        </Text>
-        <View style={{ marginTop: 10 }}>
-          {[
-            "We provide excellent, clinically competent and caring healthcare providers",
-            "We provide staffing services in per-diem, traveler, and permanent placement",
-            "We are licensed and fully insured",
-            "All of our healthcare providers are competency tested, background checked, and drug screened",
-            "All of our healthcare providers undergo Annual Education reviews to ensure on-going compliance with all OSHA, TJC, and HIPAA standards",
-            "All of our business operations meet TJC certification benchmarks/standards",
-            "We can help to streamline your facility's workflow while providing adequate staffing to help you to comply with your hospital's nurse/patient ratio goals",
-            "We can act swiftly and efficiently with unparalleled customer service",
-          ].map((item, index) => (
-            <Text key={index} style={styles.listItem}>{`${
-              index + 1
-            }. ${item}`}</Text>
-          ))}
-        </View>
-        <Text style={styles.footer}>
-          Because we would love to assist you with your immediate staffing
-          needs, I have enclosed a copy of our current Service Contract and
-          pricing information. If you require per-diem, travel, or permanent
-          placement help, we have excellent clinicians available now for all
-          shifts. You can call our office to book a clinician 24 hours a day at
-          (469)-362- 0818.
-        </Text>
-        <Text style={styles.footer}>
-          We look forward to working with you and hope to hear from you soon.
-        </Text>
-        <Text style={[styles.footer, styles.bold]}>Warm regards,</Text>
-        <Text style={styles.footer}>Embracing Hands Healthcare Staffing</Text>
-      </ContractPage>
-      <ContractPage>
         <Text style={styles.heading}>
           Why choose Embracing Hands Healthcare Staffing
         </Text>
@@ -632,8 +586,8 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
         <Text style={styles.content}>
           {facilityName ? facilityName : "Facility Customer"} shall use their
           reasonable best efforts to request to cancel services from Agency at
-          least six (6) hours prior to the beginning of the shift for which the
-          Placement’s services are required (“Reporting Time”).
+          least twenty-four (24) hours prior to the beginning of the shift for
+          which the Placement’s services are required (“Reporting Time”).
         </Text>
 
         <Text style={styles.subHeading}>2.8 Unsatisfactory Performance</Text>
@@ -650,15 +604,15 @@ const Contract = ({ profile }: { profile: FacilityProfile | null }) => {
           Needs
         </Text>
         <Text style={styles.content}>
-          If, after a Placement reports to a{" "}
+          If, after a Placement reports to{" "}
           {facilityName ? facilityName : "Facility Customer"} for work, and
           {facilityName ? facilityName : "Facility Customer"} no longer requires
-          the Placement’s services as originally requested, the{" "}
+          the Placement’s services as originally requested,{" "}
           {facilityName ? facilityName : "Facility Customer"} will pay Agency up
-          to four (4) hours of the services of the Placement. In such event, the
+          to six (6) hours of the services of the Placement. In such event,{" "}
           {facilityName ? facilityName : "Facility Customer"} reserves the right
           to utilize such Placement in an assignment(s) reasonably consistent
-          with his/her license and experience for up to four (4) hours of such
+          with his/her license and experience for up to six (6) hours of such
           paid time.
         </Text>
 

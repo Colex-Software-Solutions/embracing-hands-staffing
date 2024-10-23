@@ -1,12 +1,15 @@
 import prisma from "@/db/prisma";
-import { JobApplication } from "@prisma/client";
+import { ApplicationStatus, JobApplication } from "@prisma/client";
 
 class JobApplicationProvider {
   async createJobApplication(
     data: Omit<JobApplication, "id" | "createdAt" | "updatedAt" | "status">
   ) {
     return await prisma.jobApplication.create({
-      data,
+      data: {
+        ...data,
+        status: ApplicationStatus.ACCEPTED,
+      },
     });
   }
 
