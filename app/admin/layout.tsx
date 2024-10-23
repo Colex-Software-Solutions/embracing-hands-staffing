@@ -30,11 +30,6 @@ export default function adminLayout({
             isCollapsed={false}
             links={[
               {
-                title: "Tasks",
-                icon: <Inbox className="md:mr-2 h-4 w-4" />,
-                href: "/admin/tasks",
-              },
-              {
                 title: "Staff",
 
                 icon: <User className="md:mr-2 h-4 w-4" />,
@@ -46,12 +41,7 @@ export default function adminLayout({
                 icon: <Building className="md:mr-2 h-4 w-4" />,
                 href: "/admin/facility",
               },
-              {
-                title: "Users",
 
-                icon: <User className="md:mr-2 h-4 w-4" />,
-                href: "/admin/users",
-              },
               {
                 title: "Jobs",
                 icon: <Briefcase className="md:mr-2 h-4 w-4" />,

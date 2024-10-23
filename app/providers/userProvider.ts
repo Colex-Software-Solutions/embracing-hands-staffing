@@ -179,6 +179,9 @@ class UserProvider {
         where: whereClause,
         skip: skip,
         take: pageSize,
+        orderBy: {
+          id: "desc",
+        },
       }),
       prisma.user.count({
         where: {
@@ -214,6 +217,9 @@ class UserProvider {
       },
       where: {
         role: "FACILITY",
+      },
+      orderBy: {
+        id: "desc",
       },
     });
   }
