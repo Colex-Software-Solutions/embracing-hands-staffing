@@ -24,8 +24,8 @@ const JobsCalendar = ({ jobs }: { jobs: JobPost[] }) => {
   // Convert jobs to events for the calendar
   const events = jobs.map((job) => ({
     title: job.title + " (" + job.status + ")",
-    start: new Date(job.startDate),
-    end: new Date(job.endDate),
+    start: new Date(job.startDate + "T00:00:00"),
+    end: new Date(job.endDate + "T23:59:59"),
     status: job.status,
   }));
 
