@@ -77,7 +77,7 @@ export function DataTableRowActions<TData>({
           {" "}
           <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
         </Link>
-        <Link href={`job-posts/${id}`}>
+        <Link href={`/job-posts/${id}`}>
           {" "}
           <DropdownMenuItem>View job application form</DropdownMenuItem>
         </Link>
