@@ -24,11 +24,11 @@ export const formatDate = (date: Date): string => {
 
 export function formatDateTime(input: Date): string {
   const date = new Date(input);
-  const year = date.getUTCFullYear();
-  const month = date.getUTCMonth() + 1; // getUTCMonth() returns month index starting from 0
-  const day = date.getUTCDate();
-  let hour = date.getUTCHours();
-  const minute = date.getUTCMinutes();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // getMonth() returns month index starting from 0
+  const day = date.getDate();
+  let hour = date.getHours();
+  const minute = date.getMinutes();
   const ampm = hour >= 12 ? "PM" : "AM";
 
   hour = hour % 12;
