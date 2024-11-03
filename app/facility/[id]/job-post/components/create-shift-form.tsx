@@ -168,12 +168,6 @@ const CreateShiftForm = ({
   };
 
   const { errors, isSubmitting } = form.formState;
-  const date = form.watch("startDate");
-  const startTime = form.watch("startHour");
-  const endtime = form.watch("endHour");
-  const start = combineDateAndTime(date, hours[Number(startTime)].hour);
-  const end = combineDateAndTime(date, hours[Number(endtime)].hour);
-  console.log(start, end);
 
   return (
     <Form {...form}>

@@ -1,7 +1,6 @@
 import { shiftProvider } from "@/app/providers/shiftProvider";
 import ShiftsManager from "../../../job-post/components/shiftsManager";
 import { Status } from "@prisma/client";
-import { parseISO } from "date-fns";
 
 interface ShiftStaffProfile {
   firstname: string;
