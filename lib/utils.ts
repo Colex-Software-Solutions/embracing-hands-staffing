@@ -41,6 +41,16 @@ export function formatDateTime(input: Date): string {
   return `${year}-${monthFormatted}-${dayFormatted} ${hourFormatted}:${minuteFormatted} ${ampm}`;
 }
 
+export function formatTime(input: Date): string {
+  const hour = input.getHours();
+  const minute = input.getMinutes();
+
+  const hourFormatted = hour < 10 ? `0${hour}` : hour;
+  const minuteFormatted = minute < 10 ? `0${minute}` : minute;
+
+  return `${hourFormatted}:${minuteFormatted}`;
+}
+
 export function formatCurrency(
   number: number,
   decimalPlaces: number = 0
