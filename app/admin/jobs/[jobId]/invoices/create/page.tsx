@@ -4,6 +4,7 @@ import { CreateInvoiceFormValues } from "../../../data/schema";
 import { createInvoiceSchema } from "../../../data/schema";
 import { invoiceProvider } from "@/app/providers/invoiceProvider";
 import {
+  formatTime,
   getDifferentialHoursFromHoursWorked,
   getSkillPayAmount,
 } from "@/lib/utils";
@@ -68,8 +69,8 @@ const transformShifts = (shifts: CreateInvoiceShift[], tag: string) => {
       endDate: shift.end,
       serviceDetails: "N/A",
       employee: `${shift.staffProfile.firstname} ${shift.staffProfile.lastname}`,
-      in: shift.clockInTime.toISOString().split("T")[1].slice(0, 5),
-      out: shift.clockOutTime.toISOString().split("T")[1].slice(0, 5),
+      in: formatTime(shift.clockInTime),
+      out: formatTime(shift.clockOutTime),
       hourlyRate: getSkillPayAmount(tag, shift.clockInTime),
     };
   });
