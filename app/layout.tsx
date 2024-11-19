@@ -8,9 +8,8 @@ import { getServerSession } from "@/lib/getServerSession";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Admin Starter Kit",
-  description:
-    "Starter kit for any application that requires admin interface and authentication",
+  title: "Embracing Hands Staffing",
+  description: "Embracing Hands Staffing is per diem hospital staffing company",
 };
 
 export default async function RootLayout({
