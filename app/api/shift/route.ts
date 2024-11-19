@@ -1,18 +1,16 @@
 import { shiftProvider } from "@/app/providers/shiftProvider";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  req: NextRequest,
-) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { jobPostId, staffProfileId, start, end } = body;
 
     const shift = await shiftProvider.createShift({
-        jobPostId,
+      jobPostId,
       staffProfileId,
       start: new Date(start),
-      end: new Date(end)
+      end: new Date(end),
     });
 
     return NextResponse.json({ success: true, shift });
