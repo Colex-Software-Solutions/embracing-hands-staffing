@@ -3,6 +3,7 @@ import { userProvider } from "@/app/providers/userProvider";
 import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { EmailTemplate, emailProvider } from "@/app/providers/emailProvider";
+import { adminTestEmail } from "@/lib/utils";
 interface RegisterBody {
   user: Omit<User, "status" | "createdAt" | "updatedAt">;
 }
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     // send new application email to admin
     emailProvider.sendEmailWithTemplate({
-      emailTo: "admin@colexsoftwaresolutions.com",
+      emailTo: process.env.ADMIN_EMAIL || adminTestEmail,
       emailTemplateId: EmailTemplate.NEW_APPLICATION_REQUEST,
       emailParams: {
         websiteUrl: `${

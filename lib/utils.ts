@@ -14,6 +14,8 @@ import {
   format,
 } from "date-fns";
 
+export const adminTestEmail = "admin@colexsoftwaresolutions.com";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
