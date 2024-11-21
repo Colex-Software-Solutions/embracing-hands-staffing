@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
 
+export const dynamic = "force-dynamic";
+
 export default function adminLayout({
   children,
 }: {
