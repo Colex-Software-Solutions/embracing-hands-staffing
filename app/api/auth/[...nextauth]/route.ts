@@ -4,6 +4,8 @@ import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+export const dynamic = "force-dynamic";
+
 export const authOptions = {
   providers: [
     CredentialsProvider({
