@@ -6,6 +6,7 @@ import NavbarAnimated from "./components/nav/navbar-main";
 import { getServerSession } from "@/lib/getServerSession";
 
 const inter = Inter({ subsets: ["latin"] });
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Embracing Hands Staffing",
