@@ -1,5 +1,6 @@
 import { EmailTemplate, emailProvider } from "@/app/providers/emailProvider";
 import { userProvider } from "@/app/providers/userProvider";
+import { adminTestEmail } from "@/lib/utils";
 import { Role } from "@prisma/client";
 
 const getUserProfileName = async (id: string, role: Role): Promise<string> => {
@@ -33,8 +34,7 @@ export async function POST(request: Request) {
 
     if (body.status === "APPROVED") {
       await emailProvider.sendEmailWithTemplate({
-        // emailTo: user.email,
-        emailTo: "admin@colexsoftwaresolutions.com",
+        emailTo: process.env.ADMIN_EMAIL || adminTestEmail,
         emailTemplateId: EmailTemplate.APPLICATION_REQUEST_APPROVED,
         emailParams: {
           name: userProfileName,
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     if (body.status === "REJECTED") {
       await emailProvider.sendEmailWithTemplate({
         // emailTo: user.email,
-        emailTo: "admin@colexsoftwaresolutions.com",
+        emailTo: process.env.ADMIN_EMAIL || adminTestEmail,
         emailTemplateId: EmailTemplate.APPLICATION_REQUEST_REJECTED,
         emailParams: {
           name: userProfileName,
