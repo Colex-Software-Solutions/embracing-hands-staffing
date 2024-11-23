@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import dynamic from "next/dynamic";
+
 const ApproveStatusModal = dynamic(
   () => import("../../components/modals/approve-status-modal"),
   { ssr: false }
@@ -29,6 +30,11 @@ const BlockNurseModal = dynamic(
   { ssr: false }
 );
 
+const RemoveUserButton = dynamic(
+  () => import("../../components/modals/remove-user-button"),
+  { ssr: false }
+);
+
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
   isPending: boolean;
@@ -36,14 +42,17 @@ interface DataTableRowActionsProps<TData> {
     id: string,
     status: "APPROVED" | "REJECTED"
   ) => void;
+  handleFacilityUsersDelete: (id: string) => void;
 }
 
 export function DataTableRowActions<TData>({
   row,
   isPending,
   handleFacilityUsersUpdate,
+  handleFacilityUsersDelete,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -79,6 +88,12 @@ export function DataTableRowActions<TData>({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
         )}
+        <RemoveUserButton
+          isStaff={false}
+          name={row.getValue("name")}
+          userId={id}
+          onSuccess={handleFacilityUsersDelete}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

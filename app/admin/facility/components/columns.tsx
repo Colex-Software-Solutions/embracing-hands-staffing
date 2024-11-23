@@ -8,7 +8,8 @@ export const columns = (
   handleFacilityUsersUpdate: (
     id: string,
     status: "APPROVED" | "REJECTED"
-  ) => void
+  ) => void,
+  handleFacilityUsersDelete: (id: string) => void
 ): ColumnDef<FacilityUserSchema>[] => [
   {
     accessorKey: "id",
@@ -101,6 +102,7 @@ export const columns = (
         row={row}
         isPending={row.getValue("status") === "PENDING"}
         handleFacilityUsersUpdate={handleFacilityUsersUpdate}
+        handleFacilityUsersDelete={handleFacilityUsersDelete}
       />
     ),
   },

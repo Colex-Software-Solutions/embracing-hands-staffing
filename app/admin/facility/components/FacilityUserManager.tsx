@@ -28,11 +28,19 @@ const FacilityUserManager = ({
     setFacilityUsers(newFacilityUsers);
   };
 
+  const handleFacilityUsersDelete = (id: string) => {
+    const newFacilityUsers = FacilityUsers.filter(
+      (facilityUser) => facilityUser.id !== id
+    );
+
+    setFacilityUsers(newFacilityUsers);
+  };
+
   return (
     <>
       <DataTable
         data={FacilityUsers as any[]}
-        columns={columns(handleFacilityUsersUpdate)}
+        columns={columns(handleFacilityUsersUpdate, handleFacilityUsersDelete)}
       />
       <Toaster />
     </>

@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
       // just stop the execution without letting the user know that this email does not exist in our database
       return new Response();
     }
+
     // delete all current expiry codes for that user
     await prisma.passwordReset.deleteMany({ where: { userId: user.id } });
 

@@ -28,8 +28,9 @@ export function ForgotPasswordForm() {
 
   const handleRequestReset = async () => {
     setLoading(true);
+
     try {
-      await axios.post("/api/forgot-password", { email });
+      const test = await axios.post("/api/forgot-password", { email });
       setStep(2);
       toast({ title: "Check your email for the code." });
     } catch (error: any) {

@@ -11,13 +11,16 @@ class UserProvider {
   }
 
   async getUser(id: string) {
-    return await prisma.user.findUnique({
-      where: { id },
+    return await prisma.user.findFirst({
+      where: { id, archived: false },
     });
   }
   async getUserByEmail(email: string) {
-    return await prisma.user.findUnique({
-      where: { email },
+    return await prisma.user.findFirst({
+      where: {
+        email,
+        archived: false,
+      },
       select: {
         id: true,
         email: true,
@@ -25,6 +28,7 @@ class UserProvider {
         role: true,
         phone: true,
         status: true,
+        archived: true,
         staffProfile: {
           select: {
             firstname: true,
@@ -44,8 +48,8 @@ class UserProvider {
     });
   }
   async getStaffUserById(id: string) {
-    return await prisma.user.findUnique({
-      where: { id, role: "STAFF" },
+    return await prisma.user.findFirst({
+      where: { id, role: "STAFF", archived: false },
       select: {
         id: true,
         email: true,
@@ -82,6 +86,7 @@ class UserProvider {
 
   async getAllUsers() {
     return await prisma.user.findMany({
+      where: { archived: false },
       select: {
         id: true,
         email: true,
@@ -95,7 +100,7 @@ class UserProvider {
   }
 
   async getStaffProfileById(id: string) {
-    return prisma.user.findUnique({
+    return prisma.user.findFirst({
       select: {
         id: true,
         staffProfile: {
@@ -109,12 +114,13 @@ class UserProvider {
       where: {
         id,
         role: "STAFF",
+        archived: false,
       },
     });
   }
 
   async getFacilityProfileById(id: string) {
-    return prisma.user.findUnique({
+    return prisma.user.findFirst({
       select: {
         id: true,
         facilityProfile: {
@@ -130,6 +136,7 @@ class UserProvider {
       where: {
         id,
         role: "FACILITY",
+        archived: false,
       },
     });
   }
@@ -152,7 +159,7 @@ class UserProvider {
         });
         return acc;
       },
-      { role: "STAFF" }
+      { role: "STAFF", archived: false }
     );
 
     const whereClause = {
@@ -217,6 +224,7 @@ class UserProvider {
       },
       where: {
         role: "FACILITY",
+        archived: false,
       },
       orderBy: {
         id: "desc",
@@ -243,6 +251,7 @@ class UserProvider {
       where: {
         role: "STAFF",
         status: "APPROVED",
+        archived: false,
       },
     });
   }
@@ -266,6 +275,13 @@ class UserProvider {
   async deleteUser(id: string) {
     return await prisma.user.delete({
       where: { id },
+    });
+  }
+
+  async archiveUser(id: string) {
+    return await prisma.user.update({
+      where: { id },
+      data: { archived: true },
     });
   }
 }
