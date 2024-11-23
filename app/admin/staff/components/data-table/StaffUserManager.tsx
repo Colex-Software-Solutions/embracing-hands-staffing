@@ -109,11 +109,19 @@ const StaffUserManager = ({
     setStaffUsers(newStaffUSers);
   };
 
+  const handleStaffUsersDelete = (id: string) => {
+    const newStaffUsers = staffUsers.filter(
+      (newStaffUser) => newStaffUser.id !== id
+    );
+
+    setStaffUsers(newStaffUsers);
+  };
+
   return (
     <>
       <DataTable
         data={staffUsers as any[]}
-        columns={columns(handleStaffUsersUpdate)}
+        columns={columns(handleStaffUsersUpdate, handleStaffUsersDelete)}
         dataTableToolbarInputs={dataTableToolbarInputs}
         dataTableToolbarOptions={dataTableToolbarOutputs}
         totalCount={totalCount}

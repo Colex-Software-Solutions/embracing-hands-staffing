@@ -27,20 +27,24 @@ const DeclineStatusModal = dynamic(
 import { Button } from "../../../../components/ui/button";
 import DocumentModal from "@/app/staff/[id]/profile/components/DocumentModal";
 import { useState } from "react";
+import RemoveUserButton from "@/app/admin/components/modals/remove-user-button";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
   isPending: boolean;
   handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void;
+  handleStaffUsersDelete: (id: string) => void;
 }
 
 export function DataTableRowActions<TData>({
   row,
   isPending,
   handleStaffUsersUpdate,
+  handleStaffUsersDelete,
 }: DataTableRowActionsProps<TData>) {
   const id = row.getValue("id") as string;
   const [openDocumentModal, setOpenDocumentModal] = useState(false);
+  const name = `${row.getValue("firstName")} ${row.getValue("lastName")}`;
 
   return (
     <DropdownMenu>
@@ -76,6 +80,12 @@ export function DataTableRowActions<TData>({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
         )}
+        <RemoveUserButton
+          isStaff={true}
+          userId={id}
+          name={name}
+          onSuccess={handleStaffUsersDelete}
+        />
       </DropdownMenuContent>
       <DocumentModal
         isOpen={openDocumentModal}
