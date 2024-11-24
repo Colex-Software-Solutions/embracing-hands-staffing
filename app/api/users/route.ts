@@ -57,3 +57,18 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify({ success: false, error }));
   }
 }
+
+export async function DELETE(request: Request) {
+  const body: RequestBody = await request.json();
+
+  try {
+    await userProvider.archiveUser(body.id);
+
+    return new Response(JSON.stringify({ success: true }));
+  } catch (error) {
+    console.error("Error archiving user:", error);
+    return new Response(JSON.stringify({ success: false, error }), {
+      status: 500,
+    });
+  }
+}

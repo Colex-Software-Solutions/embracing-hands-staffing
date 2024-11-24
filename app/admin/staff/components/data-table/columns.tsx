@@ -5,7 +5,8 @@ import { DataTableColumnHeader } from "@/app/components/data-table/data-table-co
 import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columns = (
-  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void
+  handleStaffUsersUpdate: (id: string, status: "APPROVED" | "REJECTED") => void,
+  handleStaffUsersDelete: (id: string) => void
 ): ColumnDef<StaffUserSchema>[] => [
   {
     accessorKey: "id",
@@ -81,6 +82,7 @@ export const columns = (
         row={row}
         isPending={row.getValue("status") === "PENDING"}
         handleStaffUsersUpdate={handleStaffUsersUpdate}
+        handleStaffUsersDelete={handleStaffUsersDelete}
       />
     ),
   },
