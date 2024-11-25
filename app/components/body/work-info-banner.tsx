@@ -46,7 +46,7 @@ const WorkInfoBanner = () => {
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       exit="exit"
-      className="flex-col text-center items-center py-20"
+      className="flex-col text-center items-center py-20 p-12"
     >
       <p className="text-3xl font-bold text-primary">Work the way you want</p>
       <div className="text-xl font-light mt-5 text-center w-full px-5">
@@ -55,7 +55,7 @@ const WorkInfoBanner = () => {
           day of the week.
         </p>
       </div>
-      <div className="flex gap-10 mt-10">
+      <div className="flex gap-10 mt-10 sm:flex-row flex-col items-center">
         {workInfoCards.map((workInfoCard) => (
           <WorkInfoCard {...workInfoCard} />
         ))}

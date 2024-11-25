@@ -23,9 +23,9 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="flex-col item-center text-center bg-secondary py-20 mt-10 w-screen">
+    <div className="flex-col item-center text-center bg-secondary py-20 mt-10 w-full overflow-hidden">
       <p className="text-4xl text-primary">How it works</p>
-      <div className="flex mt-10 gap-5 justify-center">
+      <div className="flex mt-10 gap-5 justify-center flex-col sm:flex-row items-center">
         {howItWorksItems.map((howItWorksItem) => (
           <HowItWorksItem
             key={howItWorksItem.title}
