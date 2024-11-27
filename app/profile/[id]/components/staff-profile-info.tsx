@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar } from "@/app/components/ui/avatar";
 import {
   Document,
@@ -8,6 +8,7 @@ import {
   StaffSchoolInfo,
   User,
 } from "@prisma/client";
+import { useToast } from "@/app/components/ui/use-toast";
 
 import DocumentsSection from "@/app/staff/[id]/profile/components/DocumentsSection";
 import {
@@ -19,6 +20,18 @@ import {
   CardContent,
 } from "@/app/components/ui/card";
 import { format } from "date-fns";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { EditIcon, SaveIcon } from "lucide-react";
+import { z } from "zod";
+import axios from "axios";
+
+const phoneSchema = z.object({
+  phone: z.string().regex(/^\+?\d{10,15}$/, {
+    message:
+      "Phone number must be 10 to 15 digits long and can optionally start with a +",
+  }),
+});
 
 export interface FullStaffProfile extends StaffProfile {
   staffSchoolInfo: StaffSchoolInfo[];
@@ -65,6 +78,46 @@ const StaffProfileInfo = ({
     electronicSignatureDisclaimer,
     signatureDate,
   } = staffProfile;
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
+  const [phone, setPhone] = useState(user.phone);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const handleSavePhone = async () => {
+    try {
+      phoneSchema.parse({ phone });
+
+      const response = await axios.put(`/api/users/${user.id}`, { phone });
+
+      toast({
+        variant: "default",
+        title: "Phone number updated",
+        description: "The phone number was successfully updated.",
+      });
+
+      setIsEditingPhone(false);
+      setError(null);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setError(error.errors[0].message);
+      } else if (axios.isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: "Error updating phone",
+          description:
+            error.response?.data?.error ||
+            "Failed to update phone. Please try again.",
+        });
+      } else {
+        console.error("Unknown error occurred:", error);
+        toast({
+          variant: "destructive",
+          title: "Unknown Error",
+          description: "An unknown error occurred. Please try again.",
+        });
+      }
+    }
+  };
 
   return (
     <div className="grid gap-6 lg:grid-cols-3 md:m-12 m-2">
@@ -89,7 +142,45 @@ const StaffProfileInfo = ({
             <div className="space-y-1.5">
               <div className="text-md font-semibold">{title}</div>
               <div className="text-sm font-medium">{user.email}</div>
-              <div className="text-sm font-medium">{user.phone}</div>
+              {/* <div className="text-sm font-medium">{user.phone}</div> */}
+              <div className="flex items-center space-x-2">
+                {isEditingPhone ? (
+                  <>
+                    <div className="flex flex-col">
+                      <Input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-40"
+                        placeholder="Enter phone number"
+                      />
+                      {error && <p className="text-red-500 text-sm">{error}</p>}
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={handleSavePhone}
+                      className="flex items-center"
+                    >
+                      <SaveIcon className="w-4 h-4 mr-1" />
+                      Save
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-sm font-medium">
+                      {phone || "N/A"}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsEditingPhone(true)}
+                      className="flex items-center"
+                    >
+                      <EditIcon className="w-4 h-4" />
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
