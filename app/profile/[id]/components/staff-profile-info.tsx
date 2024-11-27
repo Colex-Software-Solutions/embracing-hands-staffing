@@ -14,12 +14,12 @@ import DocumentsSection from "@/app/staff/[id]/profile/components/DocumentsSecti
 import {
   Card,
   CardHeader,
-  CardFooter,
   CardTitle,
   CardDescription,
   CardContent,
 } from "@/app/components/ui/card";
 import { format } from "date-fns";
+import { useSession } from "next-auth/react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { EditIcon, SaveIcon } from "lucide-react";
@@ -46,6 +46,7 @@ const StaffProfileInfo = ({
   staffProfile: FullStaffProfile;
   documents: Document[];
 }) => {
+  const { data: session } = useSession();
   const {
     firstname,
     lastname,
@@ -82,6 +83,7 @@ const StaffProfileInfo = ({
   const [phone, setPhone] = useState(user.phone);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const isCurrentUser = String(session?.user.id ?? "") === user.id;
 
   const handleSavePhone = async () => {
     try {
@@ -142,7 +144,6 @@ const StaffProfileInfo = ({
             <div className="space-y-1.5">
               <div className="text-md font-semibold">{title}</div>
               <div className="text-sm font-medium">{user.email}</div>
-              {/* <div className="text-sm font-medium">{user.phone}</div> */}
               <div className="flex items-center space-x-2">
                 {isEditingPhone ? (
                   <>
@@ -170,14 +171,16 @@ const StaffProfileInfo = ({
                     <span className="text-sm font-medium">
                       {phone || "N/A"}
                     </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setIsEditingPhone(true)}
-                      className="flex items-center"
-                    >
-                      <EditIcon className="w-4 h-4" />
-                    </Button>
+                    {isCurrentUser && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsEditingPhone(true)}
+                        className="flex items-center"
+                      >
+                        <EditIcon className="w-4 h-4" />
+                      </Button>
+                    )}
                   </>
                 )}
               </div>
