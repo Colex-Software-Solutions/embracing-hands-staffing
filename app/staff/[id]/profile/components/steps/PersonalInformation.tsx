@@ -33,7 +33,6 @@ import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import { Switch } from "@/app/components/ui/switch";
 import Spinner from "@/app/components/loading/spinner";
 import CustomDatePicker from "../DatePicker";
-import DocumentsSection from "../DocumentsSection";
 
 export interface GeoLocation {
   latitude: number;
@@ -292,7 +291,6 @@ const PersonalInformationForm = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="address"
