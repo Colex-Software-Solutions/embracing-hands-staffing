@@ -21,6 +21,7 @@ import axios from "axios";
 import PdfViewerModal from "@/app/components/modals/pdf-viewer-modal";
 import { Switch } from "@/app/components/ui/switch";
 import { Checkbox } from "@/app/components/ui/checkbox";
+import useWindowSize from "@/app/hooks/use-window-size";
 
 const electronicSignatureSchema = z.object({
   electronicSignatureDisclaimer: z.string().nonempty("Signature is required"),
@@ -35,6 +36,7 @@ const ElectronicSignature: React.FC<StepComponentProps> = ({
   onNext,
 }) => {
   const { toast } = useToast();
+  const { isMobile } = useWindowSize();
   const [isConsentFormViewed, setIsConsentFormViewed] =
     useState<boolean>(false);
   const [consentFormToggle, setConsentFormToggle] = useState<boolean>(false);
@@ -157,7 +159,7 @@ const ElectronicSignature: React.FC<StepComponentProps> = ({
                       <SignatureCanvas
                         penColor="black"
                         canvasProps={{
-                          width: 500,
+                          width: isMobile ? 300 : 500,
                           height: 200,
                           className: "sigCanvas",
                         }}

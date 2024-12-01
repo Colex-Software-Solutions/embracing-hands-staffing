@@ -19,7 +19,13 @@ const AdditionalWorkInfoSection = () => {
         animate={inView ? "visible" : "hidden"}
         exit="exit"
       >
-        <video src="/videos/scroll.mp4" autoPlay muted loop className="h-96">
+        <video
+          src="/videos/scroll.mp4"
+          autoPlay
+          muted
+          loop
+          className="sm:h-96 hidden sm:block"
+        >
           Your browser does not support the video tag.
         </video>
       </motion.div>

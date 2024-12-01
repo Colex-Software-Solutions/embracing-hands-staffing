@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <div className="flex justify-center items-center py-20 gap-10">
+    <div className="flex justify-center items-center py-20 gap-10 flex-col sm:flex-row">
       <Image
         src="/images/logo.jpeg"
         alt="Embracing Hands Healthcare Staffing logo"
