@@ -74,7 +74,7 @@ const steps = [
   { name: "Personal Information", component: PersonalInformation },
   { name: "Position Details", component: PositionDetails },
   { name: "Educational Background", component: EducationalBackground },
-  { name: "Certifications and Licensure", component: Certifications },
+  { name: "Certifications & Licensure", component: Certifications },
   { name: "Background Information", component: BackgroundInformation },
   { name: "Professional References", component: ProfessionalReferences },
   { name: "Employment History", component: EmploymentHistorySection },
@@ -202,7 +202,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
           staffSchoolInfo={staffSchoolInfo}
           employmentHistory={employmentHistory}
         />
-        {isInitialSetup && (
+        {/* {isInitialSetup && (
           <div className="flex justify-between mt-4 md:hidden">
             <Button
               variant="secondary"
@@ -219,7 +219,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
               Next
             </Button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
