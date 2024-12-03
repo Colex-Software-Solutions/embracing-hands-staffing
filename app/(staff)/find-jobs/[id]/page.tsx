@@ -4,6 +4,7 @@ import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { staffProvider } from "@/app/providers/staffProvider";
 import { weeksBetween } from "@/lib/utils";
 import { BlockedNurse, StaffProfile } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 export interface Job {
   id: string;
@@ -56,6 +57,9 @@ const mapFetchedJobPostToJobPost = (
 
 const FindJobsPage = async ({ params }: { params: { id: string } }) => {
   const staffProfile = await staffProvider.getStaffProfile(params.id);
+  if (!staffProfile?.profileSetupComplete) {
+    redirect(`/staff/${params.id}/profile`);
+  }
   const fetchedJobPosts = (await jobPostProvider.getAllValidJobPosts(
     staffProfile?.id
   )) as FetchedJobPost[];

@@ -12,10 +12,10 @@ export async function POST(
 
     if (!userId) {
       return NextResponse.json(
-        { message: "This job post could not be found." },
+        { message: "Could not find the user" },
         {
           status: 400,
-          statusText: "Invalid job post",
+          statusText: "Invalid User",
         }
       );
     }

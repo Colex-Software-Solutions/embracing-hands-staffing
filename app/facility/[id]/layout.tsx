@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
 import { getServerSession } from "@/lib/getServerSession";
+import { headers } from "next/headers";
 
 export default async function facilityLayout({
   children,
@@ -16,6 +17,7 @@ export default async function facilityLayout({
 }) {
   const session = await getServerSession();
   const baseUrl = `/facility/${session?.user.id}`;
+
   return (
     <div className="flex">
       <div className="mt-6">
