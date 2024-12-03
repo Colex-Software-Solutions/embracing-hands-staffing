@@ -81,6 +81,8 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
 
   const addEducation = async (data: EducationFormValues) => {
     try {
+      console.log("Test");
+      console.log("Profile", profile);
       const res = await axios.post(`/api/education/${profile?.id}`, data, {
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +94,7 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
     } catch (error: any) {
       console.error(error);
       toast({
-        title: "Server Side Error",
+        title: "Failed to update education information",
         description: error?.response?.statusText,
         variant: "destructive",
       });
