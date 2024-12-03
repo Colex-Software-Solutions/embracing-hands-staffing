@@ -81,8 +81,6 @@ const EducationalBackground: React.FC<StepComponentProps> = ({
 
   const addEducation = async (data: EducationFormValues) => {
     try {
-      console.log("Test");
-      console.log("Profile", profile);
       const res = await axios.post(`/api/education/${profile?.id}`, data, {
         headers: {
           "Content-Type": "application/json",
