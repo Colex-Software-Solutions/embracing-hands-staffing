@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 const PersonalInformation = dynamic(
@@ -92,6 +92,73 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   const [formData, setFormData] = useState<StaffProfile | null>(profile);
   const router = useRouter();
   const isInitialSetup = profile?.profileSetupComplete === true ? false : true;
+
+  // Function to determine if a step is complete
+  const isStepComplete = (stepName: string): boolean => {
+    // for ACLS certifications we check if any documents has the title of a certification
+    const certNames = [
+      "BLS Certification",
+      "PALS Certification",
+      "ACLS Certification",
+    ];
+    const hasAnyCertification =
+      documents.length > 0 &&
+      documents.some((doc) => certNames.includes(doc.name));
+
+    // need to do similar check for resume, driverLicense files
+    const requiredProfileDocs = [
+      "Resume",
+      "Social Security Card",
+      "Drivers License",
+    ];
+    const hasRequiredDocs =
+      documents.length > 0 &&
+      documents.some((doc) => requiredProfileDocs.includes(doc.name));
+
+    switch (stepName) {
+      case "Personal Information":
+        return profile && profile.firstname && profile.lastname ? true : false;
+      case "Position Details":
+        return profile && profile.position ? true : false;
+      case "Educational Background":
+        return profile &&
+          staffSchoolInfo &&
+          staffSchoolInfo.length > 0 &&
+          hasRequiredDocs
+          ? true
+          : false;
+      case "Certifications & Licensure":
+        return profile && hasAnyCertification ? true : false;
+      case "Background Information":
+        return profile && profile.hasConviction !== null ? true : false;
+      case "Professional References":
+        return profile && profile.references.length > 0 ? true : false;
+      case "Employment History":
+        return employmentHistory && employmentHistory.length > 0 ? true : false;
+      case "Electronic Signature":
+        return profile && profile.electronicSignatureDisclaimer ? true : false;
+      default:
+        return false;
+    }
+  };
+
+  // Function to find the next incomplete step
+  const getNextIncompleteStep = (): number => {
+    for (let i = steps.length - 1; i >= 0; i--) {
+      if (isStepComplete(steps[i].name)) {
+        return i + 1;
+      }
+    }
+    // No step is completed
+    return 0;
+  };
+
+  useEffect(() => {
+    if (isInitialSetup) {
+      const nextStep = getNextIncompleteStep();
+      setCurrentStep(nextStep);
+    }
+  }, [isInitialSetup]);
 
   const CurrentStepComponent = steps[currentStep].component;
 

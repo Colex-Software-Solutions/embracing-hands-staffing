@@ -112,6 +112,7 @@ function StartApplicationModal({
             className="w-96 rounded-full text-white bg-primary hover:text-primary"
             variant="outline"
             onClick={() => setOpenModal(true)}
+            disabled={session?.user.status !== "APPROVED"}
           >
             Accept job
           </Button>

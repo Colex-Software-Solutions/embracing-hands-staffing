@@ -233,6 +233,13 @@ const JobPostingForm = ({
   if (!googleScriptLoaded) {
     return <div>Loading Google Maps...</div>;
   }
+  if (session?.user.status !== "APPROVED") {
+    return (
+      <h2 className="text-2xl font-bold tracking-tight">
+        You are not allowed to access this page until you get approved by admin
+      </h2>
+    );
+  }
 
   return (
     <Form {...form}>
