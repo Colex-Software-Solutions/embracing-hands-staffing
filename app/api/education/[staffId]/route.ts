@@ -16,20 +16,17 @@ export async function POST(
 ) {
   try {
     const data = await req.json();
-    console.log("Test 1", data);
+
     const validatedData = educationSchema.parse({
       ...data,
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
     });
 
-    console.log("Test2", validatedData);
     const education = await staffSchoolInfoProvider.createStaffSchoolInfo({
       ...validatedData,
       staffProfileId: params.staffId,
     });
-
-    console.log("Test3", education);
 
     return NextResponse.json(education, { status: 200 });
   } catch (error) {
