@@ -30,7 +30,6 @@ const RemoveShiftButton: React.FC<RemoveShiftButtonProps> = ({
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      console.log({ shiftId });
       await handleDeleteShift(shiftId);
       toast({
         title: "Shift Removed",
