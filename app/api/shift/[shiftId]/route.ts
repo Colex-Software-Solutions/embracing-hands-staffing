@@ -38,3 +38,23 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { shiftId: string } }
+) {
+  const { shiftId } = params;
+
+  try {
+    const deletedShift = await shiftProvider.deleteShift(shiftId);
+    return NextResponse.json({
+      message: "Shift deleted successfully.",
+      shift: deletedShift,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500, statusText: error.message }
+    );
+  }
+}
