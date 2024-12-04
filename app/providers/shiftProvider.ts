@@ -140,6 +140,17 @@ class ShiftProvider {
       data: { end: new Date() },
     });
   }
+
+  async deleteShift(id: string) {
+    try {
+      return await prisma.shift.delete({
+        where: { id },
+      });
+    } catch (error) {
+      console.error("Error deleting shift:", error);
+      throw new Error("Unable to delete shift.");
+    }
+  }
 }
 
 export const shiftProvider = new ShiftProvider();

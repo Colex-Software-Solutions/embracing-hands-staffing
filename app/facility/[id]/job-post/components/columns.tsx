@@ -3,8 +3,11 @@ import { Badge } from "@/app/components/ui/badge";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { ShiftSchema } from "../data/schema";
 import { formatDateTime } from "@/lib/utils";
+import { DataTableShiftRowActions } from "./data-table-shift-row-actions";
 
-export const columns = (): ColumnDef<ShiftSchema>[] => [
+export const columns = (
+  handleDeleteShift: (shiftId: string) => void
+): ColumnDef<ShiftSchema>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -101,6 +104,15 @@ export const columns = (): ColumnDef<ShiftSchema>[] => [
           ? formatDateTime(row.getValue("clockOutTime"))
           : "N/A"}
       </div>
+    ),
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <DataTableShiftRowActions
+        shiftId={row.getValue("id")}
+        handleDeleteShift={handleDeleteShift}
+      />
     ),
   },
 ];

@@ -247,9 +247,9 @@ model Shift {
   clockOutTime    DateTime?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  jobPost         JobPost     @relation(fields: [jobPostId], references: [id])
-  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id])
-  breaks          Break[]     // This line adds a list of Breaks related to the Shift
+  jobPost         JobPost     @relation(fields: [jobPostId], references: [id], onDelete: Cascade)
+  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
+  breaks          Break[]     @relation("BreakToShift") 
 }
 
 model Break {
@@ -257,7 +257,7 @@ model Break {
   start           DateTime
   end             DateTime?
   shiftId         String      @db.ObjectId
-  shift           Shift       @relation(fields: [shiftId], references: [id])
+  shift           Shift       @relation("BreakToShift", fields: [shiftId], references: [id], onDelete: Cascade)
 }
 
 model BlockedNurse {
