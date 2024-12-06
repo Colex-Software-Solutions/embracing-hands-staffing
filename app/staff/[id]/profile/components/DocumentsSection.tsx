@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import requiredDocs from "@/lib/data/requiredDocs.json";
 import { CardTitle, CardContent, Card } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import DocumentModal from "./DocumentModal";
@@ -114,33 +114,36 @@ const DocumentsSection = ({
                     >
                       View
                     </Button>
-                    {edit && (
-                      <>
-                        {" "}
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenDocumentModal(doc);
-                          }}
-                        >
-                          Edit
-                        </Button>
-                        {/* <Button
-                          variant="destructive"
-                          size="sm"
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveDocument(doc.id);
-                          }}
-                        >
-                          Remove
-                        </Button> */}
-                      </>
-                    )}
+                    {edit ||
+                      (doc.isAdminUploaded && (
+                        <>
+                          {" "}
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenDocumentModal(doc);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                          {!requiredDocs.includes(doc.name) && (
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveDocument(doc.id);
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          )}
+                        </>
+                      ))}
                   </div>
                 </div>
               </Card>
@@ -160,15 +163,16 @@ const DocumentsSection = ({
         )}
       </CardContent>
 
-      {edit && (
-        <DocumentModal
-          isOpen={isDocumentModalOpen}
-          onClose={handleCloseDocumentModal}
-          selectedDocument={selectedDocument}
-          setDocumentsList={setDocumentsList}
-          userId={userId}
-        />
-      )}
+      {edit ||
+        (session?.user.role === "ADMIN" && (
+          <DocumentModal
+            isOpen={isDocumentModalOpen}
+            onClose={handleCloseDocumentModal}
+            selectedDocument={selectedDocument}
+            setDocumentsList={setDocumentsList}
+            userId={userId}
+          />
+        ))}
 
       {/* PDF Viewer Modal */}
       {selectedDocumentUrl && (
