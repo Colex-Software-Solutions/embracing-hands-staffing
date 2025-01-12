@@ -193,6 +193,7 @@ class UserProvider {
       prisma.user.count({
         where: {
           role: "STAFF",
+          archived: false,
         },
       }),
     ]);
