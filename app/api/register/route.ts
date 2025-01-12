@@ -3,7 +3,7 @@ import { userProvider } from "@/app/providers/userProvider";
 import { User } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { EmailTemplate, emailProvider } from "@/app/providers/emailProvider";
-import { adminTestEmail } from "@/lib/utils";
+import { adminTestEmail, formatPhoneNumberToE164 } from "@/lib/utils";
 interface RegisterBody {
   user: Omit<User, "status" | "createdAt" | "updatedAt">;
 }
@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     const user = await userProvider.createUser({
       ...body.user,
       status: "PENDING",
+      phone: formatPhoneNumberToE164(body.user.phone),
       password: await bcrypt.hash(body.user.password, 10),
     });
 
