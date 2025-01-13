@@ -319,3 +319,20 @@ export function calculateHoursBetweenTimes({
   // Return the difference in hours rounded to one decimal place
   return parseFloat(differenceInHours.toFixed(1));
 }
+
+export function formatPhoneNumberToE164(phoneNumber: string) {
+  // Remove all non-numeric characters except for the leading '+'
+  let cleanedNumber = phoneNumber.replace(/[^0-9+]/g, "");
+
+  // Check if the number already starts with the correct country code
+  const expectedPrefix = "+1";
+  if (cleanedNumber.startsWith(expectedPrefix)) {
+    return cleanedNumber;
+  }
+
+  // Remove any leading '+' if present (wrong or extra country code)
+  cleanedNumber = cleanedNumber.replace(/^\+/, "");
+
+  // Add the correct country code
+  return `+1${cleanedNumber}`;
+}
