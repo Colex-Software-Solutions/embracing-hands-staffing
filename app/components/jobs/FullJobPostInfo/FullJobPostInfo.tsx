@@ -50,11 +50,11 @@ const FullJobPostInfo: React.FC<FullJobPostInfoProps> = ({ jobPost }) => {
           <JobPostInfo key={jobPostInfo.title} {...jobPostInfo} />
         ))}
       </div>
-      <FullJobPostDivider />
+      {/* <FullJobPostDivider />
       <FullJobPostCTAButtons
         jobPostId={jobPost.id}
         facilityProfile={jobPost.facilityProfile}
-      />
+      /> */}
       <FullJobPostDivider />
       <FullJobPostAdditionalDetails {...jobPost} />
     </div>
