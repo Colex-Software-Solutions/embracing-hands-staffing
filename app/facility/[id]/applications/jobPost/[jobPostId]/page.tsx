@@ -40,7 +40,9 @@ const mapFetchedShiftsToShifts = (fetchedShifts: FetchedShift[]): Shift[] =>
     return {
       ...fetchedShift,
       staffProfile: null,
-      staffName: `${fetchedShift.staffProfile.firstname} ${fetchedShift.staffProfile.lastname}`,
+      staffName: fetchedShift.staffProfile
+        ? ` ${fetchedShift.staffProfile.firstname} ${fetchedShift.staffProfile.lastname}`
+        : "NOT ASSIGNED",
     };
   });
 

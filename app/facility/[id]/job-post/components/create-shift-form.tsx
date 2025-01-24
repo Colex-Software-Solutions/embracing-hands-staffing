@@ -109,6 +109,7 @@ const CreateShiftForm = ({
         data.endDate,
         hours[Number(data.endHour)].hour
       );
+      console.log(start, end);
 
       const requestBody = {
         start,
