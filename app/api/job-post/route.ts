@@ -1,3 +1,4 @@
+import { emailProvider } from "@/app/providers/emailProvider";
 import { facilityProvider } from "@/app/providers/facilityProvider";
 import { jobPostProvider } from "@/app/providers/jobPostProvider";
 import { smsProvider } from "@/app/providers/smsProvider";
@@ -38,19 +39,28 @@ export async function POST(req: NextRequest) {
         longitude,
         facilityId,
       });
+
+      // get all staff with required tags
+      const validStaffs = await staffProvider.getValidStaffProfiles(
+        jobPost.tags
+      );
+
+      // send sms
+      const batchSmsData = validStaffs.map((staff) => {
+        return {
+          senderName: staff.firstname,
+          phoneNumber: staff.user.phone,
+          text: `Hi ${staff.firstname}, a new job has been posted. Log into your profile to view the newest jobs`,
+        };
+      });
+      await smsProvider.sendBatchSMS(batchSmsData);
+
+      // send email to admin
+      await emailProvider.sendEmailToAdmin({
+        subject: "New Job posted",
+        content: `A new job has been posted, log in to the admin console to view new jobs.`,
+      });
     }
-
-    const staffs = await staffProvider.getApprovedStaffProfiles();
-
-    const batchSmsData = staffs.map((staff) => {
-      return {
-        senderName: staff.firstname,
-        phoneNumber: staff.user.phone,
-        text: `Hi ${staff.firstname}, a new job has been posted. Log into your profile to view the newest jobs`,
-      };
-    });
-
-    await smsProvider.sendBatchSMS(batchSmsData);
 
     return NextResponse.json({ success: true, jobPost });
   } catch (error: any) {

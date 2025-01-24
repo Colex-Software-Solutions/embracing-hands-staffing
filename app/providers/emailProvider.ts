@@ -1,3 +1,5 @@
+import { adminTestEmail } from "@/lib/utils";
+
 const SibApiV3Sdk = require("@getbrevo/brevo");
 let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
@@ -89,6 +91,28 @@ class EmailProvider {
         name: "Embracing Hands Staffing",
       },
       to: [{ email: emailTo }],
+      subject: subject,
+      htmlContent: content,
+    };
+
+    return apiInstance.sendTransacEmail(sendSmtpEmail);
+  }
+
+  async sendEmailToAdmin({
+    subject,
+    content,
+  }: {
+    subject: string;
+    content: string;
+  }) {
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+
+    sendSmtpEmail = {
+      sender: {
+        email: "admin@colexsoftwaresolutions.com",
+        name: "EHS - Staffing",
+      },
+      to: [{ email: process.env.ADMIN_EMAIL || adminTestEmail }],
       subject: subject,
       htmlContent: content,
     };
