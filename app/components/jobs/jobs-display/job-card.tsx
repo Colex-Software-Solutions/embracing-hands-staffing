@@ -39,13 +39,13 @@ const JobCard: React.FC<JobCardProps> = (props) => {
         </div>
       </div>
       <div className="flex flex-col w-1/4 items-end">
-        <div
+        {/* <div
           onClick={() =>
             handleFavoriteChange({ id, isCurrentFavorite: isFavorite ?? false })
           }
         >
           <JobCardFavoriteIcon isFavorite={isFavorite || false} />
-        </div>
+        </div> */}
         <div className="text-sm text-gray-400 mt-2">
           Posted on: {formatDate(createdAt)}
         </div>

@@ -79,12 +79,12 @@ const JobDisplayTabs: React.FC<JobDisplayTabsProps> = ({
   return (
     <Tabs value={window} onValueChange={handleChange}>
       <TabsList className="w-full flex gap-5">
-        <TabsTrigger className="w-1/2 text-center" value="jobs">
+        <TabsTrigger className="w-full text-center" value="jobs">
           Jobs
         </TabsTrigger>
-        <TabsTrigger className="w-1/2 text-center" value="favorites">
+        {/* <TabsTrigger className="w-1/2 text-center" value="favorites">
           Favorite(s)
-        </TabsTrigger>
+        </TabsTrigger> */}
       </TabsList>
       <TabsContent value="jobs" className="max-h-screen h-2/3 overflow-scroll">
         {jobs.length > 0 ? (

@@ -22,9 +22,10 @@ import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { EditIcon, SaveIcon } from "lucide-react";
+import { CircleUser, EditIcon, SaveIcon } from "lucide-react";
 import { z } from "zod";
 import axios from "axios";
+import Image from "next/image";
 
 const phoneSchema = z.object({
   phone: z.string().regex(/^\+?\d{10,15}$/, {
@@ -120,6 +121,9 @@ const StaffProfileInfo = ({
       }
     }
   };
+  const encodedProfileImage = profileImage
+    ? profileImage.replace(/\+/g, "%2B")
+    : null;
 
   return (
     <div className="grid gap-6 lg:grid-cols-3 md:m-12 m-2">
@@ -130,16 +134,20 @@ const StaffProfileInfo = ({
           </h1>
           <div className="flex items-center space-x-2">
             <Avatar className="w-36 h-36">
-              <img
-                alt="Avatar"
-                className="rounded-full object-cover"
-                height="64"
-                src={profileImage ?? "/avatar.jpg"}
-                style={{
-                  aspectRatio: "64/64",
-                  objectFit: "cover",
-                }}
-              />
+              {encodedProfileImage ? (
+                <Image
+                  alt="Avatar"
+                  className="w-full"
+                  height="120"
+                  width="64"
+                  src={encodedProfileImage}
+                  style={{
+                    aspectRatio: "64/64",
+                  }}
+                />
+              ) : (
+                <CircleUser className="h-36 w-36 bg-muted text-muted-foreground hover:bg-muted border-full" />
+              )}
             </Avatar>
             <div className="space-y-1.5">
               <div className="text-md font-semibold">{title}</div>
