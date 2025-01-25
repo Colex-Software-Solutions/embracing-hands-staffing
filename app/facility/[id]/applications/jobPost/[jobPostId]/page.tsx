@@ -47,11 +47,11 @@ const mapFetchedShiftsToShifts = (fetchedShifts: FetchedShift[]): Shift[] =>
   });
 
 const JobPostPage = async ({ params }: { params: { jobPostId: string } }) => {
-  const jobPostId = params.jobPostId;
-  const fetchedShifts = (await shiftProvider.getAllShifts(
-    jobPostId
-  )) as FetchedShift[];
-  const shifts = mapFetchedShiftsToShifts(fetchedShifts);
+  // const jobPostId = params.jobPostId;
+  // const fetchedShifts = (await shiftProvider.getAllShifts(
+  //   jobPostId
+  // )) as FetchedShift[];
+  // const shifts = mapFetchedShiftsToShifts(fetchedShifts);
 
   return (
     <>
@@ -59,11 +59,11 @@ const JobPostPage = async ({ params }: { params: { jobPostId: string } }) => {
         <div className="flex items-center justify-between space-y-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Shifts</h2>
-            <p className="text-muted-foreground">Manage job shifts.</p>
+            <p className="text-muted-foreground">This Page has been deleted.</p>
           </div>
         </div>
 
-        <ShiftsManager initialShifts={shifts} jobPostId={jobPostId} />
+        {/* <ShiftsManager initialShifts={shifts} jobPostId={jobPostId} /> */}
       </div>
     </>
   );
