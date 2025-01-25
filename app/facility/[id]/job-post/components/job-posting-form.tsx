@@ -214,7 +214,6 @@ const JobPostingForm = ({
         facilityId: session.user.facilityProfile.id,
         id: currentJob ? currentJob.id : null,
       };
-      console.log(requestBody);
 
       const response = await fetch("/api/job-post", {
         method: "POST",
@@ -268,7 +267,6 @@ const JobPostingForm = ({
       </h2>
     );
   }
-  console.log(form.watch("startTime"));
 
   return (
     <Form {...form}>

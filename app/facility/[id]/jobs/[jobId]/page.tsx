@@ -13,7 +13,7 @@ export interface ShiftsSummary extends Shift {
     };
     firstname: string;
     lastname: string;
-  };
+  } | null;
 
   breaks: Break[];
 }
