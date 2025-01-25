@@ -23,35 +23,55 @@ export async function POST(
     console.log(profileData);
     const staff = await staffProvider.getStaffProfile(userId);
     // Handle profile image upload
-    let profileUrl;
+    let profileUrl: string | null = null;
+
     if (profileImage) {
-      if (staff?.profileImage) {
-        deleteFile(staff.profileImage);
+      try {
+        // Check and delete old profile image if it exists
+        if (staff?.profileImage) {
+          await deleteFile(staff.profileImage);
+        }
+
+        // Ensure base64 string is valid
+        if (!profileImage.startsWith("data:image")) {
+          return NextResponse.json(
+            { message: "Invalid profile image format." },
+            { status: 400 }
+          );
+        }
+
+        const profileImageBuffer = Buffer.from(
+          profileImage.split(",")[1],
+          "base64"
+        );
+
+        // Generate a unique file name
+        const timestamp = Date.now();
+        const extension = profileImage.split(";")[0].split("/")[1];
+        const fileName = `profile-${userId}-${timestamp}.${extension}`;
+
+        // Upload the file
+        profileUrl = await uploadFile(
+          profileImageBuffer,
+          fileName,
+          `image/${extension}`
+        );
+      } catch (error) {
+        console.error("Error uploading profile image:", error);
+        return NextResponse.json(
+          { message: "Failed to upload profile image." },
+          { status: 500 }
+        );
       }
-      const profileImageBuffer = Buffer.from(
-        profileImage.split(",")[1],
-        "base64"
-      );
-      profileUrl = await uploadFile(
-        profileImageBuffer,
-        profileImage.name,
-        profileImage.type
-      );
     }
 
-    if (!staff && !profileImage) {
-      return NextResponse.json(null, {
-        status: 400,
-        statusText: "Profile image is required",
-      });
-    }
     let updatedProfileData;
     if (staff) {
       const { id, userId, ...rest } = staff;
       updatedProfileData = {
         ...rest,
         ...profileData,
-        profileImage: profileUrl || staff?.profileImage || null,
+        profileImage: profileUrl || staff.profileImage || null,
       };
     } else {
       updatedProfileData = {
