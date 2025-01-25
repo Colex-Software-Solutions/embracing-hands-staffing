@@ -310,7 +310,7 @@ const JobPostingForm = ({
                     <FormItem>
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter Title" {...field} />
+                        <Input placeholder="Enter Name" {...field} />
                       </FormControl>
                       {errors.name && (
                         <FormMessage>{errors.name.message}</FormMessage>
