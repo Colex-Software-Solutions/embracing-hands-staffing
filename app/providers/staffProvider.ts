@@ -7,7 +7,7 @@ export interface UpdateStaffProfile {
 }
 
 class StaffProvider {
-  async getApprovedStaffProfiles() {
+  async getValidStaffProfiles(tags: string[]) {
     return await prisma.staffProfile.findMany({
       include: {
         user: {
@@ -19,6 +19,9 @@ class StaffProvider {
       where: {
         user: {
           status: "APPROVED",
+        },
+        skills: {
+          hasSome: tags,
         },
       },
     });
