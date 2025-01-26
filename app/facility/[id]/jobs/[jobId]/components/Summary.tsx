@@ -59,8 +59,7 @@ const Summary = ({
         }, 0);
         totalMinutes += durationMinutes - breakTimeMinutes;
       }
-
-      staffIds.add(shift.staffProfileId);
+      if (shift.staffProfileId) staffIds.add(shift.staffProfileId);
     });
 
     const totalHours = Math.floor(totalMinutes / 60);
@@ -124,7 +123,10 @@ const Summary = ({
               <React.Fragment key={shift.id}>
                 <TableRow onClick={() => toggleShiftDetails(shift.id)}>
                   <TableCell>
-                    {shift.staffProfile.firstname} {shift.staffProfile.lastname}
+                    {shift.staffProfile
+                      ? `${shift.staffProfile.firstname}{" "}
+                    ${shift.staffProfile.lastname}`
+                      : "NOT ASSIGNED"}
                   </TableCell>
                   <TableCell>
                     {formatDateTime(shift.start)} - {formatDateTime(shift.end)}

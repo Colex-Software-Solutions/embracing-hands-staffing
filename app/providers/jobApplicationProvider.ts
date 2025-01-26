@@ -1,15 +1,32 @@
 import prisma from "@/db/prisma";
-import { ApplicationStatus, JobApplication } from "@prisma/client";
+import { ApplicationStatus, JobApplication, JobStatus } from "@prisma/client";
 
 class JobApplicationProvider {
   async createJobApplication(
     data: Omit<JobApplication, "id" | "createdAt" | "updatedAt" | "status">
   ) {
-    return await prisma.jobApplication.create({
-      data: {
-        ...data,
-        status: ApplicationStatus.ACCEPTED,
-      },
+    return await prisma.$transaction(async (prisma) => {
+      // Create job application
+      const jobApplication = await prisma.jobApplication.create({
+        data: {
+          ...data,
+          status: ApplicationStatus.ACCEPTED,
+        },
+      });
+
+      // Update job status to COMPLETED
+      await prisma.jobPost.update({
+        where: { id: data.jobId },
+        data: { status: JobStatus.COMPLETED },
+      });
+
+      // Assign staff to the shift
+      await prisma.shift.updateMany({
+        where: { jobPostId: data.jobId },
+        data: { staffProfileId: data.staffId },
+      });
+
+      return jobApplication;
     });
   }
 

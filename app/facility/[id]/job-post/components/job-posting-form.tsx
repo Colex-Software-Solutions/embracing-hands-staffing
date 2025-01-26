@@ -14,6 +14,13 @@ import { Button } from "@/app/components/ui/button";
 import { Switch } from "@/app/components/ui/switch";
 import { useForm } from "react-hook-form";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
+import {
   Form,
   FormControl,
   FormLabel,
@@ -26,7 +33,7 @@ import * as z from "zod";
 import { Loader, XIcon } from "lucide-react";
 import { useToast } from "@/app/components/ui/use-toast";
 import { useSession } from "next-auth/react";
-import { JobPost } from "@prisma/client";
+import type { JobPost } from "@prisma/client";
 import { SkillsCombobox } from "@/app/components/combobox/skills-combobox";
 import GooglePlacesAutocomplete, {
   geocodeByAddress,
@@ -34,18 +41,21 @@ import GooglePlacesAutocomplete, {
 import { format } from "date-fns";
 import useLoadGoogleMapsScript from "@/lib/hooks/useGoogleMapsHook";
 import { useRouter } from "next/navigation";
+import hours from "../data/hours.json";
+import { combineDateAndTime } from "@/lib/utils";
 
 const jobPostingSchema = z
   .object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
+    name: z.string().min(1, "Name is required"),
+    description: z.string().optional(),
     scrubsProvided: z.boolean(),
     location: z.string().optional(),
     latitude: z.coerce.number().optional(),
     longitude: z.coerce.number().optional(),
-    shiftsTime: z.string().min(5, "Shifts description is required"),
     startDate: z.string(),
     endDate: z.string(),
+    startTime: z.string(),
+    endTime: z.string(),
     housing: z.string().optional(),
     patientPopulation: z.string().optional(),
   })
@@ -69,17 +79,18 @@ const JobPostingForm = ({
   handleJobPostUpdate,
 }: IJobPostingForm) => {
   const defaultValues: Partial<JobPostingFormValues> = {
-    title: currentJob?.title || "",
+    name: currentJob?.title || "",
     description: currentJob?.description || "",
     scrubsProvided: currentJob?.scrubsProvided || false,
     location: currentJob?.location || "",
-    shiftsTime: currentJob?.shiftsTime || "",
     startDate: currentJob
       ? new Date(currentJob.startDate).toISOString().slice(0, 10)
       : "",
     endDate: currentJob
       ? new Date(currentJob.endDate).toISOString().slice(0, 10)
       : "",
+    startTime: currentJob?.shiftsTime?.split(" - ")[0] || "",
+    endTime: currentJob?.shiftsTime?.split(" - ")[1] || "",
     housing: currentJob?.housing || "",
     patientPopulation: currentJob?.patientPopulation || "",
   };
@@ -182,13 +193,21 @@ const JobPostingForm = ({
         return;
       }
 
+      const shiftsTime = `${data.startTime} - ${data.endTime}`;
+      const startTime = combineDateAndTime(data.startDate, data.startTime);
+      const endTime = combineDateAndTime(data.endDate, data.endTime);
+      const { name, ...jobData } = data;
       const requestBody = {
-        ...data,
+        ...jobData,
+        title: data.name,
         location,
         latitude,
         longitude,
         startDate: data.startDate,
         endDate: data.endDate,
+        shiftsTime,
+        startTime: startTime,
+        endTime: endTime,
         procedures,
         tags,
         facilityId: session.user.facilityProfile.id,
@@ -214,17 +233,24 @@ const JobPostingForm = ({
       }
       toast({
         title: "Success!",
-        description: "The new job add has been posted successfully",
+        description: currentJob
+          ? "The job has been updated successfully"
+          : "The new job has been posted successfully",
         variant: "default",
       });
       router.push(`/facility/${session.user.facilityProfile.id}/jobs`);
     } catch (error: any) {
       toast({
         title: "Error!",
-        description: "Failed to create job post",
+        description: currentJob
+          ? "Failed to update job post"
+          : "Failed to create job post",
         variant: "destructive",
       });
-      console.error("Failed to create job post", error);
+      console.error(
+        currentJob ? "Failed to update job post" : "Failed to create job post",
+        error
+      );
     }
   };
 
@@ -278,15 +304,15 @@ const JobPostingForm = ({
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="title"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter Title" {...field} />
+                        <Input placeholder="Enter Name" {...field} />
                       </FormControl>
-                      {errors.title && (
-                        <FormMessage>{errors.title.message}</FormMessage>
+                      {errors.name && (
+                        <FormMessage>{errors.name.message}</FormMessage>
                       )}
                     </FormItem>
                   )}
@@ -406,7 +432,7 @@ const JobPostingForm = ({
                 />
               </div>
               <div className="space-y-4">
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="shiftsTime"
                   render={({ field }) => (
@@ -424,7 +450,7 @@ const JobPostingForm = ({
                       )}
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
               <div className="space-y-4">
                 <FormField
@@ -531,6 +557,72 @@ const JobPostingForm = ({
                     </div>
                   ))}
                 </div>
+              </div>
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="startTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Start Time</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select start time" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {hours.map((hour) => (
+                            <SelectItem key={hour.hour} value={hour.hour}>
+                              {hour.hour}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {form.formState.errors.startTime && (
+                        <FormMessage>
+                          {form.formState.errors.startTime.message}
+                        </FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="endTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>End Time</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select end time" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {hours.map((hour) => (
+                            <SelectItem key={hour.id} value={hour.hour}>
+                              {hour.hour}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {form.formState.errors.endTime && (
+                        <FormMessage>
+                          {form.formState.errors.endTime.message}
+                        </FormMessage>
+                      )}
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="space-y-4">
                 <FormField

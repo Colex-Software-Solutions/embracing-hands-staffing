@@ -29,8 +29,9 @@ const JobCard: React.FC<JobCardProps> = (props) => {
         <p className="flex font-bold text-lg">{title}</p>
         <p>{location}</p>
         <p>
-          {startDate} - <span className="tracking-wider">{duration}</span>
+          {/* {startDate} - <span className="tracking-wider">{duration}</span> */}
         </p>
+        <p>{startDate}</p>
         <p>{shift}</p>
         <div className="flex gap-2 flex-wrap">
           {tags.map((tag) => (

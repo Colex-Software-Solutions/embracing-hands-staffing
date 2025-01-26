@@ -86,6 +86,58 @@ class JobPostProvider {
       },
     });
   }
+  async createJobPostWithShift(
+    jobPostData: Omit<JobPost, "id" | "createdAt" | "updatedAt"> & {
+      startTime: string;
+      endTime: string;
+    }
+  ) {
+    const { startTime, endTime, ...jobData } = jobPostData;
+
+    return await prisma.$transaction(async (prisma) => {
+      const jobPost = await prisma.jobPost.create({
+        data: jobData,
+      });
+
+      // staffProfileId will be null when the shift is first created
+      const shift = await prisma.shift.create({
+        data: {
+          jobPostId: jobPost.id,
+          start: new Date(startTime),
+          end: new Date(endTime),
+        },
+      });
+
+      return { ...jobPost, shift };
+    });
+  }
+
+  async updateJobPostWithShift(
+    id: string,
+    jobPostData: Partial<JobPost> & {
+      startTime: string;
+      endTime: string;
+    }
+  ) {
+    const { startTime, endTime, ...jobData } = jobPostData;
+
+    return await prisma.$transaction(async (prisma) => {
+      const jobPost = await prisma.jobPost.update({
+        where: { id },
+        data: jobData,
+      });
+
+      const shift = await prisma.shift.updateMany({
+        where: { jobPostId: id },
+        data: {
+          start: new Date(startTime),
+          end: new Date(endTime),
+        },
+      });
+
+      return { ...jobPost, shift };
+    });
+  }
 
   async getJobPostInvoiceDataById(id: string) {
     return await prisma.jobPost.findUnique({

@@ -15,6 +15,7 @@ import { JobPost, JobStatus } from "@prisma/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { ViewShiftDetailsModal } from "./modals/view-shift-details-modal";
 
 const ViewAndEditModal = dynamic(
   () => import("./modals/view-and-edit-job-details"),
@@ -69,10 +70,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem>Invoices</DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <Link href={`/facility/${facilityId}/applications/jobPost/${id}`}>
-          {" "}
-          <DropdownMenuItem>View Shifts</DropdownMenuItem>
-        </Link>
+        <ViewShiftDetailsModal jobId={id} />
         <Link href={`/facility/${facilityId}/jobs/${id}`}>
           {" "}
           <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
