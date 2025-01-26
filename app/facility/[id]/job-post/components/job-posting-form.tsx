@@ -196,7 +196,6 @@ const JobPostingForm = ({
       const shiftsTime = `${data.startTime} - ${data.endTime}`;
       const startTime = combineDateAndTime(data.startDate, data.startTime);
       const endTime = combineDateAndTime(data.endDate, data.endTime);
-      console.log(startTime, endTime);
       const { name, ...jobData } = data;
       const requestBody = {
         ...jobData,
