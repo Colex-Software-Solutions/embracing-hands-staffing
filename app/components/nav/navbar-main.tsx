@@ -181,13 +181,19 @@ const getNavLinks = (session: Session | null) => {
       label: "Contract",
     },
   ];
+  const adminNavItems = [
+    {
+      href: "/",
+      label: "Home",
+    },
+  ];
 
   if (session?.user.role === "STAFF") {
     return staffNavItems;
   } else if (session?.user.role === "FACILITY") {
     return facilityNavItems;
   } else if (session?.user.role === "ADMIN") {
-    return [];
+    return adminNavItems;
   }
 
   return navItems;
