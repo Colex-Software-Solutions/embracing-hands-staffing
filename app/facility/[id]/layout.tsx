@@ -40,11 +40,11 @@ export default async function facilityLayout({
               href: `${baseUrl}/jobs`,
             },
 
-            {
-              title: "Applicants",
-              icon: <ClipboardList className="md:mr-2 h-4 w-4" />,
-              href: `${baseUrl}/applications`,
-            },
+            // {
+            //   title: "Applicants",
+            //   icon: <ClipboardList className="md:mr-2 h-4 w-4" />,
+            //   href: `${baseUrl}/applications`,
+            // },
           ]}
         />
         <Separator />

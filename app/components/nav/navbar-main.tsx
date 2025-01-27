@@ -165,10 +165,10 @@ const getNavLinks = (session: Session | null) => {
       href: `/find-jobs/${session?.user.id}`,
       label: "Find Jobs",
     },
-    {
-      href: "/about-us",
-      label: "About Us",
-    },
+    // {
+    //   href: "/about-us",
+    //   label: "About Us",
+    // },
     { href: "/handbook.pdf", label: "Handbook" },
   ];
   const facilityNavItems = [
@@ -186,6 +186,8 @@ const getNavLinks = (session: Session | null) => {
     return staffNavItems;
   } else if (session?.user.role === "FACILITY") {
     return facilityNavItems;
+  } else if (session?.user.role === "ADMIN") {
+    return [];
   }
 
   return navItems;

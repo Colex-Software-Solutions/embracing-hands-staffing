@@ -61,24 +61,24 @@ export function DataTableRowActions<TData>({
           id={id}
           handleJobPostUpdate={handleJobPostUpdate}
         />
-        <Link href={`/facility/${facilityId}/applications?jobId=${id}`}>
+        {/* <Link href={`/facility/${facilityId}/applications?jobId=${id}`}>
           {" "}
           <DropdownMenuItem>View Applicants</DropdownMenuItem>
-        </Link>
+        </Link> */}
         <Link href={`/facility/${facilityId}/jobs/${id}/invoices`}>
           {" "}
           <DropdownMenuItem>Invoices</DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
         <ViewShiftDetailsModal jobId={id} />
-        <Link href={`/facility/${facilityId}/jobs/${id}`}>
+        {/* <Link href={`/facility/${facilityId}/jobs/${id}`}>
           {" "}
           <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
-        </Link>
-        <Link href={`/job-posts/${id}`}>
+        </Link> */}
+        {/* <Link href={`/job-posts/${id}`}>
           {" "}
           <DropdownMenuItem>View job application form</DropdownMenuItem>
-        </Link>
+        </Link> */}
         <DropdownMenuSeparator />
         {row.getValue("status") !== "CLOSED" &&
           row.getValue("status") !== "COMPLETED" && (
