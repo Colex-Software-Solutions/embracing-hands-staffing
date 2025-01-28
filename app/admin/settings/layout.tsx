@@ -11,26 +11,26 @@ export const metadata: Metadata = {
 };
 
 const sidebarNavItems = [
-  {
-    title: "Profile",
-    href: "/admin/settings",
-  },
-  {
-    title: "Account",
-    href: "/admin/settings/account",
-  },
+  // {
+  //   title: "Profile",
+  //   href: "/admin/settings",
+  // },
+  // {
+  //   title: "Account",
+  //   href: "/admin/settings/account",
+  // },
   {
     title: "Appearance",
     href: "/admin/settings/appearance",
   },
-  {
-    title: "Notifications",
-    href: "/admin/settings/notifications",
-  },
-  {
-    title: "Display",
-    href: "/admin/settings/display",
-  },
+  // {
+  //   title: "Notifications",
+  //   href: "/admin/settings/notifications",
+  // },
+  // {
+  //   title: "Display",
+  //   href: "/admin/settings/display",
+  // },
 ];
 
 interface SettingsLayoutProps {

@@ -317,7 +317,7 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                           <FormControl>
                             <Input
                               className="bg-white"
-                              placeholder="In Time"
+                              placeholder="e.g 4:00"
                               {...field}
                             />
                           </FormControl>
@@ -334,7 +334,7 @@ const CreateInvoiceForm: React.FC<CreateInvoiceFormProps> = ({
                           <FormControl>
                             <Input
                               className="bg-white"
-                              placeholder="Out Time"
+                              placeholder="e.g 23:00"
                               {...field}
                             />
                           </FormControl>

@@ -44,9 +44,9 @@ const AboutUsPage = () => {
               healthcare marketplace, a place where professionals can find
               meaningful work.
             </p>
-            <Button variant="link" className="mt-5">
+            {/* <Button variant="link" className="mt-5">
               {`Job Openings >`}
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

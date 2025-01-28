@@ -18,10 +18,10 @@ const Footer = () => {
         width={200}
         height={50}
       />
-      <SignUpButton />
+      {/* <SignUpButton />
       <Link href="/about-us">
         <Button variant="secondary">About Us</Button>
-      </Link>
+      </Link> */}
     </div>
   );
 };

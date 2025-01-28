@@ -1,7 +1,11 @@
+"use client";
 import { Separator } from "@/app/components/ui/separator";
-import { ProfileForm } from "./profile-form";
+import { AppearanceForm } from "./appearance/appearance-form";
+import { useTheme } from "next-themes";
 
 export default function SettingsProfilePage() {
+  const { setTheme, theme } = useTheme();
+
   return (
     <div className="space-y-6">
       <div>
@@ -11,7 +15,7 @@ export default function SettingsProfilePage() {
         </p>
       </div>
       <Separator />
-      <ProfileForm />
+      <AppearanceForm theme={theme} setTheme={setTheme} />
     </div>
   );
 }

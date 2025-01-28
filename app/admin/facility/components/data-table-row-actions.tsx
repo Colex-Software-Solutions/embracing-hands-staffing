@@ -66,10 +66,7 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <ViewFacilityUserDetailsModal row={row} role="FACILITY" />
-        <BlockNurseModal
-          facilityId={row.getValue("facilityId")}
-          facilityName={row.getValue("name")}
-        />
+        <BlockNurseModal facilityId={id} facilityName={row.getValue("name")} />
         {isPending && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>

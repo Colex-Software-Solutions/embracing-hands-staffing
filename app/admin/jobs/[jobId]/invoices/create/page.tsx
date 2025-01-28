@@ -100,6 +100,7 @@ const CreateInvoicePage = async ({ params }: CreateInvoicePageProps) => {
       createInvoiceData.tag
     ),
     cardPayment: false,
+    latePayment: false,
   };
 
   return (

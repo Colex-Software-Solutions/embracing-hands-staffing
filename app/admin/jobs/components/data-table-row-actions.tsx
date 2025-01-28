@@ -38,10 +38,10 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <Link href={`/admin/jobs/${id}`}>
+        {/* <Link href={`/admin/jobs/${id}`}>
           {" "}
           <DropdownMenuItem>View Current Job Summary</DropdownMenuItem>
-        </Link>
+        </Link> */}
         <Link href={`/admin/jobs/${id}/invoices`} className="w-full">
           <Button
             className="w-full border-0 justify-start flex pl-2 font-normal"
