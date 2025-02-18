@@ -193,6 +193,36 @@ class JobPostProvider {
         location: true,
         shifts: true,
         startDate: true,
+        status: true,
+        endDate: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  async getActiveJobPosts() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayString = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+
+    return await prisma.jobPost.findMany({
+      where: {
+        endDate: {
+          gte: todayString,
+        },
+      },
+      select: {
+        id: true,
+        facilityProfile: {
+          select: {
+            name: true,
+          },
+        },
+        title: true,
+        location: true,
+        shifts: true,
+        startDate: true,
+        status: true,
         endDate: true,
         createdAt: true,
       },

@@ -35,7 +35,7 @@ const mapFetchedJobPostsToFacilityJobPosts = (
 
 async function getJobPosts() {
   try {
-    const jobPosts = await jobPostProvider.getActiveJobPosts();
+    const jobPosts = await jobPostProvider.getAllJobPosts();
 
     return mapFetchedJobPostsToFacilityJobPosts(jobPosts);
   } catch (error) {
@@ -54,11 +54,9 @@ export default async function JobsPage() {
       <div className="h-full flex-1 flex-col space-y-8 p-8 flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Active Job Posts
-            </h2>
+            <h2 className="text-2xl font-bold tracking-tight">Job Posts</h2>
             <p className="text-muted-foreground">
-              Manage currently active job posts here.
+              Manage current and previous job posts here.
             </p>
           </div>
         </div>
