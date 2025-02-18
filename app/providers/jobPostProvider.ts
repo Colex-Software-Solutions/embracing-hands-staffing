@@ -272,18 +272,19 @@ class JobPostProvider {
         });
 
         // If an application exists, update its status
+        let jobApplication;
         if (existingApplication) {
-          const updatedApplication = await tx.jobApplication.update({
+          jobApplication = await tx.jobApplication.update({
             where: { id: existingApplication.id },
             data: { status: "ACCEPTED" },
           });
-          return updatedApplication;
+        } else {
+          // Otherwise, create a new job application
+          jobApplication = await tx.jobApplication.create({
+            data: { jobId, staffId, status: "ACCEPTED" },
+          });
         }
 
-        // Otherwise, create a new job application
-        const newApplication = await tx.jobApplication.create({
-          data: { jobId, staffId, status: "ACCEPTED" },
-        });
         await tx.jobPost.update({
           where: { id: jobId },
           data: { status: JobStatus.COMPLETED },
@@ -295,7 +296,7 @@ class JobPostProvider {
           where: { jobPostId: jobId },
         });
 
-        return newApplication;
+        return jobApplication;
       });
 
       return result;
