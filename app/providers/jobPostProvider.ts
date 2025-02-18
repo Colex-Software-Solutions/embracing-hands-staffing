@@ -207,6 +207,11 @@ class JobPostProvider {
     const blockedFacilityIds = blockedFacilities.map(
       (facility) => facility.facilityId
     );
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayString = today.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+
     const jobs = await prisma.jobPost.findMany({
       select: {
         id: true,
@@ -221,6 +226,9 @@ class JobPostProvider {
       },
       where: {
         status: "OPEN",
+        startDate: {
+          gte: todayString,
+        },
         NOT: {
           facilityId: {
             in: blockedFacilityIds,
