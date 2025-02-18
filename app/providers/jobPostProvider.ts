@@ -1,6 +1,7 @@
 // utils/jobPostProvider.ts
-import { JobPost, PrismaClient } from "@prisma/client";
+import { JobPost, JobStatus, PrismaClient } from "@prisma/client";
 import { blockNurseProvider } from "./blockNurseProvider";
+import { shiftProvider } from "./shiftProvider";
 const prisma = new PrismaClient();
 
 class JobPostProvider {
@@ -264,34 +265,40 @@ class JobPostProvider {
 
   async assignStaffToJob(jobId: string, staffId: string) {
     try {
-      const existingApplication = await prisma.jobApplication.findFirst({
-        where: {
-          jobId,
-          staffId,
-        },
-      });
-
-      if (existingApplication) {
-        const updatedApplication = await prisma.jobApplication.update({
-          where: {
-            id: existingApplication.id,
-          },
-          data: {
-            status: "ACCEPTED",
-          },
+      const result = await prisma.$transaction(async (tx) => {
+        // Look for an existing job application
+        const existingApplication = await tx.jobApplication.findFirst({
+          where: { jobId, staffId },
         });
-        return updatedApplication;
-      }
 
-      const newApplication = await prisma.jobApplication.create({
-        data: {
-          jobId,
-          staffId,
-          status: "ACCEPTED",
-        },
+        // If an application exists, update its status
+        if (existingApplication) {
+          const updatedApplication = await tx.jobApplication.update({
+            where: { id: existingApplication.id },
+            data: { status: "ACCEPTED" },
+          });
+          return updatedApplication;
+        }
+
+        // Otherwise, create a new job application
+        const newApplication = await tx.jobApplication.create({
+          data: { jobId, staffId, status: "ACCEPTED" },
+        });
+        await tx.jobPost.update({
+          where: { id: jobId },
+          data: { status: JobStatus.COMPLETED },
+        });
+
+        // Also update the shift by assigning the staff member to it
+        await tx.shift.updateMany({
+          data: { staffProfileId: staffId },
+          where: { jobPostId: jobId },
+        });
+
+        return newApplication;
       });
 
-      return newApplication;
+      return result;
     } catch (error: any) {
       console.error(
         "Error creating or updating job application:",
