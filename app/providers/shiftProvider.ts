@@ -62,6 +62,16 @@ class ShiftProvider {
       },
     });
   }
+  async assignStaffToShift(staffId: string, jobId: string) {
+    return await prisma.shift.updateMany({
+      data: {
+        staffProfileId: staffId,
+      },
+      where: {
+        jobPostId: jobId,
+      },
+    });
+  }
 
   async getAllShifts(jobPostId: string) {
     return await prisma.shift.findMany({
