@@ -24,9 +24,8 @@ const JobsCalendar = ({ jobs }: { jobs: JobPost[] }) => {
   };
   const getShiftForJob = async (jobId: string) => {
     try {
-      // Passing jobId as a query parameter, adjust the API route accordingly.
       const response = await axios.get(`/api/shift?jobId=${jobId}`);
-      return response.data; // Assuming the API returns an object with shift details
+      return response.data;
     } catch (error) {
       console.error("Error fetching shift for job", jobId, error);
       return null;
