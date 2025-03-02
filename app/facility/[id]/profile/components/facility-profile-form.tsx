@@ -184,8 +184,7 @@ const FacilityProfileForm = ({
       if (!signatureDataUrl || !isContractViewed) {
         toast({
           title: "Error!",
-          description:
-            "Please view and sign the contract and save your signature",
+          description: "Please view the contract and save your signature",
           variant: "destructive",
         });
         return;

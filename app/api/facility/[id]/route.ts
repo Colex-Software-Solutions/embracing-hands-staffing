@@ -47,12 +47,12 @@ export async function POST(
     }
 
     // Ensure profile image is present
-    if (!facility?.profileImage && !profileImage) {
-      return NextResponse.json(null, {
-        status: 400,
-        statusText: "Profile image is required",
-      });
-    }
+    // if (!facility?.profileImage && !profileImage) {
+    //   return NextResponse.json(null, {
+    //     status: 400,
+    //     statusText: "Profile image is required",
+    //   });
+    // }
 
     // Ensure signed contract is present on creation
     if (!facility && !contractSignatureUrl) {

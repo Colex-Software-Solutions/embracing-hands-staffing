@@ -4,6 +4,8 @@ import { Label } from "@/app/components/ui/label";
 import { FacilityProfile, User } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
+import Image from "next/image";
+import { CircleUser } from "lucide-react";
 
 const FacilityProfileInfo = ({
   user,
@@ -22,6 +24,9 @@ const FacilityProfileInfo = ({
     facilityRepName,
     facilityRepPhone,
   } = facilityProfile;
+  const encodedProfileImage = profileImage
+    ? profileImage.replace(/\+/g, "%2B")
+    : null;
 
   return (
     <div className="grid gap-6 lg:grid-cols-3 m-12">
@@ -29,18 +34,37 @@ const FacilityProfileInfo = ({
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">{name}</h1>
           <div className="flex items-center space-x-2">
-            <Avatar className="w-36 h-36">
-              <img
-                alt="Avatar"
-                className="rounded-full object-cover"
-                height="64"
-                src={profileImage ?? "/avatar.jpg"}
-                style={{
-                  aspectRatio: "64/64",
-                  objectFit: "cover",
-                }}
-              />
-            </Avatar>
+            {profileImage ? (
+              <Avatar className="w-36 h-36">
+                <img
+                  alt="Avatar"
+                  className="rounded-full object-cover"
+                  height="64"
+                  src={profileImage ?? "/avatar.jpg"}
+                  style={{
+                    aspectRatio: "64/64",
+                    objectFit: "cover",
+                  }}
+                />
+              </Avatar>
+            ) : (
+              <Avatar className="w-36 h-36">
+                {encodedProfileImage ? (
+                  <Image
+                    alt="Avatar"
+                    className="w-full"
+                    height="120"
+                    width="64"
+                    src={encodedProfileImage}
+                    style={{
+                      aspectRatio: "64/64",
+                    }}
+                  />
+                ) : (
+                  <CircleUser className="h-36 w-36 bg-muted text-muted-foreground hover:bg-muted border-full" />
+                )}
+              </Avatar>
+            )}
             <div className="space-y-1.5">
               <div className="text-md font-semibold">{facilityType}</div>
               <div className="text-md font-semibold">{address}</div>
