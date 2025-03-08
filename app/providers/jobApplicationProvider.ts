@@ -17,7 +17,7 @@ class JobApplicationProvider {
       // Update job status to COMPLETED
       await prisma.jobPost.update({
         where: { id: data.jobId },
-        data: { status: JobStatus.COMPLETED },
+        data: { status: JobStatus.ACCEPTED },
       });
 
       // Assign staff to the shift

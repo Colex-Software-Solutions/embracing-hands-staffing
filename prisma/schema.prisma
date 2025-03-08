@@ -21,6 +21,7 @@ enum UserStatus {
 
 enum JobStatus {
   OPEN
+  ACCEPTED
   CLOSED
   COMPLETED
 }

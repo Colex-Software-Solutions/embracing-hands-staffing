@@ -86,7 +86,7 @@ export function DataTableRowActions<TData>({
               <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>
 
               <DropdownMenuSubContent>
-                <CompleteJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
+                {/* <CompleteJobModal jobId={id} onUpdate={handleJobStatusUpdate} /> */}
                 <CloseJobModal jobId={id} onUpdate={handleJobStatusUpdate} />
               </DropdownMenuSubContent>
             </DropdownMenuSub>

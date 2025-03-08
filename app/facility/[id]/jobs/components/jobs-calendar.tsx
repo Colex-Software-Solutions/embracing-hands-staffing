@@ -16,6 +16,8 @@ const JobsCalendar = ({ jobs }: { jobs: JobPost[] }) => {
         return "gray";
       case "COMPLETED":
         return "green";
+      case "ACCEPTED":
+        return "orange";
       case "CLOSED":
         return "red";
       default:

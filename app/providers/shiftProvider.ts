@@ -114,10 +114,27 @@ class ShiftProvider {
   }
 
   async endShift(shiftId: string) {
-    return prisma.shift.update({
-      where: { id: shiftId },
-      data: { status: "Completed", clockOutTime: new Date() },
+    const result = await prisma.$transaction(async (tx) => {
+      const shift = await tx.shift.findFirst({
+        where: { id: shiftId },
+      });
+      if (!shift) {
+        throw new Error("Shift does not exist");
+      }
+      // update the job status to completed when shift ends
+      await tx.jobPost.update({
+        where: {
+          id: shift.jobPostId,
+        },
+        data: { status: "COMPLETED" },
+      });
+
+      return await tx.shift.update({
+        where: { id: shiftId },
+        data: { status: "Completed", clockOutTime: new Date() },
+      });
     });
+    return result;
   }
 
   async startBreak(shiftId: string) {
