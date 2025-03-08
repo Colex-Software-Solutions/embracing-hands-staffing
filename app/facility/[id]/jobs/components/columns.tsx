@@ -43,6 +43,8 @@ export const columns = ({
         switch (status) {
           case "OPEN":
             return "text-green-500 border-green-500";
+          case "ACCEPTED":
+            return "text-yellow-500 border-yellow-500";
           case "CLOSED":
             return "text-red-500 border-red-500";
           default:

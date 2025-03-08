@@ -295,7 +295,7 @@ class JobPostProvider {
 
         await tx.jobPost.update({
           where: { id: jobId },
-          data: { status: JobStatus.COMPLETED },
+          data: { status: JobStatus.ACCEPTED },
         });
 
         // Also update the shift by assigning the staff member to it
